@@ -1,0 +1,4507 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gastro Planer Pro</title>
+    
+    <!-- PWA Meta Tags für iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Gastro Planer">
+    <meta name="theme-color" content="#c9a961">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Startup Image für iOS (verhindert schwarzen Bildschirm) -->
+    <style id="startup-styles">
+        /* Verhindere schwarzen Bildschirm auf iOS PWA */
+        html, body {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%) !important;
+        }
+    </style>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin: 0 auto 24px;
+        }
+
+        .login-title {
+            font-size: 2em;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #8b6f47;
+            border: 3px solid #8b6f47;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .header {
+            background: white;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mode-badge {
+            padding: 6px 12px;
+            background: #c9a961;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 12px;
+        }
+
+        .nav-item.active {
+            color: #8b6f47;
+            background: rgba(139, 111, 71, 0.15);
+            font-weight: 700;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: #8b6f47;
+            border-radius: 0 0 3px 3px;
+        }
+
+        .nav-item .icon {
+            font-size: 1.5em;
+            margin-bottom: 4px;
+        }
+
+        .nav-item .label {
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        /* NEUE STYLES FÜR 2-WOCHEN ANSICHT */
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .calendar-scroll-container {
+            margin: 0;
+            padding: 0;
+        }
+
+        .calendar-grid {
+            display: block;
+        }
+
+        .calendar-day {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            min-height: 150px;
+            min-width: 140px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .calendar-day.heute {
+            background: linear-gradient(135deg, #c9a96120 0%, #8b6f4720 100%);
+            border: 2px solid #c9a961;
+        }
+
+        .calendar-day-header {
+            font-weight: 700;
+            font-size: 0.95em;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .calendar-day small {
+            display: block;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .schicht-item {
+            background: #e3f2fd;
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .schicht-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .schicht-item.frueh {
+            background: #fff3cd;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .schicht-item.spaet {
+            background: #e3f2fd;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .schicht-initials {
+            display: inline-block;
+            background: #8b6f47;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-right: 6px;
+        }
+
+        .quick-add-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-add-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .list-item-info strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .list-item-info small {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            width: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3em;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons .btn {
+            margin: 0;
+        }
+
+        /* Status Buttons für Einkaufsliste */
+        .status-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .status-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .status-btn.ok {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-btn.niedrig {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status-btn.leer {
+            background: #ef4444;
+            color: white;
+        }
+
+        .status-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Zeiterfassung */
+        .zeit-entry {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #c9a961;
+        }
+
+        .zeit-entry strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .week-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #c9a961;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* Tab Buttons */
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
+        }
+
+        .tab-btn:hover {
+            border-color: #c9a961;
+            color: #8b6f47;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 0.7em;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .team-tab-content {
+            display: none;
+        }
+
+        .team-tab-content.active {
+            display: block;
+        }
+
+        .komm-tab-content {
+            display: none;
+        }
+
+        .komm-tab-content.active {
+            display: block;
+        }
+
+        /* Stempeluhr Styles */
+        .stempeluhr-container {
+            text-align: center;
+            padding: 32px 20px;
+        }
+
+        .stempeluhr-time {
+            font-size: 3em;
+            font-weight: 700;
+            color: #8b6f47;
+            margin-bottom: 8px;
+        }
+
+        .stempeluhr-date {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .stempel-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            font-size: 1.5em;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .stempel-btn.einstempeln {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .stempel-btn.ausstempeln {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .stempel-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .stempel-btn:active {
+            transform: scale(0.95);
+        }
+
+        .stempel-status {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+
+        .stempel-status strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        /* Checklist Styles */
+        .checklist-item {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .checklist-item.erledigt {
+            background: #d1fae5;
+            opacity: 0.7;
+        }
+
+        .checklist-item.erledigt .checklist-text {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .checklist-checkbox {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #c9a961;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #10b981;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .checklist-checkbox:hover {
+            background: #c9a96120;
+        }
+
+        .checklist-text {
+            flex: 1;
+            font-size: 1.05em;
+        }
+
+        /* Lager Melden */
+        .lager-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .lager-item-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .lager-item-btn:hover {
+            border-color: #c9a961;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .lager-item-btn.leer {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .lager-item-btn.niedrig {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .lager-item-btn strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .lager-status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .lager-status-badge.ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .lager-status-badge.niedrig {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .lager-status-badge.leer {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .welcome-card p {
+            opacity: 0.9;
+            font-size: 1.05em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="login-screen">
+        <div class="login-card">
+            <div class="login-icon">🍽️</div>
+            <h1 class="login-title">Gastro Planer</h1>
+            <p class="login-subtitle">Willkommen zurück!</p>
+            <button class="btn btn-primary" onclick="showAdminLogin()">👤 Admin-Modus</button>
+            <button class="btn btn-secondary" onclick="(async () => await showMitarbeiterLogin())()">👥 Mitarbeiter-Modus</button>
+        </div>
+    </div>
+
+    <script>
+        // Frühe Definition der Login-Funktionen (vor Buttons aufgerufen)
+        function showAdminLogin() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-login-screen').classList.remove('hidden');
+        }
+        
+        async function showMitarbeiterLogin() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('mitarbeiter-login-screen').classList.remove('hidden');
+            // Lade Mitarbeiter-Select wenn verfügbar
+            if (typeof updateMitarbeiterSelect === 'function') {
+                await updateMitarbeiterSelect();
+            }
+        }
+        
+        function backToMain() {
+            document.getElementById('admin-login-screen').classList.add('hidden');
+            document.getElementById('mitarbeiter-login-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+    </script>
+
+    <!-- Admin Login -->
+    <div class="login-container hidden" id="admin-login-screen">
+        <div class="login-card">
+            <button class="btn btn-secondary" onclick="backToMain()" style="margin-bottom: 20px;">← Zurück</button>
+            <div class="login-icon">👤</div>
+            <h2 class="login-title">Admin Login</h2>
+            <form onsubmit="loginAdmin(event)">
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="admin-pin" placeholder="••••" maxlength="4" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mitarbeiter Login -->
+    <div class="login-container hidden" id="mitarbeiter-login-screen">
+        <div class="login-card">
+            <button class="btn btn-secondary" onclick="backToMain()" style="margin-bottom: 20px;">← Zurück</button>
+            <div class="login-icon">👥</div>
+            <h2 class="login-title">Mitarbeiter Login</h2>
+            <form onsubmit="loginMitarbeiter(event)">
+                <div class="form-group">
+                    <label>Mitarbeiter</label>
+                    <select id="mitarbeiter-select" required>
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="mitarbeiter-pin" placeholder="••••" maxlength="4" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="admin-content" class="hidden">
+        <div class="header">
+            <div class="header-content">
+                <h1 class="logo">🍽️ Gastro Planer</h1>
+                <span class="mode-badge">Admin-Modus</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Wochenplan Section -->
+            <div class="content-section active" id="admin-wochenplan">
+                <div class="card">
+                    <div class="calendar-controls">
+                        <h2 class="card-title" style="margin: 0;">📅 Dienstplan</h2>
+                        <div>
+                            <span id="aktuelle-kw"></span>
+                            <span class="week-indicator">2 Wochen</span>
+                        </div>
+                    </div>
+                    <div class="calendar-scroll-container">
+                        <div class="calendar-grid" id="calendar-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="content-section" id="admin-team">
+                <!-- Tab Navigation -->
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <button class="tab-btn active" onclick="switchTeamTab('team-uebersicht')" id="tab-uebersicht">Team-Übersicht</button>
+                    <button class="tab-btn" onclick="switchTeamTab('team-neu')" id="tab-neu">Neuer Mitarbeiter</button>
+                    <button class="tab-btn" onclick="switchTeamTab('team-zeit')" id="tab-zeit">Zeiterfassung</button>
+                </div>
+
+                <!-- Team Übersicht -->
+                <div class="team-tab-content active" id="team-uebersicht">
+                    <div class="card">
+                        <h2 class="card-title">👥 Team-Übersicht</h2>
+                        <div id="mitarbeiter-liste"></div>
+                    </div>
+                </div>
+
+                <!-- Neuer Mitarbeiter -->
+                <div class="team-tab-content" id="team-neu">
+                    <div class="card">
+                        <h2 class="card-title">➕ Mitarbeiter hinzufügen</h2>
+                        <form id="mitarbeiter-form">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="ma-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <input type="text" id="ma-position" placeholder="z.B. Kellner/in" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="tel" id="ma-telefon" placeholder="+43 123 456789" required>
+                            </div>
+                            <div class="form-group">
+                                <label>PIN (4-stellig)</label>
+                                <input type="number" id="ma-pin" maxlength="4" placeholder="1234" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">➕ Mitarbeiter hinzufügen</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Zeiterfassung -->
+                <div class="team-tab-content" id="team-zeit">
+                    <div class="card">
+                        <h2 class="card-title">⏰ Zeiterfassung</h2>
+                        
+                        <!-- Mitarbeiter Filter -->
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label>Mitarbeiter auswählen:</label>
+                            <select id="zeit-mitarbeiter-filter" onchange="updateZeiterfassungListe()">
+                                <option value="">Alle Mitarbeiter</option>
+                            </select>
+                        </div>
+                        
+                        <div id="zeiterfassung-liste"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kommunikation Section -->
+            <div class="content-section" id="admin-kommunikation">
+                <!-- Tab Navigation -->
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <button class="tab-btn active" onclick="switchKommTab('komm-benachrichtigungen')" id="tab-komm-benachrichtigungen">🔔 Benachrichtigungen</button>
+                    <button class="tab-btn" onclick="switchKommTab('komm-notizen')" id="tab-komm-notizen">💬 Notizen</button>
+                </div>
+
+                <!-- Benachrichtigungen Tab (JETZT ZUERST!) -->
+                <div class="komm-tab-content active" id="komm-benachrichtigungen">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                            <h2 class="card-title" style="margin: 0;">🔔 Benachrichtigungen</h2>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button class="btn btn-secondary btn-small" onclick="markiereAlleBenachrichtigungenGelesen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">✓ Gelesen</button>
+                                <button class="btn btn-danger btn-small" onclick="loescheAlleBenachrichtigungen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">🗑️ Löschen</button>
+                            </div>
+                        </div>
+                        <div id="benachrichtigungen-liste"></div>
+                    </div>
+                </div>
+
+                <!-- Notizen Tab -->
+                <div class="komm-tab-content" id="komm-notizen">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                            <h2 class="card-title" style="margin: 0;">💬 Team-Kommunikation</h2>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button class="btn btn-secondary btn-small" onclick="markiereAlleNotizenGelesen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">✓ Gelesen</button>
+                                <button class="btn btn-danger btn-small" onclick="loescheAlleNotizen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">🗑️ Löschen</button>
+                            </div>
+                        </div>
+                        <div id="notizen-liste"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistik Section -->
+            <div class="content-section" id="admin-statistik">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="card-title" style="margin: 0;">📊 Kassenstatistik</h2>
+                        <button class="btn btn-primary btn-small" onclick="druckeStatistik()" style="width: auto;">🖨️ Drucken</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Zeitraum</label>
+                        <select id="statistik-zeitraum" onchange="updateStatistik()">
+                            <option value="tag">Heute</option>
+                            <option value="monat" selected>Dieser Monat</option>
+                            <option value="jahr">Dieses Jahr</option>
+                        </select>
+                    </div>
+
+                    <div id="statistik-inhalt"></div>
+                </div>
+            </div>
+
+            <!-- Lager Section -->
+            <div class="content-section" id="admin-lager">
+                <div class="card">
+                    <h2 class="card-title">🛒 Einkaufsliste</h2>
+                    <button class="btn btn-primary" onclick="openLagerModal()" style="margin-bottom: 16px;">➕ Neuer Artikel</button>
+                    <div id="einkaufsliste"></div>
+                </div>
+            </div>
+
+            <!-- Checkliste Section -->
+            <div class="content-section" id="admin-checkliste">
+                <div class="card">
+                    <h2 class="card-title">✅ Aktuelle Checkliste</h2>
+                    <div id="master-checklist"></div>
+                </div>
+                <div class="card">
+                    <h2 class="card-title">Checkliste verwalten</h2>
+                    <form id="checklist-form">
+                        <div class="form-group">
+                            <label>Neuer Checklisten-Punkt</label>
+                            <textarea id="checklist-text" rows="2" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">➕ Hinzufügen</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Einstellungen Section -->
+            <div class="content-section" id="admin-einstellungen">
+                <!-- Admin-PIN ändern (eingeklappt) -->
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="togglePinSection()">
+                        <h2 class="card-title" style="margin: 0;">🔒 Admin-PIN ändern</h2>
+                        <span id="pin-toggle-icon" style="font-size: 1.5em;">▼</span>
+                    </div>
+                    
+                    <div id="pin-change-section" style="display: none; margin-top: 16px;">
+                        <form id="pin-change-form">
+                            <div class="form-group">
+                                <label>Aktueller Admin-PIN</label>
+                                <input type="password" id="current-admin-pin" placeholder="••••" maxlength="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Neuer Admin-PIN</label>
+                                <input type="password" id="new-admin-pin" placeholder="••••" maxlength="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Neuen PIN bestätigen</label>
+                                <input type="password" id="confirm-admin-pin" placeholder="••••" maxlength="4" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">🔒 PIN ändern</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Datenverwaltung -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2 class="card-title">💾 Datenverwaltung</h2>
+                    
+                    <div style="background: #dbeafe; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                        <p style="color: #1e40af; margin: 0; font-size: 0.95em; line-height: 1.6;">
+                            <strong>ℹ️ Automatische Backups:</strong><br>
+                            Ihre Daten werden automatisch in Firebase gespeichert. Zusätzlich werden nächtliche Backups erstellt.<br>
+                            <strong>Manuelle Backups sind optional möglich.</strong>
+                        </p>
+                    </div>
+                    
+                    <button onclick="showStorageInfo()" class="btn btn-secondary" style="margin-bottom: 12px;">
+                        📊 Speicher-Info anzeigen
+                    </button>
+                    
+                    <button onclick="exportData()" class="btn btn-success" style="margin-bottom: 12px;">
+                        📥 Backup herunterladen
+                    </button>
+                    
+                    <button onclick="importData()" class="btn btn-warning" style="margin-bottom: 12px;">
+                        📤 Backup importieren
+                    </button>
+                    
+                    <button onclick="clearAllData()" class="btn btn-danger">
+                        🗑️ Alle Daten löschen
+                    </button>
+                    
+                </div>
+                
+                <!-- Push-Benachrichtigungen -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2 class="card-title">🔔 Push-Benachrichtigungen</h2>
+                    <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">
+                        Erhalten Sie Benachrichtigungen auf Ihrem Handy bei neuen Notizen und Kassenmeldungen.
+                    </p>
+                    
+                    <button onclick="window.adminPushNotifications.init()" class="btn btn-primary" style="margin-bottom: 12px;">
+                        🔔 Push-Benachrichtigungen aktivieren
+                    </button>
+                    
+                    <div id="push-status" style="margin-top: 12px; padding: 12px; background: #f3f4f6; border-radius: 8px; font-size: 0.9em;">
+                        <strong>Status:</strong> <span id="push-status-text">Nicht aktiviert</span>
+                    </div>
+                    
+                    <script>
+                        // Update Push-Status
+                        function updatePushStatus() {
+                            const statusEl = document.getElementById('push-status-text');
+                            if (!statusEl) return;
+                            
+                            // Prüfe ob iOS Safari
+                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                            const isStandalone = window.navigator.standalone === true;
+                            
+                            if (!('Notification' in window)) {
+                                if (isIOS && isSafari && !isStandalone) {
+                                    statusEl.innerHTML = '📱 <strong>iOS Safari:</strong> Füge die App zum Homescreen hinzu, dann funktionieren Push-Benachrichtigungen!<br><small style="color: #666; margin-top: 4px; display: block;">Tippe auf "Teilen" → "Zum Home-Bildschirm"</small>';
+                                    statusEl.style.color = '#f59e0b';
+                                } else {
+                                    statusEl.textContent = '❌ Nicht unterstützt von diesem Browser';
+                                    statusEl.style.color = '#dc2626';
+                                }
+                            } else if (Notification.permission === 'granted') {
+                                statusEl.textContent = '✅ Aktiv';
+                                statusEl.style.color = '#10b981';
+                            } else if (Notification.permission === 'denied') {
+                                statusEl.textContent = '❌ Blockiert (in Browser-Einstellungen ändern)';
+                                statusEl.style.color = '#dc2626';
+                            } else {
+                                statusEl.textContent = '⏳ Noch nicht aktiviert';
+                                statusEl.style.color = '#f59e0b';
+                            }
+                        }
+                        
+                        // Update beim Laden
+                        setTimeout(updatePushStatus, 500);
+                    </script>
+                </div>
+                    <div style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px; font-size: 0.9em;">
+                        <strong>💡 Tipp:</strong> Laden Sie regelmäßig ein Backup herunter, um Ihre Daten zu sichern. 
+                        Die Daten bleiben nur in diesem Browser gespeichert.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Add Button -->
+        <button class="quick-add-btn hidden" onclick="(async () => await openQuickAddModal())()" title="Schnell Schicht hinzufügen">+</button>
+
+        <!-- Admin Navigation -->
+        <div class="bottom-nav hidden" id="admin-nav">
+            <button class="nav-item active" onclick="showSection('admin-wochenplan', event)">
+                <div class="icon">📅</div>
+                <div class="label">Plan</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-team', event)">
+                <div class="icon">👥</div>
+                <div class="label">Team</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-kommunikation', event)">
+                <div class="icon">💬</div>
+                <div class="label">Komm.</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-statistik', event)">
+                <div class="icon">📊</div>
+                <div class="label">Statistik</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-lager', event)">
+                <div class="icon">🛒</div>
+                <div class="label">Lager</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-checkliste', event)">
+                <div class="icon">✅</div>
+                <div class="label">Check</div>
+            </button>
+            <button class="nav-item" onclick="showSection('admin-einstellungen', event)">
+                <div class="icon">⚙️</div>
+                <div class="label">Settings</div>
+            </button>
+            <button class="nav-item" onclick="logout()">
+                <div class="icon">🚪</div>
+                <div class="label">Logout</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mitarbeiter Content -->
+    <div id="mitarbeiter-content" class="hidden">
+        <div class="header">
+            <div class="header-content">
+                <h1 class="logo">🍽️ Gastro Planer</h1>
+                <span class="mode-badge" id="mitarbeiter-name-badge">Mitarbeiter</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Plan (Dienstplan Read-Only) -->
+            <div class="content-section active" id="mitarbeiter-plan">
+                <div class="card">
+                    <div class="calendar-controls">
+                        <h2 class="card-title" style="margin: 0;">📅 Dienstplan</h2>
+                        <div>
+                            <span id="mitarbeiter-kw"></span>
+                            <span class="week-indicator">2 Wochen</span>
+                        </div>
+                    </div>
+                    <div id="mitarbeiter-calendar-grid"></div>
+                </div>
+            </div>
+
+            <!-- Schicht (Schicht starten/beenden) -->
+            <div class="content-section" id="mitarbeiter-schicht">
+                <div class="welcome-card">
+                    <h2 id="schicht-welcome-text">Meine Schicht</h2>
+                    <p id="schicht-welcome-subtext">Starte deine Schicht wenn du bereit bist</p>
+                </div>
+
+                <!-- Schicht-Steuerung -->
+                <div class="card">
+                    <h2 class="card-title">🎯 Schicht-Steuerung</h2>
+                    <div class="stempeluhr-container" style="padding: 20px;">
+                        <button class="stempel-btn einstempeln" id="schicht-button" onclick="schichtAktion()" style="width: 180px; height: 180px; margin: 0 auto;">
+                            <div id="schicht-button-text">▶️ Schicht starten</div>
+                        </button>
+                        <div class="stempel-status" id="schicht-status-box" style="margin-top: 20px;">
+                            <strong>Status:</strong>
+                            <p id="schicht-status-text">Schicht nicht gestartet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">📅 Meine nächsten Schichten</h2>
+                    <div id="meine-schichten"></div>
+                </div>
+            </div>
+
+            <!-- Meine Zeiten (Zeiterfassung) -->
+            <div class="content-section" id="mitarbeiter-zeiten">
+                <div class="card">
+                    <h2 class="card-title">⏰ Zeiterfassung</h2>
+                    <div class="stempeluhr-container">
+                        <div class="stempeluhr-time" id="aktuelle-uhrzeit">--:--</div>
+                        <div class="stempeluhr-date" id="aktuelles-datum">--</div>
+                        
+                        <form id="manuel-zeit-form" style="max-width: 400px; margin: 0 auto;">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="manuel-datum" required>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label>Von</label>
+                                    <input type="time" id="manuel-start" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Bis</label>
+                                    <input type="time" id="manuel-ende" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">💾 Zeit speichern</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Meine Zeiten</h2>
+                    <div id="meine-zeiten-liste"></div>
+                </div>
+            </div>
+
+            <!-- Lager -->
+            <div class="content-section" id="mitarbeiter-lager">
+                <div class="card">
+                    <h2 class="card-title">🛒 Lagerbestand melden</h2>
+                    <p style="color: #666; margin-bottom: 16px;">Tippe auf einen Artikel, um seinen Status zu ändern</p>
+                    <div class="lager-grid" id="mitarbeiter-lager-grid"></div>
+                </div>
+            </div>
+
+            <!-- Notizen -->
+            <div class="content-section" id="mitarbeiter-notizen">
+                <div class="card" id="tausch-anfragen-card" style="display: none;">
+                    <h2 class="card-title">🔄 Tausch-Anfragen</h2>
+                    <div id="tausch-anfragen-liste"></div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">💬 Notiz schreiben</h2>
+                    <form id="mitarbeiter-notiz-form">
+                        <div class="form-group">
+                            <label>Art der Notiz</label>
+                            <select id="notiz-typ" required>
+                                <option value="info">ℹ️ Information</option>
+                                <option value="frage">❓ Frage</option>
+                                <option value="problem">⚠️ Problem</option>
+                                <option value="idee">💡 Idee</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Betreff</label>
+                            <input type="text" id="notiz-betreff" placeholder="z.B. Warenlieferung" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nachricht</label>
+                            <textarea id="notiz-text" rows="4" placeholder="Deine Nachricht..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">📨 Notiz senden</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Meine Notizen</h2>
+                    <div id="meine-notizen-liste"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mitarbeiter Navigation -->
+        <div class="bottom-nav hidden" id="mitarbeiter-nav">
+            <button class="nav-item active" onclick="showMitarbeiterSection('mitarbeiter-plan', event)">
+                <div class="icon">📅</div>
+                <div class="label">Plan</div>
+            </button>
+            <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-schicht', event)">
+                <div class="icon">▶️</div>
+                <div class="label">Schicht</div>
+            </button>
+            <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-zeiten', event)">
+                <div class="icon">⏰</div>
+                <div class="label">Zeiten</div>
+            </button>
+            <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-lager', event)">
+                <div class="icon">🛒</div>
+                <div class="label">Lager</div>
+            </button>
+            <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-notizen', event)">
+                <div class="icon">💬</div>
+                <div class="label">Notizen</div>
+                <span class="notification-badge" id="tausch-badge" style="display: none;">0</span>
+            </button>
+            <button class="nav-item" onclick="logout()">
+                <div class="icon">🚪</div>
+                <div class="label">Logout</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Add Modal -->
+    <div class="modal" id="quick-add-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚡ Schnell hinzufügen</h3>
+                <button class="close-modal" onclick="closeModal('quick-add-modal')">×</button>
+            </div>
+            <form id="quick-add-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="quick-datum" required>
+                </div>
+                <div class="form-group">
+                    <label>Mitarbeiter</label>
+                    <select id="quick-mitarbeiter" required>
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Schichttyp</label>
+                    <select id="quick-typ" required>
+                        <option value="">Bitte wählen...</option>
+                        <option value="frueh">🌅 Frühschicht</option>
+                        <option value="spaet">🌙 Spätschicht</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('quick-add-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">➕ Hinzufügen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mitarbeiter bearbeiten Modal -->
+    <div class="modal" id="edit-mitarbeiter-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Mitarbeiter bearbeiten</h3>
+                <button class="close-modal" onclick="closeModal('edit-mitarbeiter-modal')">×</button>
+            </div>
+            <form id="edit-mitarbeiter-form">
+                <input type="hidden" id="edit-ma-id">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="edit-ma-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <input type="text" id="edit-ma-position" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="tel" id="edit-ma-telefon" required>
+                </div>
+                <div class="form-group">
+                    <label>PIN (4-stellig)</label>
+                    <input type="number" id="edit-ma-pin" maxlength="4" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('edit-mitarbeiter-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lagerartikel Modal -->
+    <div class="modal" id="lager-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🛒 Neuer Artikel</h3>
+                <button class="close-modal" onclick="closeModal('lager-modal')">×</button>
+            </div>
+            <form id="lager-form">
+                <div class="form-group">
+                    <label>Artikelname</label>
+                    <input type="text" id="lager-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="lager-status" required>
+                        <option value="ok">✅ Genügend vorhanden</option>
+                        <option value="niedrig">⚠️ Bald nachbestellen</option>
+                        <option value="leer">🔴 Sofort einkaufen</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('lager-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">➕ Hinzufügen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Zeiterfassung Modal -->
+    <div class="modal" id="zeit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⏰ Manuelle Zeiterfassung</h3>
+                <button class="close-modal" onclick="closeModal('zeit-modal')">×</button>
+            </div>
+            <form id="zeit-form">
+                <div class="form-group">
+                    <label>Mitarbeiter</label>
+                    <select id="zeit-mitarbeiter" required>
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="zeit-datum" required>
+                </div>
+                <div class="form-group">
+                    <label>Startzeit</label>
+                    <input type="time" id="zeit-start" required>
+                </div>
+                <div class="form-group">
+                    <label>Endzeit</label>
+                    <input type="time" id="zeit-ende" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('zeit-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lager Status ändern Modal -->
+    <div class="modal" id="lager-status-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="lager-status-title">Status ändern</h3>
+                <button class="close-modal" onclick="closeModal('lager-status-modal')">×</button>
+            </div>
+            <p style="margin-bottom: 20px; text-align: center;">Neuer Status für <strong id="lager-item-name"></strong>:</p>
+            <button class="btn btn-success" onclick="saveLagerStatus('ok')" style="margin-bottom: 12px;">✅ Genügend vorhanden</button>
+            <button class="btn btn-warning" onclick="saveLagerStatus('niedrig')" style="margin-bottom: 12px;">⚠️ Bald nachbestellen</button>
+            <button class="btn btn-danger" onclick="saveLagerStatus('leer')" style="margin-bottom: 12px;">🔴 Sofort einkaufen</button>
+            <button class="btn btn-secondary" onclick="closeModal('lager-status-modal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <!-- Schicht Tausch Modal -->
+    <div class="modal" id="tausch-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 Schicht tauschen</h3>
+                <button class="close-modal" onclick="closeModal('tausch-modal')">×</button>
+            </div>
+            
+            <div id="tausch-info" style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin-bottom: 16px;"></div>
+
+            <form id="tausch-form">
+                <div class="form-group">
+                    <label>Mit wem möchtest du tauschen?</label>
+                    <select id="tausch-mitarbeiter" required onchange="updateTauschSchichten()">
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="tausch-schicht-gruppe" style="display: none;">
+                    <label>Welche Schicht möchtest du ihm/ihr anbieten?</label>
+                    <select id="tausch-angebot-schicht">
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('tausch-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">🔄 Anfrage senden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schicht Beenden Modal -->
+    <div class="modal" id="schicht-beenden-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏁 Schicht beenden</h3>
+                <button class="close-modal" onclick="closeModal('schicht-beenden-modal')">×</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px; color: #8b6f47;">✅ Checkliste abhaken</h4>
+                <div id="schicht-beenden-checklist"></div>
+            </div>
+
+            <form id="schicht-beenden-form">
+                <div class="form-group">
+                    <label>💰 Kassenstand (€)</label>
+                    <input type="number" id="kassenstand" step="0.01" placeholder="z.B. 1250.50" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('schicht-beenden-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" id="schicht-beenden-btn" disabled>🏁 Schicht beenden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Antwort Modal -->
+    <div class="modal" id="antwort-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💬 Antworten</h3>
+                <button class="close-modal" onclick="closeModal('antwort-modal')">×</button>
+            </div>
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <strong id="original-betreff" style="display: block; margin-bottom: 8px;"></strong>
+                <p id="original-text" style="color: #666; font-size: 0.95em;"></p>
+                <small id="original-autor" style="color: #999; display: block; margin-top: 8px;"></small>
+            </div>
+            <form id="antwort-form">
+                <div class="form-group">
+                    <label>Deine Antwort</label>
+                    <textarea id="antwort-text" rows="4" placeholder="Deine Antwort..." required></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('antwort-modal')">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">📨 Antwort senden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // WICHTIG: Daten werden NACH localStorage-Patch geladen!
+        // Siehe ganz unten nach allen Script-Includes
+        
+        // Nur leere Variablen definieren
+        let mitarbeiter = [];
+        let schichten = [];
+        let notizen = [];
+        let lagerBestand = [];
+        let checklistItems = [];
+        let zeiterfassung = [];
+        let tagesCheckliste = {};
+        let kassenstände = [];
+        let tauschAnfragen = [];
+        
+        let adminPin = '1234'; // Default
+        let loggedInMitarbeiter = null;
+        let currentLagerItemId = null;
+        let stempelStatus = null;
+        let currentNotizId = null;
+        let schichtGestartet = false;
+        let schichtChecklistStatus = {};
+
+        // Init - wird am Ende aufgerufen nach localStorage-Patch
+        function init() {
+            console.log('🚀 App Init gestartet...');
+            
+            // ==========================================
+            // DATEN LADEN (NACH localStorage-Patch!)
+            // ==========================================
+            
+            // MITARBEITER werden NICHT aus localStorage geladen!
+            // Sie werden aus Firestore geladen wenn benötigt
+            console.log('ℹ️ Mitarbeiter werden aus Firestore geladen (nicht localStorage)');
+            
+            // SCHICHTEN werden NICHT aus localStorage geladen!
+            // Sie werden aus Firestore geladen wenn benötigt
+            console.log('ℹ️ Schichten werden aus Firestore geladen (nicht localStorage)');
+            
+            // NOTIZEN werden NICHT aus localStorage geladen!
+            // Sie werden aus Firestore geladen wenn benötigt
+            console.log('ℹ️ Notizen werden aus Firestore geladen (nicht localStorage)');
+            
+            // LAGER wird NICHT aus localStorage geladen!
+            // Es wird aus Firestore geladen wenn benötigt
+            console.log('ℹ️ Lager wird aus Firestore geladen (nicht localStorage)');
+            
+            try {
+                checklistItems = JSON.parse(localStorage.getItem('gastro-checklist') || '["Kasse zählen", "Tische abwischen", "Küche aufräumen"]');
+                console.log('✅ Checkliste geladen:', checklistItems.length);
+            } catch(e) {
+                console.error('❌ Fehler beim Laden der Checkliste:', e);
+                checklistItems = ["Kasse zählen", "Tische abwischen", "Küche aufräumen"];
+            }
+            
+            try {
+                zeiterfassung = JSON.parse(localStorage.getItem('gastro-zeiterfassung') || '[]');
+                console.log('✅ Zeiterfassung geladen:', zeiterfassung.length);
+            } catch(e) {
+                console.error('❌ Fehler beim Laden der Zeiterfassung:', e);
+                zeiterfassung = [];
+            }
+            
+            try {
+                tagesCheckliste = JSON.parse(localStorage.getItem('gastro-tages-checklist') || '{}');
+                console.log('✅ Tages-Checkliste geladen');
+            } catch(e) {
+                console.error('❌ Fehler beim Laden der Tages-Checkliste:', e);
+                tagesCheckliste = {};
+            }
+            
+            try {
+                kassenstände = JSON.parse(localStorage.getItem('gastro-kassenstände') || '[]');
+                console.log('✅ Kassenstände geladen:', kassenstände.length);
+            } catch(e) {
+                console.error('❌ Fehler beim Laden der Kassenstände:', e);
+                kassenstände = [];
+            }
+            
+            // TAUSCH-ANFRAGEN werden NICHT aus localStorage geladen!
+            // Sie werden aus Firestore geladen wenn benötigt
+            console.log('ℹ️ Tausch-Anfragen werden aus Firestore geladen (nicht localStorage)');
+            
+            adminPin = localStorage.getItem('gastro-admin-pin') || '1234';
+            console.log('✅ Admin-PIN geladen');
+            
+            // ==========================================
+            // KEINE DEMO-DATEN
+            // Restaurant startet leer - Mitarbeiter werden manuell hinzugefügt
+            // ==========================================
+            
+            console.log('ℹ️ Restaurant startet leer - keine Demo-Daten');
+            // Mitarbeiter werden vom Admin über "Neuer Mitarbeiter" erstellt
+
+            // Demo-Lager nur wenn gewünscht (auskommentiert)
+            // if (lagerBestand.length === 0) {
+            //     lagerBestand = [
+            //         {id: 1, name: 'Cola', status: 'ok'},
+            //         {id: 2, name: 'Fanta', status: 'niedrig'},
+            //         {id: 3, name: 'Sprite', status: 'leer'}
+            //     ];
+            //     localStorage.setItem('gastro-lager', JSON.stringify(lagerBestand));
+            // }
+
+            updateMitarbeiterSelect();
+            startClock();
+            
+            console.log('✅ App Init abgeschlossen!');
+        }
+
+        // Uhr für Stempeluhr
+        function startClock() {
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+            const dateStr = now.toLocaleDateString('de-DE', {weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'});
+            
+            const timeEl = document.getElementById('aktuelle-uhrzeit');
+            const dateEl = document.getElementById('aktuelles-datum');
+            
+            if (timeEl) timeEl.textContent = timeStr;
+            if (dateEl) dateEl.textContent = dateStr;
+        }
+
+        // Hilfsfunktion für Initialen
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase();
+        }
+
+        // Login Functions (bereits früher definiert, hier nur noch Login-Handler)
+
+        function backToMain() {
+            document.getElementById('admin-login-screen').classList.add('hidden');
+            document.getElementById('mitarbeiter-login-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function loginAdmin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('admin-pin').value;
+            if (pin === adminPin) {
+                document.getElementById('admin-login-screen').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                document.getElementById('admin-nav').classList.remove('hidden'); // Navigation einblenden
+                updateAdminUI();
+                // Statistik initialisieren
+                updateStatistik();
+                // Zeige Plan-Section als Standard
+                showSection('admin-wochenplan', null);
+            } else {
+                alert('❌ Falscher PIN!');
+            }
+        }
+
+        async function loginMitarbeiter(e) {
+            e.preventDefault();
+            const maId = document.getElementById('mitarbeiter-select').value;
+            const pin = document.getElementById('mitarbeiter-pin').value;
+            
+            console.log('🔐 Login-Versuch - ID:', maId, 'PIN:', pin);
+            
+            if (!maId) {
+                alert('❌ Bitte Mitarbeiter auswählen!');
+                return;
+            }
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                // Lade Mitarbeiter aus Firestore
+                const docSnap = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .doc(maId)
+                    .get();
+                
+                if (!docSnap.exists) {
+                    alert('❌ Mitarbeiter nicht gefunden!');
+                    console.error('❌ Mitarbeiter nicht gefunden:', maId);
+                    return;
+                }
+                
+                const ma = {
+                    id: docSnap.id,
+                    ...docSnap.data()
+                };
+                
+                console.log('🔍 Mitarbeiter geladen:', ma);
+                console.log('🔍 PIN-Vergleich:', pin, '===', ma.pin, '?', pin === ma.pin);
+                
+                if (ma.pin === pin) {
+                    loggedInMitarbeiter = ma;
+                    document.getElementById('mitarbeiter-login-screen').classList.add('hidden');
+                    document.getElementById('mitarbeiter-content').classList.remove('hidden');
+                    document.getElementById('mitarbeiter-nav').classList.remove('hidden'); // Navigation einblenden
+                    
+                    // Quick-Add Button verstecken (nur für Admin)
+                    const quickAddBtn = document.querySelector('.quick-add-btn');
+                    if (quickAddBtn) {
+                        quickAddBtn.classList.add('hidden');
+                    }
+                    
+                    updateMitarbeiterUI();
+                    // Setze Standarddatum für manuelle Zeiterfassung
+                    const manuelDatum = document.getElementById('manuel-datum');
+                    if (manuelDatum) {
+                        manuelDatum.value = new Date().toISOString().split('T')[0];
+                    }
+                    // Zeige Plan-Section als Standard
+                    showMitarbeiterSection('mitarbeiter-plan', null);
+                    console.log('✅ Login erfolgreich!');
+                } else {
+                    alert('❌ Falscher PIN!');
+                    console.error('❌ PIN falsch! Eingabe:', pin, 'Erwartet:', ma.pin);
+                }
+            } catch (error) {
+                console.error('❌ Login-Fehler:', error);
+                alert('❌ Login fehlgeschlagen: ' + error.message);
+            }
+        }
+
+        function logout() {
+            loggedInMitarbeiter = null;
+            stempelStatus = null;
+            document.getElementById('admin-content').classList.add('hidden');
+            document.getElementById('mitarbeiter-content').classList.add('hidden');
+            document.getElementById('admin-nav').classList.add('hidden'); // Navigation ausblenden
+            document.getElementById('mitarbeiter-nav').classList.add('hidden'); // Navigation ausblenden
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-pin').value = '';
+            document.getElementById('mitarbeiter-pin').value = '';
+        }
+
+        // Toggle PIN Section
+        function togglePinSection() {
+            const section = document.getElementById('pin-change-section');
+            const icon = document.getElementById('pin-toggle-icon');
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                section.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Navigation
+        function showSection(sectionId, eventObj) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Active State für Navigation setzen
+            document.querySelectorAll('#admin-nav .nav-item').forEach(item => item.classList.remove('active'));
+            
+            if (eventObj) {
+                eventObj.target.closest('.nav-item').classList.add('active');
+            } else {
+                // Wenn kein Event (z.B. beim Login), finde den passenden Button
+                const navButtons = document.querySelectorAll('#admin-nav .nav-item');
+                const sectionMap = {
+                    'admin-wochenplan': 0,
+                    'admin-team': 1,
+                    'admin-kommunikation': 2,
+                    'admin-statistik': 3,
+                    'admin-lager': 4,
+                    'admin-checkliste': 5,
+                    'admin-settings': 6
+                };
+                const index = sectionMap[sectionId];
+                if (index !== undefined && navButtons[index]) {
+                    navButtons[index].classList.add('active');
+                }
+            }
+
+            // Quick-Add Button nur im Plan-Tab zeigen
+            const quickAddBtn = document.querySelector('.quick-add-btn');
+            if (quickAddBtn) {
+                if (sectionId === 'admin-wochenplan') {
+                    quickAddBtn.classList.remove('hidden');
+                } else {
+                    quickAddBtn.classList.add('hidden');
+                }
+            }
+
+            // Bei Team-Tab zur Übersicht springen
+            if (sectionId === 'admin-team') {
+                switchTeamTab('team-uebersicht');
+            }
+            
+            // Bei Kommunikation-Tab Benachrichtigungen laden
+            if (sectionId === 'admin-kommunikation') {
+                updateBenachrichtigungen();
+            }
+        }
+
+        function switchTeamTab(tabId) {
+            // Tabs umschalten
+            document.querySelectorAll('.team-tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // Buttons umschalten
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (tabId === 'team-uebersicht') {
+                document.getElementById('tab-uebersicht').classList.add('active');
+            } else if (tabId === 'team-neu') {
+                document.getElementById('tab-neu').classList.add('active');
+            } else if (tabId === 'team-zeit') {
+                document.getElementById('tab-zeit').classList.add('active');
+            }
+        }
+
+        async function switchKommTab(tabId) {
+            // Tabs umschalten
+            document.querySelectorAll('.komm-tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // Buttons umschalten
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (tabId === 'komm-benachrichtigungen') {
+                document.getElementById('tab-komm-benachrichtigungen').classList.add('active');
+                await updateBenachrichtigungen();
+            } else if (tabId === 'komm-notizen') {
+                document.getElementById('tab-komm-notizen').classList.add('active');
+                // Timeout um sicherzustellen dass Firestore geladen ist
+                setTimeout(() => updateNotizenListe(), 100);
+            }
+        }
+
+        // Schicht-Funktionen
+        async function schichtAktion() {
+            const heute = new Date().toISOString().split('T')[0];
+            
+            if (!schichtGestartet) {
+                // Lade Schichten aus Firestore
+                const tenantId = TenantStorage.getTenantId();
+                let alleSchichten = [];
+                
+                if (tenantId) {
+                    try {
+                        const snapshot = await db.collection('tenants')
+                            .doc(tenantId)
+                            .collection('schichten')
+                            .get();
+                        
+                        snapshot.forEach(doc => {
+                            alleSchichten.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                    } catch (error) {
+                        console.error('❌ Fehler beim Laden der Schichten:', error);
+                    }
+                }
+                
+                // Prüfe ob Mitarbeiter heute Schicht hat
+                const heuteSchicht = alleSchichten.find(s => 
+                    s.mitarbeiterId === loggedInMitarbeiter.id && 
+                    s.datum === heute
+                );
+                
+                if (!heuteSchicht) {
+                    alert('❌ Du hast heute keine Schicht eingeplant!');
+                    return;
+                }
+                
+                // Prüfe ob Schicht heute bereits gestartet wurde
+                const schichtKey = `schicht-gestartet-${loggedInMitarbeiter.id}-${heute}`;
+                if (localStorage.getItem(schichtKey)) {
+                    alert('❌ Du hast deine Schicht heute bereits gestartet!');
+                    schichtGestartet = true;
+                    updateSchichtButton();
+                    return;
+                }
+                
+                // Schicht starten
+                localStorage.setItem(schichtKey, 'true');
+                schichtGestartet = true;
+                updateSchichtButton();
+                alert('✅ Schicht gestartet!');
+            } else {
+                // Schicht beenden - Modal öffnen
+                openSchichtBeendenModal();
+            }
+        }
+
+        async function updateSchichtButton() {
+            console.log('🔘 updateSchichtButton gestartet');
+            const button = document.getElementById('schicht-button');
+            const text = document.getElementById('schicht-button-text');
+            const statusText = document.getElementById('schicht-status-text');
+            
+            if (!button) {
+                console.log('❌ Button nicht gefunden!');
+                return;
+            }
+            
+            const heute = new Date().toISOString().split('T')[0];
+            console.log('📅 Heute:', heute);
+            console.log('👤 Mitarbeiter ID:', loggedInMitarbeiter.id);
+            
+            // Prüfe ob Schicht bereits gestartet wurde
+            const schichtKey = `schicht-gestartet-${loggedInMitarbeiter.id}-${heute}`;
+            if (localStorage.getItem(schichtKey)) {
+                schichtGestartet = true;
+            }
+            console.log('▶️ Schicht bereits gestartet:', schichtGestartet);
+            
+            // Lade Schichten aus Firestore
+            const tenantId = TenantStorage.getTenantId();
+            let alleSchichten = [];
+            
+            console.log('🔍 Lade Schichten aus Firestore...');
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('schichten')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        alleSchichten.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    console.log('✅ Schichten geladen:', alleSchichten.length);
+                    console.log('📋 Alle Schichten:', alleSchichten);
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Schichten:', error);
+                }
+            }
+            
+            // Prüfe ob heute Schicht
+            console.log('🔍 Suche Schicht für:', loggedInMitarbeiter.id, 'am', heute);
+            const heuteSchicht = alleSchichten.find(s => 
+                s.mitarbeiterId === loggedInMitarbeiter.id && 
+                s.datum === heute
+            );
+            console.log('🎯 Heute Schicht gefunden:', heuteSchicht);
+            
+            if (!heuteSchicht && !schichtGestartet) {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+                button.className = 'stempel-btn einstempeln';
+                text.innerHTML = '❌ Keine Schicht heute';
+                statusText.innerHTML = 'Du hast heute keine Schicht eingeplant';
+                return;
+            }
+            
+            button.disabled = false;
+            button.style.opacity = '1';
+            button.style.cursor = 'pointer';
+            
+            if (schichtGestartet) {
+                button.className = 'stempel-btn ausstempeln';
+                text.innerHTML = '⏹️ Schicht beenden';
+                statusText.innerHTML = '✅ Schicht läuft';
+            } else {
+                button.className = 'stempel-btn einstempeln';
+                text.innerHTML = '▶️ Schicht starten';
+                statusText.innerHTML = 'Schicht nicht gestartet';
+            }
+        }
+
+        function openSchichtBeendenModal() {
+            // Checkliste für Modal vorbereiten
+            const checklistContainer = document.getElementById('schicht-beenden-checklist');
+            schichtChecklistStatus = {};
+            
+            checklistContainer.innerHTML = checklistItems.map((item, i) => {
+                schichtChecklistStatus[i] = false;
+                return `
+                    <div class="checklist-item" onclick="toggleSchichtChecklistItem(${i})" id="schicht-check-${i}">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">${item}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('schicht-beenden-modal').classList.add('active');
+            updateSchichtBeendenButton();
+        }
+
+        function toggleSchichtChecklistItem(index) {
+            schichtChecklistStatus[index] = !schichtChecklistStatus[index];
+            const item = document.getElementById(`schicht-check-${index}`);
+            
+            if (schichtChecklistStatus[index]) {
+                item.classList.add('erledigt');
+                item.querySelector('.checklist-checkbox').innerHTML = '✓';
+            } else {
+                item.classList.remove('erledigt');
+                item.querySelector('.checklist-checkbox').innerHTML = '';
+            }
+            
+            updateSchichtBeendenButton();
+        }
+
+        function updateSchichtBeendenButton() {
+            const alleErledigt = Object.keys(schichtChecklistStatus).length === checklistItems.length &&
+                                  Object.values(schichtChecklistStatus).every(v => v === true);
+            
+            const button = document.getElementById('schicht-beenden-btn');
+            button.disabled = !alleErledigt;
+            
+            if (alleErledigt) {
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
+            } else {
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+            }
+        }
+
+        // Tausch-Funktionen
+        let currentTauschSchichtId = null;
+
+        async function openTauschModal(schichtId) {
+            console.log('openTauschModal aufgerufen mit schichtId:', schichtId, 'Typ:', typeof schichtId);
+            console.log('Aktueller schichten Status:', schichten, 'Length:', schichten ? schichten.length : 'undefined');
+            
+            // Falls schichten leer oder undefined ist, lade aus Firestore
+            if (!schichten || schichten.length === 0) {
+                console.log('⚠️ schichten Array ist leer - lade aus Firestore...');
+                const tenantId = TenantStorage.getTenantId();
+                console.log('TenantId:', tenantId);
+                if (tenantId && typeof db !== 'undefined') {
+                    try {
+                        const snapshot = await db.collection('tenants')
+                            .doc(tenantId)
+                            .collection('schichten')
+                            .get();
+                        
+                        schichten = [];
+                        snapshot.forEach(doc => {
+                            schichten.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                        console.log('✅ Schichten nachgeladen:', schichten.length, schichten);
+                    } catch (error) {
+                        console.error('❌ Fehler beim Nachladen der Schichten:', error);
+                    }
+                } else {
+                    console.error('❌ TenantId oder db nicht verfügbar:', { tenantId, dbExists: typeof db !== 'undefined' });
+                }
+            }
+            
+            // Falls mitarbeiter leer ist, lade aus Firestore
+            if (!mitarbeiter || mitarbeiter.length === 0) {
+                console.log('⚠️ mitarbeiter Array ist leer - lade aus Firestore...');
+                const tenantId = TenantStorage.getTenantId();
+                if (tenantId && typeof db !== 'undefined') {
+                    try {
+                        const snapshot = await db.collection('tenants')
+                            .doc(tenantId)
+                            .collection('mitarbeiter')
+                            .get();
+                        
+                        mitarbeiter = [];
+                        snapshot.forEach(doc => {
+                            mitarbeiter.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                        console.log('✅ Mitarbeiter nachgeladen:', mitarbeiter.length);
+                    } catch (error) {
+                        console.error('❌ Fehler beim Nachladen der Mitarbeiter:', error);
+                    }
+                }
+            }
+            
+            console.log('Verfügbare Schichten:', schichten.map(s => ({id: s.id, idTyp: typeof s.id})));
+            
+            currentTauschSchichtId = schichtId;
+            const schicht = schichten.find(s => s.id == schichtId);
+            console.log('Gefundene Schicht:', schicht);
+            
+            if (!schicht) {
+                console.error('Keine Schicht gefunden für ID:', schichtId);
+                return;
+            }
+            
+            const datum = new Date(schicht.datum).toLocaleDateString('de-DE', {
+                weekday: 'long',
+                day: '2-digit',
+                month: 'long'
+            });
+            const typText = schicht.typ === 'frueh' ? 'Frühschicht' : 'Spätschicht';
+            
+            document.getElementById('tausch-info').innerHTML = `
+                <strong>Du möchtest diese Schicht weggeben:</strong><br>
+                ${datum} - ${typText}
+            `;
+            
+            // Mitarbeiter-Auswahl (ohne sich selbst)
+            const select = document.getElementById('tausch-mitarbeiter');
+            select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                mitarbeiter
+                    .filter(m => m.id !== loggedInMitarbeiter.id)
+                    .map(m => `<option value="${m.id}">${m.name} - ${m.position}</option>`)
+                    .join('');
+            
+            // Reset Schicht-Auswahl
+            document.getElementById('tausch-schicht-gruppe').style.display = 'none';
+            document.getElementById('tausch-angebot-schicht').innerHTML = '<option value="">Bitte wählen...</option>';
+            
+            document.getElementById('tausch-modal').classList.add('active');
+        }
+
+        function updateTauschSchichten() {
+            const zielMitarbeiterId = document.getElementById('tausch-mitarbeiter').value;
+            console.log('updateTauschSchichten - zielMitarbeiterId:', zielMitarbeiterId);
+            
+            if (!zielMitarbeiterId) {
+                document.getElementById('tausch-schicht-gruppe').style.display = 'none';
+                return;
+            }
+            
+            // Zeige Schichten des Ziel-Mitarbeiters
+            const heute = new Date().toISOString().split('T')[0];
+            console.log('Suche Schichten für Mitarbeiter:', zielMitarbeiterId, 'ab Datum:', heute);
+            console.log('Alle Schichten:', schichten);
+            
+            const zielSchichten = schichten.filter(s => {
+                const match = s.mitarbeiterId == zielMitarbeiterId && s.datum >= heute;
+                console.log('Schicht:', s.id, 'mitarbeiterId:', s.mitarbeiterId, 'datum:', s.datum, 'Match:', match);
+                return match;
+            });
+            
+            console.log('Gefundene Ziel-Schichten:', zielSchichten);
+            
+            const select = document.getElementById('tausch-angebot-schicht');
+            
+            if (zielSchichten.length === 0) {
+                select.innerHTML = '<option value="">Keine zukünftigen Schichten verfügbar</option>';
+                document.getElementById('tausch-schicht-gruppe').style.display = 'block';
+                return;
+            }
+            
+            select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                zielSchichten.map(s => {
+                    const datum = new Date(s.datum).toLocaleDateString('de-DE', {
+                        weekday: 'short',
+                        day: '2-digit',
+                        month: '2-digit'
+                    });
+                    const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                    return `<option value="${s.id}">${datum} - ${typText}</option>`;
+                }).join('');
+            
+            document.getElementById('tausch-schicht-gruppe').style.display = 'block';
+        }
+
+        async function updateTauschAnfragen() {
+            if (!loggedInMitarbeiter) return;
+            
+            // Lade Tausch-Anfragen aus Firestore
+            const alleTauschAnfragen = await FirestoreHelpers.loadTauschAnfragen();
+            console.log('updateTauschAnfragen - Alle Anfragen:', alleTauschAnfragen);
+            console.log('updateTauschAnfragen - loggedInMitarbeiter.id:', loggedInMitarbeiter.id);
+            
+            const meineAnfragen = alleTauschAnfragen.filter(t => 
+                t.zielMitarbeiterId == loggedInMitarbeiter.id && 
+                t.status === 'ausstehend'
+            );
+            console.log('updateTauschAnfragen - Meine ausstehenden Anfragen:', meineAnfragen);
+            
+            const badge = document.getElementById('tausch-badge');
+            const card = document.getElementById('tausch-anfragen-card');
+            const liste = document.getElementById('tausch-anfragen-liste');
+            
+            if (!badge || !card || !liste) return;
+            
+            if (meineAnfragen.length === 0) {
+                badge.style.display = 'none';
+                card.style.display = 'none';
+                return;
+            }
+            
+            badge.style.display = 'block';
+            badge.textContent = meineAnfragen.length;
+            card.style.display = 'block';
+            
+            // Lade Schichten und Mitarbeiter aus Firestore
+            const tenantId = TenantStorage.getTenantId();
+            let alleSchichten = [];
+            let alleMitarbeiter = [];
+            
+            if (tenantId) {
+                try {
+                    const schichtenSnapshot = await db.collection('tenants').doc(tenantId).collection('schichten').get();
+                    schichtenSnapshot.forEach(doc => {
+                        alleSchichten.push({id: doc.id, ...doc.data()});
+                    });
+                    
+                    const mitarbeiterSnapshot = await db.collection('tenants').doc(tenantId).collection('mitarbeiter').get();
+                    mitarbeiterSnapshot.forEach(doc => {
+                        alleMitarbeiter.push({id: doc.id, ...doc.data()});
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden:', error);
+                }
+            }
+            
+            liste.innerHTML = meineAnfragen.map(anfrage => {
+                const schichtAbsender = alleSchichten.find(s => s.id == anfrage.schichtId);
+                const schichtAngebot = alleSchichten.find(s => s.id == anfrage.angebotSchichtId);
+                const absender = alleMitarbeiter.find(m => m.id == anfrage.absenderId);
+                
+                if (!schichtAbsender || !schichtAngebot || !absender) return '';
+                
+                const datumAbsender = new Date(schichtAbsender.datum).toLocaleDateString('de-DE', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+                const typTextAbsender = schichtAbsender.typ === 'frueh' ? 'Früh' : 'Spät';
+                
+                const datumAngebot = new Date(schichtAngebot.datum).toLocaleDateString('de-DE', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+                const typTextAngebot = schichtAngebot.typ === 'frueh' ? 'Früh' : 'Spät';
+                
+                return `
+                    <div class="list-item" style="flex-direction: column; align-items: stretch;">
+                        <div class="list-item-info">
+                            <strong>🔄 Tausch-Anfrage von ${absender.name}</strong>
+                            <div style="margin-top: 12px; background: white; padding: 12px; border-radius: 8px;">
+                                <p style="margin: 0; color: #333;">
+                                    <strong>Du gibst ab:</strong> ${datumAngebot} - ${typTextAngebot}<br>
+                                    <strong>Du bekommst:</strong> ${datumAbsender} - ${typTextAbsender}
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="akzeptiereTausch('${anfrage.id}')" style="flex: 1;">✅ Akzeptieren</button>
+                            <button class="btn btn-secondary" onclick="lehneTauschAb('${anfrage.id}')" style="flex: 1;">❌ Ablehnen</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function akzeptiereTausch(anfrageId) {
+            console.log('akzeptiereTausch aufgerufen mit ID:', anfrageId);
+            
+            try {
+                const alleTauschAnfragen = await FirestoreHelpers.loadTauschAnfragen();
+                const anfrage = alleTauschAnfragen.find(a => a.id == anfrageId);
+                console.log('Gefundene Anfrage:', anfrage);
+                
+                if (!anfrage) {
+                    console.error('Anfrage nicht gefunden!');
+                    return;
+                }
+                
+                const schichtAbsender = schichten.find(s => s.id == anfrage.schichtId);
+                const schichtZiel = schichten.find(s => s.id == anfrage.angebotSchichtId);
+                
+                console.log('Schicht Absender:', schichtAbsender);
+                console.log('Schicht Ziel:', schichtZiel);
+                
+                if (!schichtAbsender || !schichtZiel) {
+                    console.error('Schichten nicht gefunden!');
+                    alert('❌ Fehler: Schichten nicht gefunden');
+                    return;
+                }
+                
+                // Schichten tauschen - Mitarbeiter-IDs austauschen
+                const tempMitarbeiterId = schichtAbsender.mitarbeiterId;
+                const neueAbsenderMitarbeiterId = schichtZiel.mitarbeiterId;
+                const neueZielMitarbeiterId = tempMitarbeiterId;
+                
+                // In Firestore aktualisieren
+                const tenantId = TenantStorage.getTenantId();
+                if (tenantId) {
+                    // Schicht 1 aktualisieren
+                    await db.collection('tenants').doc(tenantId)
+                        .collection('schichten').doc(schichtAbsender.id)
+                        .update({ mitarbeiterId: neueAbsenderMitarbeiterId });
+                    
+                    // Schicht 2 aktualisieren
+                    await db.collection('tenants').doc(tenantId)
+                        .collection('schichten').doc(schichtZiel.id)
+                        .update({ mitarbeiterId: neueZielMitarbeiterId });
+                    
+                    // Tausch-Anfrage löschen
+                    await FirestoreHelpers.deleteTauschAnfrage(anfrageId);
+                    
+                    console.log('✅ Schichten in Firestore getauscht und Anfrage gelöscht');
+                }
+                
+                // Lokale Arrays aktualisieren
+                schichtAbsender.mitarbeiterId = neueAbsenderMitarbeiterId;
+                schichtZiel.mitarbeiterId = neueZielMitarbeiterId;
+                
+                // Benachrichtigung an Admin erstellen
+                const absender = mitarbeiter.find(m => m.id == anfrage.absenderId);
+                const ziel = mitarbeiter.find(m => m.id == anfrage.zielMitarbeiterId);
+                
+                if (absender && ziel) {
+                    const datumAbsender = new Date(schichtAbsender.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
+                    const datumZiel = new Date(schichtZiel.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
+                    
+                    const notizData = {
+                        typ: 'benachrichtigung',
+                        betreff: 'Schichttausch durchgeführt',
+                        text: `${absender.name} und ${ziel.name} haben ihre Schichten getauscht:\n• ${absender.name}: ${datumAbsender} → ${datumZiel}\n• ${ziel.name}: ${datumZiel} → ${datumAbsender}`,
+                        mitarbeiterId: anfrage.absenderId,
+                        mitarbeiterName: absender.name,
+                        datum: new Date().toISOString(),
+                        antwort: null,
+                        antwortDatum: null
+                    };
+                    
+                    await FirestoreHelpers.createNotiz(notizData);
+                }
+                
+                // UI aktualisieren
+                await updateTauschAnfragen();
+                await updateMitarbeiterCalendar();
+                
+                alert('✅ Tausch akzeptiert! Der Dienstplan wurde aktualisiert.');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Akzeptieren:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        async function lehneTauschAb(anfrageId) {
+            try {
+                await FirestoreHelpers.deleteTauschAnfrage(anfrageId);
+                await updateTauschAnfragen();
+                alert('❌ Tausch-Anfrage abgelehnt.');
+            } catch (error) {
+                console.error('❌ Fehler beim Ablehnen:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        function showMitarbeiterSection(sectionId, eventObj) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Active State für Navigation setzen
+            document.querySelectorAll('#mitarbeiter-nav .nav-item').forEach(item => item.classList.remove('active'));
+            
+            if (eventObj) {
+                eventObj.target.closest('.nav-item').classList.add('active');
+            } else {
+                // Wenn kein Event (z.B. beim Login), finde den passenden Button
+                const navButtons = document.querySelectorAll('#mitarbeiter-nav .nav-item');
+                const sectionMap = {
+                    'mitarbeiter-plan': 0,
+                    'mitarbeiter-schicht': 1,
+                    'mitarbeiter-zeiten': 2,
+                    'mitarbeiter-lager': 3,
+                    'mitarbeiter-notizen': 4
+                };
+                const index = sectionMap[sectionId];
+                if (index !== undefined && navButtons[index]) {
+                    navButtons[index].classList.add('active');
+                }
+            }
+
+            // Update spezifische Sections
+            if (sectionId === 'mitarbeiter-plan') {
+                updateMitarbeiterCalendar();
+            } else if (sectionId === 'mitarbeiter-schicht') {
+                updateMeineSchichten();
+                updateSchichtButton();
+            } else if (sectionId === 'mitarbeiter-zeiten') {
+                updateMeineZeiten();
+            } else if (sectionId === 'mitarbeiter-lager') {
+                updateMitarbeiterLagerGrid();
+            } else if (sectionId === 'mitarbeiter-notizen') {
+                setTimeout(() => updateMeineNotizen(), 100); // async
+                updateTauschAnfragen();
+            }
+        }
+
+        // Modal Functions
+        async function openQuickAddModal() {
+            document.getElementById('quick-add-modal').classList.add('active');
+            document.getElementById('quick-datum').value = new Date().toISOString().split('T')[0];
+            await updateQuickAddSelect();
+        }
+
+        function openLagerModal() {
+            document.getElementById('lager-modal').classList.add('active');
+        }
+
+        async function openEditMitarbeiterModal(id) {
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                const docSnap = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .doc(id)
+                    .get();
+                
+                if (!docSnap.exists) {
+                    alert('❌ Mitarbeiter nicht gefunden!');
+                    return;
+                }
+                
+                const ma = {
+                    id: docSnap.id,
+                    ...docSnap.data()
+                };
+                
+                document.getElementById('edit-ma-id').value = ma.id;
+                document.getElementById('edit-ma-name').value = ma.name;
+                document.getElementById('edit-ma-position').value = ma.position;
+                document.getElementById('edit-ma-telefon').value = ma.telefon;
+                document.getElementById('edit-ma-pin').value = ma.pin;
+                document.getElementById('edit-mitarbeiter-modal').classList.add('active');
+            } catch (error) {
+                console.error('❌ Fehler beim Laden des Mitarbeiters:', error);
+                alert('❌ Fehler beim Laden: ' + error.message);
+            }
+        }
+
+        function openZeitModal() {
+            document.getElementById('zeit-modal').classList.add('active');
+            document.getElementById('zeit-datum').value = new Date().toISOString().split('T')[0];
+            updateZeitSelect();
+        }
+
+        async function openLagerStatusModal(itemId) {
+            console.log('🛒 openLagerStatusModal aufgerufen mit ID:', itemId);
+            currentLagerItemId = itemId;
+            
+            const tenantId = TenantStorage.getTenantId();
+            console.log('🛒 Tenant-ID:', tenantId);
+            if (!tenantId) return;
+            
+            try {
+                const docSnap = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .doc(itemId)
+                    .get();
+                
+                console.log('🛒 Firestore Abfrage abgeschlossen, existiert:', docSnap.exists);
+                
+                if (docSnap.exists) {
+                    const item = {
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    };
+                    console.log('🛒 Lager-Item:', item);
+                    document.getElementById('lager-item-name').textContent = item.name;
+                    document.getElementById('lager-status-modal').classList.add('active');
+                    console.log('🛒 Modal geöffnet!');
+                } else {
+                    console.error('❌ Item nicht gefunden in Firestore:', itemId);
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden des Lager-Items:', error);
+            }
+        }
+
+        async function openAntwortModal(notizId) {
+            console.log('📝 openAntwortModal aufgerufen mit ID:', notizId);
+            currentNotizId = notizId;
+            
+            // Lade Notizen aus Firestore
+            const alleNotizen = await FirestoreHelpers.loadNotizen();
+            const notiz = alleNotizen.find(n => n.id === notizId);
+            
+            console.log('📝 Notiz gefunden:', notiz);
+            
+            if (notiz) {
+                const typIcons = {
+                    'info': 'ℹ️',
+                    'frage': '❓',
+                    'problem': '⚠️',
+                    'idee': '💡'
+                };
+                const icon = typIcons[notiz.typ] || '💬';
+                
+                document.getElementById('original-betreff').textContent = icon + ' ' + notiz.betreff;
+                document.getElementById('original-text').textContent = notiz.text;
+                document.getElementById('original-autor').textContent = `Von ${notiz.mitarbeiterName} am ${new Date(notiz.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})}`;
+                document.getElementById('antwort-modal').classList.add('active');
+                console.log('✅ Modal geöffnet!');
+            } else {
+                console.error('❌ Notiz nicht gefunden:', notizId);
+            }
+        }
+
+        async function saveLagerStatus(newStatus) {
+            if (!currentLagerItemId) return;
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                // Lade Item-Info aus Firestore
+                const docSnap = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .doc(currentLagerItemId)
+                    .get();
+                
+                if (!docSnap.exists) {
+                    alert('❌ Artikel nicht gefunden!');
+                    return;
+                }
+                
+                const item = {
+                    id: docSnap.id,
+                    ...docSnap.data()
+                };
+                
+                // Update Status
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .doc(currentLagerItemId)
+                    .update({
+                        status: newStatus,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                await updateMitarbeiterLagerGrid();
+                await updateEinkaufsliste();
+                closeModal('lager-status-modal');
+                
+                // Benachrichtigung erstellen
+                const notiz = {
+                    id: Date.now(),
+                    typ: 'benachrichtigung',
+                    betreff: 'Lagerbestand gemeldet',
+                    text: `${item.name}: Status auf "${getStatusText(newStatus)}" geändert`,
+                    mitarbeiterId: loggedInMitarbeiter.id,
+                    mitarbeiterName: loggedInMitarbeiter.name,
+                    datum: new Date().toISOString(),
+                    antwort: null,
+                    antwortDatum: null
+                };
+                notizen.push(notiz);
+                localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
+                
+                alert('✅ Status aktualisiert!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Speichern des Status:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'ok': return 'Genügend vorhanden';
+                case 'niedrig': return 'Bald nachbestellen';
+                case 'leer': return 'Sofort einkaufen';
+                default: return status;
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Stempeluhr Funktionen
+        // Manuelle Zeiterfassung
+        function updateMeineZeiten() {
+            const liste = document.getElementById('meine-zeiten-liste');
+            if (!liste) return;
+            
+            const meineZeiten = zeiterfassung.filter(z => 
+                z.mitarbeiterId === loggedInMitarbeiter.id
+            ).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            if (meineZeiten.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><p>Noch keine Zeiten erfasst</p></div>';
+                return;
+            }
+            
+            liste.innerHTML = meineZeiten.slice(0, 10).map(z => {
+                const dauer = calculateHours(z.start, z.ende);
+                return `
+                    <div class="zeit-entry">
+                        <strong>${new Date(z.datum).toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'})}</strong>
+                        <small style="display: block; color: #666; margin-top: 4px;">
+                            ${z.start} - ${z.ende} (${dauer}h)
+                        </small>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Admin UI Updates
+        async function updateAdminUI() {
+            await updateCalendar(); // Warte auf Firestore-Laden
+            await updateMitarbeiterListe(); // Warte auf Firestore-Laden
+            await updateNotizenListe(); // Warte auf Firestore-Laden
+            await updateEinkaufsliste(); // Warte auf Firestore-Laden
+            updateMasterChecklist();
+            await updateZeiterfassungListe(); // Warte auf Firestore-Laden
+        }
+
+        async function updateCalendar() {
+            console.log('📅 updateCalendar gestartet...');
+            const grid = document.getElementById('calendar-grid');
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+            
+            const kw1 = getWeekNumber(startOfWeek);
+            const kw2 = getWeekNumber(new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000));
+            document.getElementById('aktuelle-kw').innerHTML = `KW ${kw1} & ${kw2}`;
+            
+            // Lade Mitarbeiter aus Firestore
+            let mitarbeiterMap = {};
+            const tenantId = TenantStorage.getTenantId();
+            console.log('📅 Tenant-ID:', tenantId);
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('mitarbeiter')
+                        .get();
+                    
+                    console.log('📅 Mitarbeiter für Kalender geladen:', snapshot.size);
+                    
+                    snapshot.forEach(doc => {
+                        mitarbeiterMap[doc.id] = {
+                            id: doc.id,
+                            ...doc.data()
+                        };
+                        console.log('📅 Mitarbeiter:', doc.id, doc.data().name);
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Mitarbeiter für Kalender:', error);
+                }
+            }
+            
+            console.log('📅 mitarbeiterMap:', mitarbeiterMap);
+            
+            // Lade Schichten aus Firestore
+            let schichtenArray = [];
+            if (tenantId) {
+                try {
+                    const schichtenSnapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('schichten')
+                        .get();
+                    
+                    console.log('📅 Schichten für Kalender geladen:', schichtenSnapshot.size);
+                    
+                    schichtenSnapshot.forEach(doc => {
+                        schichtenArray.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Schichten für Kalender:', error);
+                }
+            }
+            
+            console.log('📅 Schichten:', schichtenArray.length);
+            
+            const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+            let html = '';
+            
+            // Erste Woche
+            html += `<div style="width: 100%; margin-bottom: 20px;">`;
+            html += `<h3 style="margin-bottom: 12px; color: #8b6f47; font-size: 1.1em;">📅 KW ${kw1}</h3>`;
+            html += `<div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">`;
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const todayStr = new Date().toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+                
+                const daySchichten = schichtenArray
+                    .filter(s => s.datum === dateStr)
+                    .sort((a, b) => a.typ === 'frueh' ? -1 : 1);
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'heute' : ''}" style="min-width: 140px;">
+                        <div class="calendar-day-header">
+                            ${days[i]}<br>
+                            <small>${date.getDate()}.${date.getMonth() + 1}</small>
+                        </div>
+                        ${daySchichten.length === 0 ? '<small style="color: #999; display: block; text-align: center; margin-top: 8px;">Keine Schichten</small>' : ''}
+                        ${daySchichten.map(s => {
+                            const m = mitarbeiterMap[s.mitarbeiterId];
+                            const initials = m ? getInitials(m.name) : '??';
+                            const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
+                            const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            return `
+                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen">
+                                    <span class="schicht-initials">${initials}</span>
+                                    <strong>${m ? m.name : 'Unbekannt'}</strong>
+                                    <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+            
+            // Zweite Woche
+            html += `<div style="width: 100%;">`;
+            html += `<h3 style="margin-bottom: 12px; color: #8b6f47; font-size: 1.1em;">📅 KW ${kw2}</h3>`;
+            html += `<div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">`;
+            
+            for (let i = 7; i < 14; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const todayStr = new Date().toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+                
+                const daySchichten = schichtenArray.filter(s => s.datum === dateStr).sort((a, b) => a.typ === "frueh" ? -1 : 1);
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'heute' : ''}" style="min-width: 140px;">
+                        <div class="calendar-day-header">
+                            ${days[i - 7]}<br>
+                            <small>${date.getDate()}.${date.getMonth() + 1}</small>
+                        </div>
+                        ${daySchichten.length === 0 ? '<small style="color: #999; display: block; text-align: center; margin-top: 8px;">Keine Schichten</small>' : ''}
+                        ${daySchichten.map(s => {
+                            const m = mitarbeiterMap[s.mitarbeiterId];
+                            const initials = m ? getInitials(m.name) : '??';
+                            const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
+                            const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            return `
+                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen">
+                                    <span class="schicht-initials">${initials}</span>
+                                    <strong>${m ? m.name : 'Unbekannt'}</strong>
+                                    <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+            
+            grid.innerHTML = html;
+            
+            // Auto-Scroll zum heutigen Tag (längeres Timeout für Admin)
+            setTimeout(() => {
+                const todayElement = grid.querySelector('.calendar-day.heute');
+                if (todayElement) {
+                    todayElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 300);
+        }
+
+        async function updateMitarbeiterListe() {
+            const liste = document.getElementById('mitarbeiter-liste');
+            if (!liste) return;
+            
+            // Lade Mitarbeiter aus Firestore
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                liste.innerHTML = '<div class="empty-state"><div class="icon">❌</div><p>Kein Restaurant ausgewählt</p></div>';
+                return;
+            }
+            
+            try {
+                const snapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .get();
+                
+                const mitarbeiterListe = [];
+                snapshot.forEach(doc => {
+                    mitarbeiterListe.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                if (mitarbeiterListe.length === 0) {
+                    liste.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Keine Mitarbeiter</p></div>';
+                    return;
+                }
+                
+                liste.innerHTML = mitarbeiterListe.map(m => `
+                    <div class="list-item">
+                        <div class="list-item-info">
+                            <strong>${m.name}</strong>
+                            <small>${m.position} • 📞 ${m.telefon} • PIN: ${m.pin}</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-primary btn-small" onclick="openEditMitarbeiterModal('${m.id}')">✏️</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteMitarbeiter('${m.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('❌ Fehler beim Laden der Mitarbeiter:', error);
+                liste.innerHTML = '<div class="empty-state"><div class="icon">❌</div><p>Fehler beim Laden</p></div>';
+            }
+        }
+
+        async function updateNotizenListe() {
+            const liste = document.getElementById('notizen-liste');
+            if (!liste) return;
+            
+            // Lade Notizen aus Firestore
+            const alleNotizen = await FirestoreHelpers.loadNotizen();
+            console.log('📝 Alle geladenen Notizen:', alleNotizen);
+            console.log('📝 Erste Notiz Detail:', alleNotizen[0]);
+            
+            // Nur echte Notizen (keine Benachrichtigungen)
+            const echteNotizen = alleNotizen.filter(n => {
+                console.log('🔍 Prüfe Notiz:', n.id, 'typ:', n.typ, 'ist Benachrichtigung?', n.typ === 'benachrichtigung');
+                return n.typ !== 'benachrichtigung';
+            });
+            console.log('📝 Nach Filter (typ !== benachrichtigung):', echteNotizen);
+            
+            if (echteNotizen.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><div class="icon">💬</div><p>Keine Notizen</p></div>';
+                return;
+            }
+            
+            const sorted = [...echteNotizen].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            // Icons für Notiztypen
+            const typIcons = {
+                'info': 'ℹ️',
+                'frage': '❓',
+                'problem': '⚠️',
+                'idee': '💡'
+            };
+            
+            liste.innerHTML = sorted.slice(0, 20).map(n => {
+                const icon = typIcons[n.typ] || '💬';
+                const hatAntwort = n.antwort && n.antwort.length > 0;
+                
+                return `
+                    <div class="list-item" style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div class="list-item-info" style="flex: 1;">
+                                <strong>${icon} ${n.betreff}</strong>
+                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</small>
+                                ${n.text ? `<p style="margin-top: 8px; color: #333; font-size: 0.95em;">${n.text}</p>` : ''}
+                            </div>
+                            ${!hatAntwort ? `<button class="btn btn-primary btn-small" onclick="openAntwortModal('${n.id}')" style="margin-left: 12px;">↩️ Antworten</button>` : ''}
+                        </div>
+                        ${hatAntwort ? `
+                            <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 8px; border-left: 4px solid #10b981;">
+                                <strong style="color: #059669; font-size: 0.9em;">✅ Admin-Antwort:</strong>
+                                <p style="color: #333; margin-top: 4px; font-size: 0.95em;">${n.antwort}</p>
+                                <small style="color: #666; margin-top: 4px; display: block;">${new Date(n.antwortDatum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function updateBenachrichtigungen() {
+            const liste = document.getElementById('benachrichtigungen-liste');
+            if (!liste) return;
+            
+            // Lade Notizen aus Firestore
+            const alleNotizen = await FirestoreHelpers.loadNotizen();
+            
+            // Nur Benachrichtigungen
+            const benachrichtigungen = alleNotizen.filter(n => n.typ === 'benachrichtigung');
+            console.log('🔔 Benachrichtigungen geladen:', benachrichtigungen.length, benachrichtigungen);
+            
+            const kassenMeldungen = kassenstände.map(k => ({
+                ...k,
+                typ: 'kassenstand',
+                betreff: 'Kassenstand gemeldet'
+            }));
+            
+            const alle = [...benachrichtigungen, ...kassenMeldungen].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            if (alle.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><div class="icon">🔔</div><p>Keine Benachrichtigungen</p></div>';
+                return;
+            }
+            
+            liste.innerHTML = alle.slice(0, 30).map(n => {
+                const isGelesen = n.gelesen || false;
+                const opacity = isGelesen ? 'opacity: 0.5;' : '';
+                
+                if (n.typ === 'kassenstand') {
+                    return `
+                        <div class="list-item" style="${opacity}">
+                            <div class="list-item-info">
+                                <strong>💰 ${n.betreff}</strong>
+                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                                <p style="margin-top: 8px; color: #333; font-size: 1.1em; font-weight: 600;">Betrag: €${parseFloat(n.betrag).toFixed(2)}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="list-item" style="${opacity}">
+                            <div class="list-item-info">
+                                <strong>🔄 ${n.betreff}</strong>
+                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                                ${n.text ? `<p style="margin-top: 8px; color: #333; font-size: 0.95em; white-space: pre-line;">${n.text}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // ==========================================
+        // BULK-ACTIONS für Notizen & Benachrichtigungen
+        // ==========================================
+        
+        function markiereAlleNotizenGelesen() {
+            if (!confirm('Alle Notizen als gelesen markieren?')) return;
+            
+            notizen.forEach(n => {
+                if (n.typ !== 'benachrichtigung') {
+                    n.gelesen = true;
+                }
+            });
+            
+            localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
+            updateNotizenListe();
+            showToast('✅ Alle Notizen als gelesen markiert');
+        }
+        
+        function loescheAlleNotizen() {
+            if (!confirm('⚠️ ALLE Notizen unwiderruflich löschen?')) return;
+            if (!confirm('Wirklich? Dies kann nicht rückgängig gemacht werden!')) return;
+            
+            // Nur echte Notizen löschen, Benachrichtigungen behalten
+            notizen = notizen.filter(n => n.typ === 'benachrichtigung');
+            
+            localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
+            updateNotizenListe();
+            showToast('🗑️ Alle Notizen gelöscht');
+        }
+        
+        function markiereAlleBenachrichtigungenGelesen() {
+            if (!confirm('Alle Benachrichtigungen als gelesen markieren?')) return;
+            
+            notizen.forEach(n => {
+                if (n.typ === 'benachrichtigung') {
+                    n.gelesen = true;
+                }
+            });
+            
+            kassenstände.forEach(k => k.gelesen = true);
+            
+            localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
+            localStorage.setItem('gastro-kassenstände', JSON.stringify(kassenstände));
+            updateBenachrichtigungen();
+            showToast('✅ Alle Benachrichtigungen als gelesen markiert');
+        }
+        
+        function loescheAlleBenachrichtigungen() {
+            if (!confirm('⚠️ ALLE Benachrichtigungen unwiderruflich löschen?')) return;
+            if (!confirm('Wirklich? Dies kann nicht rückgängig gemacht werden!')) return;
+            
+            // Benachrichtigungen aus Notizen löschen
+            notizen = notizen.filter(n => n.typ !== 'benachrichtigung');
+            
+            // Kassenstände löschen
+            kassenstände = [];
+            
+            localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
+            localStorage.setItem('gastro-kassenstände', JSON.stringify(kassenstände));
+            updateBenachrichtigungen();
+            showToast('🗑️ Alle Benachrichtigungen gelöscht');
+        }
+        
+        // Toast Notification Helper
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        async function updateEinkaufsliste() {
+            const liste = document.getElementById('einkaufsliste');
+            
+            // Lade Lager aus Firestore
+            let lagerItems = [];
+            const tenantId = TenantStorage.getTenantId();
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('lager')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        lagerItems.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden des Lagers:', error);
+                }
+            }
+            
+            const sortiert = {
+                leer: lagerItems.filter(l => l.status === 'leer'),
+                niedrig: lagerItems.filter(l => l.status === 'niedrig'),
+                ok: lagerItems.filter(l => l.status === 'ok')
+            };
+            
+            let html = '';
+            
+            if (sortiert.leer.length > 0) {
+                html += '<h3 style="color: #ef4444; margin-bottom: 12px;">🔴 Sofort einkaufen!</h3>';
+                sortiert.leer.forEach(item => {
+                    html += `
+                        <div class="list-item" style="border-left: 4px solid #ef4444;">
+                            <div class="list-item-info">
+                                <strong>${item.name}</strong>
+                            </div>
+                            <div class="status-buttons">
+                                <button class="status-btn ok" onclick="changeStatus('${item.id}', 'ok')">✅</button>
+                                <button class="status-btn niedrig" onclick="changeStatus('${item.id}', 'niedrig')">⚠️</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (sortiert.niedrig.length > 0) {
+                html += '<h3 style="color: #f59e0b; margin: 20px 0 12px;">⚠️ Bald nachbestellen</h3>';
+                sortiert.niedrig.forEach(item => {
+                    html += `
+                        <div class="list-item" style="border-left: 4px solid #f59e0b;">
+                            <div class="list-item-info">
+                                <strong>${item.name}</strong>
+                            </div>
+                            <div class="status-buttons">
+                                <button class="status-btn ok" onclick="changeStatus('${item.id}', 'ok')">✅</button>
+                                <button class="status-btn leer" onclick="changeStatus('${item.id}', 'leer')">🔴</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (sortiert.ok.length > 0) {
+                html += '<h3 style="color: #10b981; margin: 20px 0 12px;">✅ Genügend vorhanden</h3>';
+                sortiert.ok.forEach(item => {
+                    html += `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <strong>${item.name}</strong>
+                            </div>
+                            <div class="status-buttons">
+                                <button class="status-btn niedrig" onclick="changeStatus('${item.id}', 'niedrig')">⚠️</button>
+                                <button class="status-btn leer" onclick="changeStatus('${item.id}', 'leer')">🔴</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            liste.innerHTML = html || '<div class="empty-state"><p>Keine Artikel</p></div>';
+        }
+
+        async function updateZeiterfassungListe() {
+            const liste = document.getElementById('zeiterfassung-liste');
+            const filterSelect = document.getElementById('zeit-mitarbeiter-filter');
+            
+            // Lade Mitarbeiter aus Firestore
+            let mitarbeiterMap = {};
+            const tenantId = TenantStorage.getTenantId();
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('mitarbeiter')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        mitarbeiterMap[doc.id] = {
+                            id: doc.id,
+                            ...doc.data()
+                        };
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Mitarbeiter für Zeiterfassung:', error);
+                }
+            }
+            
+            const mitarbeiterListe = Object.values(mitarbeiterMap);
+            
+            // Update Mitarbeiter-Dropdown
+            if (filterSelect) {
+                const currentValue = filterSelect.value;
+                filterSelect.innerHTML = '<option value="">Alle Mitarbeiter</option>' + 
+                    mitarbeiterListe.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                filterSelect.value = currentValue;
+            }
+            
+            if (zeiterfassung.length === 0) {
+                liste.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⏰</div>
+                        <p>Keine Zeiteinträge</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openZeitModal()">➕ Manuelle Erfassung</button>
+                `;
+                return;
+            }
+
+            // Filter nach ausgewähltem Mitarbeiter
+            const selectedMitarbeiterId = filterSelect ? filterSelect.value : '';
+            let filtered = zeiterfassung.filter(z => z.type !== 'stempel'); // Nur manuelle Einträge
+            
+            if (selectedMitarbeiterId) {
+                filtered = filtered.filter(z => z.mitarbeiterId == selectedMitarbeiterId);
+            }
+            
+            // Sortiere nach Datum (neueste zuerst)
+            const sorted = [...filtered].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            // Berechne Gesamtstunden
+            let totalHours = 0;
+            sorted.forEach(z => {
+                totalHours += parseFloat(calculateHours(z.start, z.ende));
+            });
+            
+            liste.innerHTML = `
+                <button class="btn btn-primary" onclick="openZeitModal()" style="margin-bottom: 16px;">➕ Manuelle Erfassung</button>
+                
+                ${sorted.length > 0 ? `
+                    <div style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                        <strong>Gesamtstunden ${selectedMitarbeiterId ? mitarbeiterMap[selectedMitarbeiterId]?.name : 'Alle'}: ${totalHours.toFixed(1)}h</strong>
+                    </div>
+                ` : ''}
+                
+                ${sorted.length === 0 ? '<p style="color: #999; text-align: center;">Keine Einträge gefunden</p>' : ''}
+                ${sorted.slice(0, 20).map(z => {
+                    const m = mitarbeiterMap[z.mitarbeiterId];
+                    const dauer = calculateHours(z.start, z.ende);
+                    return `
+                        <div class="zeit-entry">
+                            <strong>${m ? m.name : 'Unbekannt'}</strong>
+                            <small style="display: block; color: #666; margin-top: 4px;">
+                                ${new Date(z.datum).toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'})} • ${z.start} - ${z.ende} (${dauer}h)
+                            </small>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function calculateHours(start, ende) {
+            const [sh, sm] = start.split(':').map(Number);
+            const [eh, em] = ende.split(':').map(Number);
+            let startMin = sh * 60 + sm;
+            let endeMin = eh * 60 + em;
+            
+            // Wenn Ende-Zeit kleiner als Start-Zeit, wurde Mitternacht überschritten
+            if (endeMin < startMin) {
+                endeMin += 24 * 60; // Füge 24 Stunden hinzu
+            }
+            
+            return ((endeMin - startMin) / 60).toFixed(1);
+        }
+
+        function updateMasterChecklist() {
+            const liste = document.getElementById('master-checklist');
+            liste.innerHTML = checklistItems.map((item, i) => `
+                <div class="list-item">
+                    <span>${item}</span>
+                    <button class="btn btn-danger btn-small" onclick="deleteChecklistItem(${i})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function updateSchichtSelect() {
+            const select = document.getElementById('schicht-mitarbeiter');
+            if (!select) return; // Element existiert nicht mehr
+            select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                mitarbeiter.map(m => `<option value="${m.id}">${m.name} - ${m.position}</option>`).join('');
+        }
+
+        async function updateQuickAddSelect() {
+            const select = document.getElementById('quick-mitarbeiter');
+            if (!select) return;
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                select.innerHTML = '<option value="">Kein Restaurant</option>';
+                return;
+            }
+            
+            try {
+                const snapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .get();
+                
+                const mitarbeiterListe = [];
+                snapshot.forEach(doc => {
+                    mitarbeiterListe.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                if (mitarbeiterListe.length === 0) {
+                    select.innerHTML = '<option value="">Keine Mitarbeiter</option>';
+                } else {
+                    select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                        mitarbeiterListe.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden für Quick-Add:', error);
+                select.innerHTML = '<option value="">Fehler beim Laden</option>';
+            }
+        }
+
+        async function updateZeitSelect() {
+            const select = document.getElementById('zeit-mitarbeiter');
+            if (!select) return;
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                select.innerHTML = '<option value="">Kein Restaurant</option>';
+                return;
+            }
+            
+            try {
+                const snapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .get();
+                
+                const mitarbeiterListe = [];
+                snapshot.forEach(doc => {
+                    mitarbeiterListe.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                if (mitarbeiterListe.length === 0) {
+                    select.innerHTML = '<option value="">Keine Mitarbeiter</option>';
+                } else {
+                    select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                        mitarbeiterListe.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden für Zeit-Select:', error);
+                select.innerHTML = '<option value="">Fehler beim Laden</option>';
+            }
+        }
+
+        async function updateMitarbeiterSelect() {
+            const select = document.getElementById('mitarbeiter-select');
+            if (!select) return;
+            
+            const tenantId = TenantStorage.getTenantId();
+            console.log('🔍 updateMitarbeiterSelect - Tenant:', tenantId);
+            
+            if (!tenantId) {
+                select.innerHTML = '<option value="">Kein Restaurant</option>';
+                return;
+            }
+            
+            try {
+                // OHNE active Filter - lade ALLE Mitarbeiter
+                const snapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .get();
+                
+                console.log('🔍 Mitarbeiter gefunden:', snapshot.size);
+                
+                const mitarbeiterListe = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    console.log('🔍 Mitarbeiter:', doc.id, data);
+                    mitarbeiterListe.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+                
+                if (mitarbeiterListe.length === 0) {
+                    select.innerHTML = '<option value="">Keine Mitarbeiter verfügbar</option>';
+                    console.log('❌ Keine Mitarbeiter in Firestore gefunden!');
+                } else {
+                    select.innerHTML = '<option value="">Bitte wählen...</option>' + 
+                        mitarbeiterListe.map(m => `<option value="${m.id}">${m.name} - ${m.position}</option>`).join('');
+                    console.log('✅ Dropdown gefüllt mit', mitarbeiterListe.length, 'Mitarbeitern');
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden der Mitarbeiter-Auswahl:', error);
+                select.innerHTML = '<option value="">Fehler beim Laden</option>';
+            }
+        }
+
+        // Mitarbeiter UI
+        async function updateMitarbeiterUI() {
+            await updateMitarbeiterCalendar();
+            await updateMeineSchichten();
+            await updateSchichtButton();
+            updateTauschAnfragen();
+        }
+
+        async function updateMitarbeiterCalendar() {
+            const grid = document.getElementById('mitarbeiter-calendar-grid');
+            if (!grid) return;
+            
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+            
+            const kw1 = getWeekNumber(startOfWeek);
+            const kw2 = getWeekNumber(new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000));
+            const kwEl = document.getElementById('mitarbeiter-kw');
+            if (kwEl) kwEl.innerHTML = `KW ${kw1} & ${kw2}`;
+            
+            // Lade Mitarbeiter aus Firestore
+            let mitarbeiterMap = {};
+            const tenantId = TenantStorage.getTenantId();
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('mitarbeiter')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        mitarbeiterMap[doc.id] = {
+                            id: doc.id,
+                            ...doc.data()
+                        };
+                    });
+                    
+                    // WICHTIG: Aktualisiere globale mitarbeiter Variable für Tausch-Funktionen
+                    mitarbeiter = Object.values(mitarbeiterMap);
+                    console.log('✅ Globale mitarbeiter Variable aktualisiert:', mitarbeiter.length, 'Mitarbeiter');
+                    
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Mitarbeiter für Mitarbeiter-Kalender:', error);
+                }
+            }
+            
+            // Lade Schichten aus Firestore
+            let schichtenArray = [];
+            if (tenantId) {
+                try {
+                    const schichtenSnapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('schichten')
+                        .get();
+                    
+                    schichtenSnapshot.forEach(doc => {
+                        schichtenArray.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    // WICHTIG: Aktualisiere globale schichten Variable für Tausch-Funktionen
+                    schichten = schichtenArray;
+                    console.log('✅ Globale schichten Variable aktualisiert:', schichten.length, 'Schichten');
+                    
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Schichten für Mitarbeiter-Kalender:', error);
+                }
+            }
+            
+            const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+            let html = '';
+            
+            // Erste Woche
+            html += `<div style="width: 100%; margin-bottom: 20px;">`;
+            html += `<h3 style="margin-bottom: 12px; color: #8b6f47; font-size: 1.1em;">📅 KW ${kw1}</h3>`;
+            html += `<div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">`;
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const todayStr = new Date().toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+                
+                const daySchichten = schichtenArray.filter(s => s.datum === dateStr).sort((a, b) => a.typ === "frueh" ? -1 : 1);
+                const meineSchicht = daySchichten.find(s => s.mitarbeiterId === loggedInMitarbeiter.id);
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'heute' : ''}" style="min-width: 140px;">
+                        <div class="calendar-day-header">
+                            ${days[i]}<br>
+                            <small>${date.getDate()}.${date.getMonth() + 1}</small>
+                        </div>
+                        ${daySchichten.length === 0 ? '<small style="color: #999; display: block; text-align: center; margin-top: 8px;">Keine Schichten</small>' : ''}
+                        ${daySchichten.map(s => {
+                            const m = mitarbeiterMap[s.mitarbeiterId];
+                            const initials = m ? getInitials(m.name) : '??';
+                            const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
+                            const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            const istMeineSchicht = s.mitarbeiterId === loggedInMitarbeiter.id;
+                            return `
+                                <div class="schicht-item ${s.typ}" style="${istMeineSchicht ? 'border: 2px solid #c9a961; background: #fff3cd;' : ''}">
+                                    <span class="schicht-initials">${initials}</span>
+                                    <strong>${m ? m.name : 'Unbekannt'}</strong>
+                                    <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${istMeineSchicht ? `<button onclick="openTauschModal('${s.id}')" class="btn btn-primary btn-small" style="margin-top: 8px; width: 100%; font-size: 0.85em;">🔄 Tauschen</button>` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+            
+            // Zweite Woche
+            html += `<div style="width: 100%;">`;
+            html += `<h3 style="margin-bottom: 12px; color: #8b6f47; font-size: 1.1em;">📅 KW ${kw2}</h3>`;
+            html += `<div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">`;
+            
+            for (let i = 7; i < 14; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const todayStr = new Date().toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+                
+                const daySchichten = schichtenArray.filter(s => s.datum === dateStr).sort((a, b) => a.typ === "frueh" ? -1 : 1);
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'heute' : ''}" style="min-width: 140px;">
+                        <div class="calendar-day-header">
+                            ${days[i - 7]}<br>
+                            <small>${date.getDate()}.${date.getMonth() + 1}</small>
+                        </div>
+                        ${daySchichten.length === 0 ? '<small style="color: #999; display: block; text-align: center; margin-top: 8px;">Keine Schichten</small>' : ''}
+                        ${daySchichten.map(s => {
+                            const m = mitarbeiterMap[s.mitarbeiterId];
+                            const initials = m ? getInitials(m.name) : '??';
+                            const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
+                            const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            const istMeineSchicht = s.mitarbeiterId === loggedInMitarbeiter.id;
+                            return `
+                                <div class="schicht-item ${s.typ}" style="${istMeineSchicht ? 'border: 2px solid #c9a961; background: #fff3cd;' : ''}">
+                                    <span class="schicht-initials">${initials}</span>
+                                    <strong>${m ? m.name : 'Unbekannt'}</strong>
+                                    <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${istMeineSchicht ? `<button onclick="openTauschModal('${s.id}')" class="btn btn-primary btn-small" style="margin-top: 8px; width: 100%; font-size: 0.85em;">🔄 Tauschen</button>` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+            
+            grid.innerHTML = html;
+            
+            // Auto-Scroll zum heutigen Tag
+            setTimeout(() => {
+                const todayElement = grid.querySelector('.calendar-day.heute');
+                if (todayElement) {
+                    todayElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 100);
+        }
+
+        async function updateMeineSchichten() {
+            const liste = document.getElementById('meine-schichten');
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Lade Schichten aus Firestore
+            const tenantId = TenantStorage.getTenantId();
+            let alleSchichten = [];
+            
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('schichten')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        alleSchichten.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden der Schichten:', error);
+                }
+            }
+            
+            const meineSchichten = alleSchichten.filter(s => s.mitarbeiterId == loggedInMitarbeiter.id && s.datum >= today);
+            
+            if (meineSchichten.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><div class="icon">📅</div><p>Keine anstehenden Schichten</p></div>';
+                return;
+            }
+            
+            // Sortiere nach Datum
+            const sorted = [...meineSchichten].sort((a, b) => new Date(a.datum) - new Date(b.datum));
+            
+            liste.innerHTML = sorted.slice(0, 5).map(s => {
+                const typText = s.typ === 'frueh' ? '🌅 Frühschicht' : '🌙 Spätschicht';
+                const zeitText = s.typ === 'frueh' ? '6:00 - 14:00' : '14:00 - 22:00';
+                const isToday = s.datum === today;
+                return `
+                    <div class="list-item" style="${isToday ? 'border-left: 4px solid #c9a961;' : ''}">
+                        <div class="list-item-info">
+                            <strong>${new Date(s.datum).toLocaleDateString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit'})}${isToday ? ' (Heute)' : ''}</strong>
+                            <small>${typText} • ${zeitText}</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function updateMeineNotizen() {
+            const liste = document.getElementById('meine-notizen-liste');
+            if (!liste) {
+                console.log('❌ Element meine-notizen-liste nicht gefunden!');
+                return;
+            }
+            if (!loggedInMitarbeiter) {
+                console.log('❌ Kein Mitarbeiter eingeloggt!');
+                return;
+            }
+            
+            console.log('👤 Eingeloggter Mitarbeiter ID:', loggedInMitarbeiter.id);
+            
+            // Lade Notizen aus Firestore
+            const alleNotizen = await FirestoreHelpers.loadNotizen();
+            console.log('📝 Mitarbeiter - Alle Notizen:', alleNotizen);
+            
+            // Prüfe jede Notiz
+            alleNotizen.forEach((n, i) => {
+                console.log(`🔍 Notiz ${i}: mitarbeiterId="${n.mitarbeiterId}" vs loggedIn="${loggedInMitarbeiter.id}" → Match: ${n.mitarbeiterId === loggedInMitarbeiter.id}`);
+            });
+            
+            const meineNotizen = alleNotizen.filter(n => n.mitarbeiterId === loggedInMitarbeiter.id);
+            console.log('📝 Mitarbeiter - Meine Notizen:', meineNotizen);
+            
+            if (meineNotizen.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><p>Noch keine Notizen geschrieben</p></div>';
+                return;
+            }
+            
+            const sorted = [...meineNotizen].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            const typIcons = {
+                'info': 'ℹ️',
+                'frage': '❓',
+                'problem': '⚠️',
+                'idee': '💡'
+            };
+            
+            liste.innerHTML = sorted.map(n => {
+                const icon = typIcons[n.typ] || '💬';
+                const hatAntwort = n.antwort && n.antwort.length > 0;
+                
+                return `
+                    <div class="list-item" style="flex-direction: column; align-items: stretch;">
+                        <div class="list-item-info">
+                            <strong>${icon} ${n.betreff}</strong>
+                            <small>${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                            ${n.text ? `<p style="margin-top: 8px; color: #333; font-size: 0.95em;">${n.text}</p>` : ''}
+                        </div>
+                        ${hatAntwort ? `
+                            <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 4px solid #10b981;">
+                                <strong style="color: #059669; font-size: 0.9em;">✅ Admin-Antwort:</strong>
+                                <p style="color: #333; margin-top: 4px; font-size: 0.95em;">${n.antwort}</p>
+                                <small style="color: #666; margin-top: 4px; display: block;">${new Date(n.antwortDatum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                            </div>
+                        ` : `<small style="color: #f59e0b; margin-top: 8px; display: block;">⏳ Wartet auf Antwort</small>`}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function updateMitarbeiterLagerGrid() {
+            const grid = document.getElementById('mitarbeiter-lager-grid');
+            if (!grid) return;
+            
+            // Lade Lager aus Firestore
+            let lagerItems = [];
+            const tenantId = TenantStorage.getTenantId();
+            if (tenantId) {
+                try {
+                    const snapshot = await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('lager')
+                        .get();
+                    
+                    snapshot.forEach(doc => {
+                        lagerItems.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Laden des Lagers für Mitarbeiter:', error);
+                }
+            }
+            
+            grid.innerHTML = lagerItems.map(item => {
+                let statusText = '';
+                let statusClass = '';
+                switch(item.status) {
+                    case 'ok':
+                        statusText = '✅ OK';
+                        statusClass = 'ok';
+                        break;
+                    case 'niedrig':
+                        statusText = '⚠️ Niedrig';
+                        statusClass = 'niedrig';
+                        break;
+                    case 'leer':
+                        statusText = '🔴 Leer';
+                        statusClass = 'leer';
+                        break;
+                }
+                
+                return `
+                    <div class="lager-item-btn ${item.status}" onclick="openLagerStatusModal('${item.id}')">
+                        <strong>${item.name}</strong>
+                        <div class="lager-status-badge ${statusClass}">${statusText}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateMitarbeiterChecklist() {
+            const liste = document.getElementById('mitarbeiter-checklist');
+            const heute = new Date().toISOString().split('T')[0];
+            
+            if (!tagesCheckliste[heute]) {
+                tagesCheckliste[heute] = {};
+            }
+            
+            if (checklistItems.length === 0) {
+                liste.innerHTML = '<div class="empty-state"><p>Keine Checklisten-Punkte vorhanden</p></div>';
+                return;
+            }
+            
+            liste.innerHTML = checklistItems.map((item, i) => {
+                const isErledigt = tagesCheckliste[heute][i] === true;
+                return `
+                    <div class="checklist-item ${isErledigt ? 'erledigt' : ''}" onclick="toggleChecklistItem(${i})">
+                        <div class="checklist-checkbox">
+                            ${isErledigt ? '✓' : ''}
+                        </div>
+                        <div class="checklist-text">${item}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleChecklistItem(index) {
+            const heute = new Date().toISOString().split('T')[0];
+            
+            if (!tagesCheckliste[heute]) {
+                tagesCheckliste[heute] = {};
+            }
+            
+            tagesCheckliste[heute][index] = !tagesCheckliste[heute][index];
+            localStorage.setItem('gastro-tages-checklist', JSON.stringify(tagesCheckliste));
+            
+            updateMitarbeiterChecklist();
+        }
+
+        // Form Handlers
+        document.getElementById('mitarbeiter-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird erstellt...';
+            
+            try {
+                // Erstelle Mitarbeiter in Firestore
+                const mitarbeiterData = {
+                    name: document.getElementById('ma-name').value,
+                    position: document.getElementById('ma-position').value,
+                    telefon: document.getElementById('ma-telefon').value,
+                    pin: document.getElementById('ma-pin').value,
+                    role: 'mitarbeiter',
+                    active: true,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log('📝 Erstelle Mitarbeiter:', mitarbeiterData);
+                
+                const docRef = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .add(mitarbeiterData);
+                
+                console.log('✅ Mitarbeiter erstellt mit ID:', docRef.id);
+                
+                // UI aktualisieren
+                await updateMitarbeiterListe();
+                await updateMitarbeiterSelect();
+                
+                // Formular zurücksetzen
+                e.target.reset();
+                
+                // Erfolg-Message mit Login-Daten
+                alert(`✅ Mitarbeiter hinzugefügt!\n\nLogin-Daten für den Mitarbeiter:\nName: ${mitarbeiterData.name}\nPIN: ${mitarbeiterData.pin}\n\nDer Mitarbeiter kann sich jetzt im Mitarbeiter-Modus anmelden.`);
+                
+                // Zurück zur Übersicht
+                switchTeamTab('team-uebersicht');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Erstellen:', error);
+                alert('Fehler beim Erstellen: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '➕ Mitarbeiter hinzufügen';
+            }
+        });
+
+        document.getElementById('edit-mitarbeiter-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('edit-ma-id').value; // KEIN parseInt!
+            const tenantId = TenantStorage.getTenantId();
+            
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gespeichert...';
+            
+            try {
+                const updateData = {
+                    name: document.getElementById('edit-ma-name').value,
+                    position: document.getElementById('edit-ma-position').value,
+                    telefon: document.getElementById('edit-ma-telefon').value,
+                    pin: document.getElementById('edit-ma-pin').value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log('📝 Update Mitarbeiter:', id, updateData);
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .doc(id)
+                    .update(updateData);
+                
+                console.log('✅ Mitarbeiter aktualisiert:', id);
+                
+                // UI aktualisieren
+                await updateMitarbeiterListe();
+                await updateMitarbeiterSelect();
+                await updateCalendar();
+                
+                closeModal('edit-mitarbeiter-modal');
+                alert('✅ Mitarbeiter aktualisiert!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Update:', error);
+                alert('❌ Fehler beim Aktualisieren: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '💾 Speichern';
+            }
+        });
+
+        document.getElementById('quick-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird erstellt...';
+            
+            try {
+                const schichtData = {
+                    datum: document.getElementById('quick-datum').value,
+                    mitarbeiterId: document.getElementById('quick-mitarbeiter').value,
+                    typ: document.getElementById('quick-typ').value,
+                    status: 'geplant',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log('📝 Erstelle Schicht:', schichtData);
+                
+                const docRef = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('schichten')
+                    .add(schichtData);
+                
+                console.log('✅ Schicht erstellt mit ID:', docRef.id);
+                
+                // Kalender aktualisieren
+                await updateCalendar();
+                
+                closeModal('quick-add-modal');
+                e.target.reset();
+                alert('✅ Schicht erstellt!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Erstellen der Schicht:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '➕ Erstellen';
+            }
+        });
+
+        document.getElementById('checklist-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = document.getElementById('checklist-text').value;
+            checklistItems.push(text);
+            localStorage.setItem('gastro-checklist', JSON.stringify(checklistItems));
+            updateMasterChecklist();
+            e.target.reset();
+        });
+
+        document.getElementById('lager-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird erstellt...';
+            
+            try {
+                const itemData = {
+                    name: document.getElementById('lager-name').value,
+                    status: document.getElementById('lager-status').value,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                console.log('📝 Erstelle Lager-Item:', itemData);
+                
+                const docRef = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .add(itemData);
+                
+                console.log('✅ Lager-Item erstellt mit ID:', docRef.id);
+                
+                // UI aktualisieren
+                await updateEinkaufsliste();
+                await updateMitarbeiterLagerGrid();
+                
+                closeModal('lager-modal');
+                e.target.reset();
+                alert('✅ Artikel hinzugefügt!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Erstellen:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '➕ Hinzufügen';
+            }
+        });
+
+        document.getElementById('zeit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const zeit = {
+                id: Date.now(),
+                mitarbeiterId: parseInt(document.getElementById('zeit-mitarbeiter').value),
+                datum: document.getElementById('zeit-datum').value,
+                start: document.getElementById('zeit-start').value,
+                ende: document.getElementById('zeit-ende').value,
+                type: 'manuell'
+            };
+            zeiterfassung.push(zeit);
+            localStorage.setItem('gastro-zeiterfassung', JSON.stringify(zeiterfassung));
+            updateZeiterfassungListe();
+            closeModal('zeit-modal');
+            e.target.reset();
+            alert('✅ Zeiterfassung gespeichert!');
+        });
+
+        document.getElementById('pin-change-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const current = document.getElementById('current-admin-pin').value;
+            const newPin = document.getElementById('new-admin-pin').value;
+            const confirm = document.getElementById('confirm-admin-pin').value;
+            
+            if (current !== adminPin) {
+                alert('❌ Aktueller PIN ist falsch!');
+                return;
+            }
+            
+            if (newPin !== confirm) {
+                alert('❌ PINs stimmen nicht überein!');
+                return;
+            }
+            
+            if (newPin.length !== 4) {
+                alert('❌ PIN muss 4-stellig sein!');
+                return;
+            }
+            
+            adminPin = newPin;
+            localStorage.setItem('gastro-admin-pin', adminPin);
+            e.target.reset();
+            alert('✅ Admin-PIN erfolgreich geändert!');
+        });
+
+        document.getElementById('mitarbeiter-notiz-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gesendet...';
+            
+            try {
+                const notizData = {
+                    typ: document.getElementById('notiz-typ').value,
+                    betreff: document.getElementById('notiz-betreff').value,
+                    text: document.getElementById('notiz-text').value,
+                    mitarbeiterId: loggedInMitarbeiter.id,
+                    mitarbeiterName: loggedInMitarbeiter.name,
+                    datum: new Date().toISOString(),
+                    antwort: null,
+                    antwortDatum: null
+                };
+                
+                await FirestoreHelpers.createNotiz(notizData);
+                
+                // Warte kurz damit Firestore synchronisiert
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // UI aktualisieren
+                await updateMeineNotizen();
+                e.target.reset();
+                alert('✅ Notiz gesendet!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Senden der Notiz:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📤 Senden';
+            }
+        });
+
+        document.getElementById('schicht-beenden-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const betrag = document.getElementById('kassenstand').value;
+            const heute = new Date().toISOString().split('T')[0];
+            
+            // Kassenstand speichern
+            const kassenEintrag = {
+                id: Date.now(),
+                mitarbeiterId: loggedInMitarbeiter.id,
+                mitarbeiterName: loggedInMitarbeiter.name,
+                betrag: parseFloat(betrag),
+                datum: new Date().toISOString()
+            };
+            kassenstände.push(kassenEintrag);
+            localStorage.setItem('gastro-kassenstände', JSON.stringify(kassenstände));
+            
+            // Schicht-Status zurücksetzen
+            const schichtKey = `schicht-gestartet-${loggedInMitarbeiter.id}-${heute}`;
+            localStorage.removeItem(schichtKey);
+            schichtGestartet = false;
+            
+            updateSchichtButton();
+            closeModal('schicht-beenden-modal');
+            e.target.reset();
+            
+            alert('✅ Schicht erfolgreich beendet! Kassenstand: €' + parseFloat(betrag).toFixed(2));
+        });
+
+        document.getElementById('antwort-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gesendet...';
+            
+            try {
+                const antwortText = document.getElementById('antwort-text').value;
+                
+                // Update Notiz in Firestore
+                await FirestoreHelpers.updateNotiz(currentNotizId, {
+                    antwort: antwortText,
+                    antwortDatum: new Date().toISOString()
+                });
+                
+                console.log('✅ Antwort gespeichert!');
+                
+                // UI aktualisieren
+                await updateNotizenListe();
+                closeModal('antwort-modal');
+                e.target.reset();
+                alert('✅ Antwort gesendet!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Senden der Antwort:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Antworten';
+            }
+        });
+
+        document.getElementById('manuel-zeit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const zeit = {
+                id: Date.now(),
+                mitarbeiterId: loggedInMitarbeiter.id,
+                datum: document.getElementById('manuel-datum').value,
+                start: document.getElementById('manuel-start').value,
+                ende: document.getElementById('manuel-ende').value,
+                type: 'manuell'
+            };
+            zeiterfassung.push(zeit);
+            localStorage.setItem('gastro-zeiterfassung', JSON.stringify(zeiterfassung));
+            updateMeineZeiten();
+            e.target.reset();
+            // Setze Datum auf heute
+            document.getElementById('manuel-datum').value = new Date().toISOString().split('T')[0];
+            alert('✅ Zeit erfolgreich gespeichert!');
+        });
+
+        document.getElementById('tausch-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const angebotSchichtId = document.getElementById('tausch-angebot-schicht').value;
+            if (!angebotSchichtId) {
+                alert('❌ Bitte wähle eine Schicht zum Anbieten!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gesendet...';
+            
+            try {
+                const anfrageData = {
+                    schichtId: currentTauschSchichtId,
+                    angebotSchichtId: angebotSchichtId,
+                    absenderId: loggedInMitarbeiter.id,
+                    zielMitarbeiterId: document.getElementById('tausch-mitarbeiter').value,
+                    status: 'ausstehend',
+                    datum: new Date().toISOString()
+                };
+                
+                await FirestoreHelpers.createTauschAnfrage(anfrageData);
+                
+                closeModal('tausch-modal');
+                e.target.reset();
+                alert('✅ Tausch-Anfrage gesendet!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Senden:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🔄 Anfrage senden';
+            }
+        });
+
+        // Statistik-Funktionen
+        function updateStatistik() {
+            const zeitraum = document.getElementById('statistik-zeitraum').value;
+            const inhalt = document.getElementById('statistik-inhalt');
+            
+            let gefiltert = [];
+            const heute = new Date();
+            
+            if (zeitraum === 'tag') {
+                const heuteStr = heute.toISOString().split('T')[0];
+                gefiltert = kassenstände.filter(k => k.datum.startsWith(heuteStr));
+            } else if (zeitraum === 'monat') {
+                const monat = heute.toISOString().substring(0, 7); // YYYY-MM
+                gefiltert = kassenstände.filter(k => k.datum.startsWith(monat));
+            } else if (zeitraum === 'jahr') {
+                const jahr = heute.getFullYear().toString();
+                gefiltert = kassenstände.filter(k => k.datum.startsWith(jahr));
+            }
+            
+            if (gefiltert.length === 0) {
+                inhalt.innerHTML = '<div class="empty-state"><p>Keine Daten für diesen Zeitraum</p></div>';
+                return;
+            }
+            
+            const summe = gefiltert.reduce((sum, k) => sum + parseFloat(k.betrag), 0);
+            const durchschnitt = summe / gefiltert.length;
+            
+            let zeitraumText = '';
+            if (zeitraum === 'tag') zeitraumText = 'Heute';
+            else if (zeitraum === 'monat') zeitraumText = heute.toLocaleDateString('de-DE', {month: 'long', year: 'numeric'});
+            else zeitraumText = heute.getFullYear();
+            
+            inhalt.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;" id="druck-inhalt">
+                    <h3 style="margin-bottom: 16px; color: #8b6f47;">📊 ${zeitraumText}</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div style="background: white; padding: 16px; border-radius: 8px;">
+                            <strong style="color: #666; font-size: 0.9em;">Gesamtsumme</strong>
+                            <p style="font-size: 1.6em; font-weight: 700; color: #10b981; margin-top: 8px; word-break: break-all;">€${summe.toFixed(2)}</p>
+                        </div>
+                        <div style="background: white; padding: 16px; border-radius: 8px;">
+                            <strong style="color: #666; font-size: 0.9em;">Durchschnitt</strong>
+                            <p style="font-size: 1.6em; font-weight: 700; color: #3b82f6; margin-top: 8px; word-break: break-all;">€${durchschnitt.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px;">
+                        <strong style="display: block; margin-bottom: 12px;">Einträge (${gefiltert.length})</strong>
+                        ${gefiltert.sort((a, b) => new Date(b.datum) - new Date(a.datum)).map(k => `
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">
+                                <div>
+                                    <strong>${k.mitarbeiterName}</strong>
+                                    <small style="display: block; color: #666;">${new Date(k.datum).toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                                </div>
+                                <strong style="color: #10b981;">€${parseFloat(k.betrag).toFixed(2)}</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function druckeStatistik() {
+            const druckInhalt = document.getElementById('druck-inhalt');
+            if (!druckInhalt) {
+                alert('Keine Daten zum Drucken vorhanden');
+                return;
+            }
+            
+            const zeitraum = document.getElementById('statistik-zeitraum').value;
+            let titel = 'Kassenstatistik';
+            if (zeitraum === 'tag') titel += ' - Heute';
+            else if (zeitraum === 'monat') titel += ' - Monat';
+            else titel += ' - Jahr';
+            
+            const druckFenster = window.open('', '', 'height=600,width=800');
+            druckFenster.document.write('<html><head><title>' + titel + '</title>');
+            druckFenster.document.write('<style>body{font-family: Arial; padding: 20px;} h1{color: #8b6f47;}</style>');
+            druckFenster.document.write('</head><body>');
+            druckFenster.document.write('<h1>🍽️ Gastro Planer - ' + titel + '</h1>');
+            druckFenster.document.write(druckInhalt.innerHTML);
+            druckFenster.document.write('</body></html>');
+            druckFenster.document.close();
+            druckFenster.print();
+        }
+
+        async function deleteMitarbeiter(id) {
+            if (!confirm('Mitarbeiter wirklich löschen?')) {
+                return;
+            }
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                console.log('🗑️ Lösche Mitarbeiter:', id);
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .doc(id)
+                    .delete();
+                
+                console.log('✅ Mitarbeiter gelöscht:', id);
+                
+                alert('✅ Mitarbeiter gelöscht!');
+                
+                // UI aktualisieren
+                await updateMitarbeiterListe();
+                await updateMitarbeiterSelect();
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Löschen:', error);
+                alert('❌ Fehler beim Löschen: ' + error.message);
+            }
+        }
+
+        async function deleteSchicht(id) {
+            if (!confirm('Schicht wirklich löschen?')) {
+                return;
+            }
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                console.log('🗑️ Lösche Schicht:', id);
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('schichten')
+                    .doc(id)
+                    .delete();
+                
+                console.log('✅ Schicht gelöscht:', id);
+                
+                // Kalender aktualisieren
+                await updateCalendar();
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Löschen der Schicht:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        function deleteChecklistItem(index) {
+            checklistItems.splice(index, 1);
+            localStorage.setItem('gastro-checklist', JSON.stringify(checklistItems));
+            updateMasterChecklist();
+        }
+
+        async function deleteLagerItem(id) {
+            if (!confirm('Artikel wirklich löschen?')) {
+                return;
+            }
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                console.log('🗑️ Lösche Lager-Item:', id);
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .doc(id)
+                    .delete();
+                
+                console.log('✅ Lager-Item gelöscht:', id);
+                
+                alert('✅ Artikel gelöscht!');
+                
+                // UI aktualisieren
+                await updateEinkaufsliste();
+                await updateMitarbeiterLagerGrid();
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Löschen:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        async function changeStatus(id, newStatus) {
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            try {
+                console.log('🔄 Ändere Status:', id, '→', newStatus);
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('lager')
+                    .doc(id)
+                    .update({
+                        status: newStatus,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                console.log('✅ Status geändert:', id);
+                
+                // UI aktualisieren
+                await updateEinkaufsliste();
+                await updateMitarbeiterLagerGrid();
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Ändern des Status:', error);
+                alert('❌ Fehler: ' + error.message);
+            }
+        }
+
+        function getWeekNumber(date) {
+            const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+        }
+
+        // WICHTIG: init() wird NACH Firebase-Integration aufgerufen!
+        // Siehe ganz unten nach allen Script-Includes
+    </script>
+    
+    <!-- Firebase SDK (für Multi-Tenancy) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config (MUSS VOR firebase-multi-tenancy.js sein!) -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Multi-Tenancy Manager -->
+    <script src="js/firebase-multi-tenancy.js"></script>
+    <script src="js/firestore-helpers.js"></script>
+    
+    <!-- Tenant Storage Interface (MUSS VOR firebase-integration.js sein!) -->
+    <script src="js/tenant-storage.js"></script>
+    
+    <!-- Firebase Integration -->
+    <script src="js/firebase-integration.js"></script>
+    
+    <!-- LocalStorage Patch (leitet gastro-* Keys um) -->
+    <script src="js/localstorage-patch.js"></script>
+    
+    <!-- Admin Push Notifications -->
+    <script src="js/admin-push-notifications.js"></script>
+    
+    <!-- Sync Status Indikator -->
+    <script src="js/sync-indicator.js"></script>
+    
+    <!-- APP INIT - NACH allen Integrationen! -->
+    <script>
+        // Warte auf DOM und dann init() aufrufen
+        function startApp() {
+            try {
+                if (typeof init === 'function') {
+                    console.log('🚀 Starte App mit Tenant:', TenantStorage.getTenantId());
+                    init();
+                } else {
+                    console.error('❌ init() Funktion nicht gefunden');
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim App-Start:', error);
+                // Zeige zumindest den Login-Screen bei Fehler
+                document.body.style.background = 'linear-gradient(135deg, #c9a961 0%, #8b6f47 100%)';
+            }
+        }
+        
+        // Stelle sicher, dass DOM bereit ist
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApp);
+        } else {
+            // DOM ist bereits geladen
+            startApp();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "gastro-planer-pro",
+  "version": "2.0.0",
+  "description": "Professionelle Restaurant-Management App",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -o",
+    "dev": "npx http-server -p 8080 -o -c-1",
+    "build": "echo 'Build complete - ready for deployment'",
+    "serve": "npx serve -s . -p 8080",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "firebase:login": "firebase login",
+    "firebase:init": "firebase init",
+    "firebase:serve": "firebase serve",
+    "logs": "firebase functions:log"
+  },
+  "keywords": [
+    "restaurant",
+    "management",
+    "gastro",
+    "planner"
+  ],
+  "author": "Matej",
+  "license": "ISC",
+  "devDependencies": {
+    "firebase-tools": "^13.0.0"
+  },
+  "dependencies": {}
+}

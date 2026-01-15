@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Setup Diagnose</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #000;
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #0f0;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-title {
+            color: #ff0;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .result.success {
+            background: #003300;
+            border-left: 5px solid #0f0;
+            color: #0f0;
+        }
+        
+        .result.error {
+            background: #330000;
+            border-left: 5px solid #f00;
+            color: #f00;
+        }
+        
+        .result.warning {
+            background: #333300;
+            border-left: 5px solid #ff0;
+            color: #ff0;
+        }
+        
+        .result.info {
+            background: #003;
+            border-left: 5px solid #00f;
+            color: #0ff;
+        }
+        
+        .code {
+            background: #222;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #444;
+        }
+        
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button:hover {
+            background: #00ff00;
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #0ff;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { content: '|'; }
+            25% { content: '/'; }
+            50% { content: '-'; }
+            75% { content: '\\'; }
+            100% { content: '|'; }
+        }
+        
+        .spinner:after {
+            content: '|';
+        }
+        
+        pre {
+            color: #0ff;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 FIREBASE SETUP DIAGNOSE</h1>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="runDiagnostics()">🚀 DIAGNOSE STARTEN</button>
+            <button onclick="location.reload()">🔄 NEU LADEN</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Multi-Tenancy Manager -->
+    <script src="js/firebase-multi-tenancy.js"></script>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(type, title, message, code = null) {
+            const section = document.createElement('div');
+            section.className = 'test-section';
+            
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'test-title';
+            titleDiv.textContent = title;
+            section.appendChild(titleDiv);
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = message;
+            section.appendChild(resultDiv);
+            
+            if (code) {
+                const codeDiv = document.createElement('div');
+                codeDiv.className = 'code';
+                const pre = document.createElement('pre');
+                pre.textContent = code;
+                codeDiv.appendChild(pre);
+                section.appendChild(codeDiv);
+            }
+            
+            resultsDiv.appendChild(section);
+        }
+        
+        async function runDiagnostics() {
+            resultsDiv.innerHTML = '<div class="loading"><span class="spinner"></span> DIAGNOSE LÄUFT...</div>';
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            resultsDiv.innerHTML = '';
+            
+            // Test 1: Firebase SDK
+            addResult('info', '📦 TEST 1: Firebase SDK', 'Prüfe ob Firebase SDK geladen ist...');
+            
+            if (typeof firebase === 'undefined') {
+                addResult('error', '❌ Firebase SDK FEHLT', 
+                    'Firebase SDK konnte nicht geladen werden.<br><br>' +
+                    '<strong>Mögliche Ursachen:</strong><br>' +
+                    '• Keine Internetverbindung<br>' +
+                    '• CDN nicht erreichbar<br>' +
+                    '• Skript-Pfad falsch<br><br>' +
+                    '<strong>Lösung:</strong><br>' +
+                    'Prüfe deine Internetverbindung und lade die Seite neu.'
+                );
+                return;
+            } else {
+                addResult('success', '✅ Firebase SDK OK', 
+                    `Firebase SDK Version ${firebase.SDK_VERSION} erfolgreich geladen!`
+                );
+            }
+            
+            // Test 2: Multi-Tenancy Manager
+            addResult('info', '📦 TEST 2: Multi-Tenancy Manager', 'Prüfe ob TenantManager geladen ist...');
+            
+            if (typeof TenantManager === 'undefined') {
+                addResult('error', '❌ TenantManager FEHLT', 
+                    'Multi-Tenancy Manager konnte nicht geladen werden.<br><br>' +
+                    '<strong>Mögliche Ursachen:</strong><br>' +
+                    '• Datei js/firebase-multi-tenancy.js existiert nicht<br>' +
+                    '• Pfad zur Datei ist falsch<br>' +
+                    '• JavaScript-Fehler in der Datei<br><br>' +
+                    '<strong>Lösung:</strong><br>' +
+                    '1. Prüfe ob die Datei existiert: js/firebase-multi-tenancy.js<br>' +
+                    '2. Öffne Browser-Console (F12) und prüfe auf Fehler'
+                );
+                return;
+            } else {
+                addResult('success', '✅ TenantManager OK', 
+                    'Multi-Tenancy Manager erfolgreich geladen!'
+                );
+            }
+            
+            // Test 3: Firebase Config
+            addResult('info', '📦 TEST 3: Firebase Konfiguration', 'Prüfe Firebase Config...');
+            
+            if (!firebase.apps.length) {
+                addResult('error', '❌ Firebase NICHT KONFIGURIERT', 
+                    'Firebase wurde noch nicht initialisiert.<br><br>' +
+                    '<strong>Problem:</strong><br>' +
+                    'Die Firebase Config wurde noch nicht eingetragen oder ist ungültig.<br><br>' +
+                    '<strong>Lösung:</strong><br>' +
+                    '1. Öffne: js/firebase-multi-tenancy.js<br>' +
+                    '2. Finde Zeilen 7-13 (firebaseConfig)<br>' +
+                    '3. Ersetze die Platzhalter mit deinen echten Werten<br>' +
+                    '4. Speichern und neu laden<br><br>' +
+                    '<strong>Hilfe:</strong> Öffne FIREBASE-CONFIG-FINDEN.html'
+                );
+                
+                addResult('warning', '📋 BEISPIEL CONFIG', 
+                    'So sollte deine Config aussehen:',
+                    `const firebaseConfig = {
+    apiKey: "AIzaSyXXXXXXXXXXXXXXXX",
+    authDomain: "dein-projekt.firebaseapp.com",
+    projectId: "dein-projekt",
+    storageBucket: "dein-projekt.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abc123"
+};`
+                );
+                return;
+            } else {
+                const app = firebase.apps[0];
+                const config = app.options;
+                
+                addResult('success', '✅ Firebase KONFIGURIERT', 
+                    'Firebase wurde erfolgreich initialisiert!'
+                );
+                
+                addResult('info', '📋 DEINE CONFIG', 
+                    'Aktuelle Konfiguration:',
+                    `Project ID: ${config.projectId}
+Auth Domain: ${config.authDomain}
+Storage Bucket: ${config.storageBucket}
+API Key: ${config.apiKey.substring(0, 20)}...`
+                );
+            }
+            
+            // Test 4: Firestore
+            addResult('info', '📦 TEST 4: Firestore Verbindung', 'Prüfe Firestore-Verbindung...');
+            
+            try {
+                const db = firebase.firestore();
+                
+                // Versuche eine Test-Abfrage
+                const testDoc = await db.collection('tenants').limit(1).get();
+                
+                addResult('success', '✅ Firestore VERBUNDEN', 
+                    'Firestore-Datenbank ist erreichbar!<br>' +
+                    `Dokumente gefunden: ${testDoc.size}`
+                );
+            } catch (error) {
+                addResult('error', '❌ Firestore FEHLER', 
+                    `Firestore-Verbindung fehlgeschlagen:<br><br>${error.message}<br><br>` +
+                    '<strong>Mögliche Ursachen:</strong><br>' +
+                    '• Firestore wurde in Firebase Console nicht aktiviert<br>' +
+                    '• Firestore Rules sind zu streng<br>' +
+                    '• Keine Internetverbindung<br><br>' +
+                    '<strong>Lösung:</strong><br>' +
+                    '1. Firebase Console → Build → Firestore Database<br>' +
+                    '2. "Datenbank erstellen" klicken<br>' +
+                    '3. Testmodus wählen<br>' +
+                    '4. Region wählen (europe-west3)'
+                );
+                return;
+            }
+            
+            // Test 5: TenantManager Funktionen
+            addResult('info', '📦 TEST 5: TenantManager Funktionen', 'Prüfe TenantManager Funktionen...');
+            
+            const functions = [
+                'registerTenant',
+                'validateTenant',
+                'setTenant',
+                'getTenant',
+                'generateTenantId'
+            ];
+            
+            let allOk = true;
+            functions.forEach(func => {
+                if (typeof TenantManager[func] !== 'function') {
+                    addResult('error', `❌ Funktion fehlt: ${func}`, 
+                        'Diese Funktion ist nicht definiert!'
+                    );
+                    allOk = false;
+                }
+            });
+            
+            if (allOk) {
+                addResult('success', '✅ Alle Funktionen OK', 
+                    `Alle ${functions.length} Funktionen sind verfügbar!`
+                );
+            }
+            
+            // Test 6: Test-Registrierung (nur simuliert)
+            addResult('info', '📦 TEST 6: Tenant-ID Generator', 'Teste Tenant-ID Generierung...');
+            
+            try {
+                const testId = TenantManager.generateTenantId();
+                
+                if (testId && testId.match(/^GASTRO-[A-Z0-9]{5}$/)) {
+                    addResult('success', '✅ Tenant-ID Generator OK', 
+                        `Beispiel Tenant-ID generiert: ${testId}`
+                    );
+                } else {
+                    addResult('warning', '⚠️ Tenant-ID Format', 
+                        `Generierte ID hat falsches Format: ${testId}`
+                    );
+                }
+            } catch (error) {
+                addResult('error', '❌ Generator Fehler', 
+                    `Fehler beim Generieren: ${error.message}`
+                );
+            }
+            
+            // Zusammenfassung
+            addResult('success', '🎉 DIAGNOSE ABGESCHLOSSEN', 
+                'Alle Tests durchgeführt!<br><br>' +
+                '<strong>Nächste Schritte:</strong><br>' +
+                '• Falls alle Tests ✅: Du kannst loslegen!<br>' +
+                '• Falls Fehler ❌: Behebe die Probleme oben<br>' +
+                '• Dann: Öffne tenant-zugang.html<br><br>' +
+                '<strong>Hilfe:</strong><br>' +
+                '• FIREBASE-CONFIG-FINDEN.html<br>' +
+                '• MULTI-TENANCY-DOKUMENTATION.md'
+            );
+        }
+        
+        // Auto-Start beim Laden
+        window.addEventListener('load', () => {
+            setTimeout(runDiagnostics, 500);
+        });
+    </script>
+</body>
+</html>

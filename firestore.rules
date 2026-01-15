@@ -1,0 +1,119 @@
+// ==========================================
+// FIREBASE SECURITY RULES für Multi-Tenancy
+// Jedes Restaurant (Tenant) sieht nur seine eigenen Daten
+// ==========================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // HELPER FUNCTIONS
+    // ==========================================
+    
+    // Prüfe ob User eingeloggt ist (später mit Authentication)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Prüfe ob Request vom richtigen Tenant kommt
+    function isTenantOwner(tenantId) {
+      // Für Entwicklung: Jeder darf zugreifen
+      // Für Produktion: Muss mit Authentication kombiniert werden
+      return true;
+    }
+    
+    // ==========================================
+    // TENANT DOKUMENTE (Top-Level)
+    // ==========================================
+    
+    match /tenants/{tenantId} {
+      // READ: Jeder Tenant kann nur sein eigenes Dokument lesen
+      allow read: if isTenantOwner(tenantId);
+      
+      // CREATE: Neue Tenants können erstellt werden (Registrierung)
+      allow create: if true;
+      
+      // UPDATE: Nur Tenant-Owner kann updaten
+      allow update: if isTenantOwner(tenantId);
+      
+      // DELETE: Tenants können nicht gelöscht werden (nur deaktiviert)
+      allow delete: if false;
+      
+      // ==========================================
+      // SUB-COLLECTIONS (Tenant-spezifische Daten)
+      // ==========================================
+      
+      // Alle Sub-Collections: Nur Tenant-Owner hat Zugriff
+      match /{collection}/{document=**} {
+        // READ: Nur eigene Daten lesen
+        allow read: if isTenantOwner(tenantId);
+        
+        // WRITE: Nur eigene Daten schreiben
+        allow write: if isTenantOwner(tenantId);
+      }
+    }
+    
+    // ==========================================
+    // KEINE ANDEREN ZUGRIFFE ERLAUBT
+    // ==========================================
+    
+    // Alles andere ist verboten
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ==========================================
+// PRODUKTIONS-VERSION (mit Firebase Authentication)
+// ==========================================
+// 
+// Für Produktion sollten Sie Firebase Authentication aktivieren
+// und folgende Rules verwenden:
+//
+// rules_version = '2';
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     
+//     // Helper: User gehört zum Tenant
+//     function belongsToTenant(tenantId) {
+//       return request.auth != null && 
+//              request.auth.token.tenantId == tenantId;
+//     }
+//     
+//     match /tenants/{tenantId} {
+//       // READ: Nur wenn User zu diesem Tenant gehört
+//       allow read: if belongsToTenant(tenantId);
+//       
+//       // CREATE: Nur bei Registrierung (ohne Auth)
+//       allow create: if request.auth == null;
+//       
+//       // UPDATE: Nur Tenant-Owner
+//       allow update: if belongsToTenant(tenantId);
+//       
+//       // DELETE: Nicht erlaubt
+//       allow delete: if false;
+//       
+//       // Sub-Collections
+//       match /{collection}/{document=**} {
+//         allow read, write: if belongsToTenant(tenantId);
+//       }
+//     }
+//   }
+// }
+
+// ==========================================
+// ANLEITUNG ZUM AKTIVIEREN
+// ==========================================
+//
+// 1. Gehe zu Firebase Console
+// 2. Wähle dein Projekt
+// 3. Build → Firestore Database → Regeln
+// 4. Kopiere den Inhalt von oben (Zeile 7-47 für Entwicklung)
+// 5. Klicke auf "Veröffentlichen"
+//
+// Für Produktion:
+// - Aktiviere Firebase Authentication
+// - Verwende die Produktions-Version (Zeile 56-87)
+// - Implementiere Custom Claims für tenantId

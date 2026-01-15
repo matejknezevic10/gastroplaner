@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GastroPlaner - Zugang</title>
+    
+    <!-- PWA Meta Tags für iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Gastro Planer">
+    <meta name="theme-color" content="#c9a961">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c9a961;
+        }
+
+        .form-group input[readonly] {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #8b6f47;
+            border: 3px solid #8b6f47;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border-left: 5px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .success-box {
+            background: #d1f2eb;
+            border-left: 5px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .error-box {
+            background: #f8d7da;
+            border-left: 5px solid #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #991b1b;
+        }
+
+        .tenant-id-display {
+            background: #2d3748;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.8em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 20px 0;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+
+        .link-btn {
+            color: #8b6f47;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .link-btn:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #c9a961;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        small {
+            color: #666;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen für iOS PWA -->
+    <div id="loading-screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center; color: white;">
+            <div style="font-size: 4em; margin-bottom: 20px;">🍽️</div>
+            <div style="font-size: 1.5em; font-weight: bold;">GastroPlaner Pro</div>
+            <div style="margin-top: 20px;">
+                <div style="border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            </div>
+            <div style="margin-top: 10px; opacity: 0.8; font-size: 0.9em;">Wird geladen...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Entferne Loading-Screen wenn Seite bereit
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var ls = document.getElementById('loading-screen');
+                if (ls) ls.style.display = 'none';
+            }, 500);
+        });
+    </script>
+    
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen" class="card">
+            <div class="logo">
+                <div class="logo-icon">🍽️</div>
+                <h1>GastroPlaner Pro</h1>
+                <p class="subtitle">Sichere Multi-Tenancy Lösung</p>
+            </div>
+
+            <form id="login-form" autocomplete="off">
+                <div class="form-group">
+                    <label>Restaurant-ID</label>
+                    <input 
+                        type="text" 
+                        id="login-tenant-id" 
+                        placeholder="GASTRO-XXXXX"
+                        maxlength="12"
+                        style="text-transform: uppercase;"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="characters"
+                        spellcheck="false"
+                        required>
+                    <small>Format: GASTRO-XXXXX (z.B. GASTRO-A2B3C)</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Admin-PIN</label>
+                    <input 
+                        type="tel" 
+                        id="login-pin" 
+                        placeholder="••••"
+                        maxlength="4"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        required>
+                    <small>4-stelliger PIN</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    🔓 Anmelden
+                </button>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="#" class="link-btn" onclick="showRegistration(); return false;">
+                        Noch kein Zugang? → Restaurant registrieren
+                    </a>
+                </div>
+            </form>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <strong>🔒 Sicher & Privat:</strong><br>
+                Ihre Daten sind komplett isoliert. Kein anderes Restaurant kann Ihre Daten sehen.
+            </div>
+        </div>
+
+        <!-- Registrierung Screen -->
+        <div id="registration-screen" class="card hidden">
+            <div class="logo">
+                <div class="logo-icon">📝</div>
+                <h1>Restaurant registrieren</h1>
+                <p class="subtitle">Legen Sie Ihr Restaurant an</p>
+            </div>
+
+            <form id="registration-form">
+                <div class="form-group">
+                    <label>Restaurant-Name *</label>
+                    <input 
+                        type="text" 
+                        id="reg-restaurant-name" 
+                        placeholder="z.B. Pizzeria Bella Vista"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Admin-PIN (4-stellig) *</label>
+                    <input 
+                        type="tel" 
+                        id="reg-admin-pin" 
+                        placeholder="••••"
+                        maxlength="4"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        required>
+                    <small>Merken Sie sich diesen PIN gut!</small>
+                </div>
+
+                <div class="form-group">
+                    <label>PIN bestätigen *</label>
+                    <input 
+                        type="tel" 
+                        id="reg-admin-pin-confirm" 
+                        placeholder="••••"
+                        maxlength="4"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Kontakt E-Mail (Optional)</label>
+                    <input 
+                        type="email" 
+                        id="reg-email" 
+                        placeholder="info@restaurant.at">
+                </div>
+
+                <div class="form-group">
+                    <label>Telefon (Optional)</label>
+                    <input 
+                        type="tel" 
+                        id="reg-phone" 
+                        placeholder="+43 1 234 5678">
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Wichtig:</strong><br>
+                    Nach der Registrierung erhalten Sie eine eindeutige Restaurant-ID. 
+                    <strong>Bewahren Sie diese sicher auf!</strong> Sie wird für jeden Login benötigt.
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    ✅ Restaurant registrieren
+                </button>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="#" class="link-btn" onclick="showLogin(); return false;">
+                        ← Zurück zum Login
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Success Screen nach Registrierung -->
+        <div id="success-screen" class="card hidden">
+            <div class="logo">
+                <div class="logo-icon">🎉</div>
+                <h1>Erfolgreich registriert!</h1>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Ihr Restaurant wurde erfolgreich angelegt!</strong>
+            </div>
+
+            <p style="margin: 20px 0; color: #666;">
+                Ihre eindeutige Restaurant-ID lautet:
+            </p>
+
+            <div class="tenant-id-display" id="new-tenant-id">
+                GASTRO-XXXXX
+            </div>
+
+            <div style="text-align: center;">
+                <button class="copy-btn" onclick="copyTenantId()">
+                    📋 ID kopieren
+                </button>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>⚠️ WICHTIG - Bitte speichern Sie diese ID!</strong><br><br>
+                • Diese ID wird für jeden Login benötigt<br>
+                • Sie kann nicht wiederhergestellt werden<br>
+                • Speichern Sie sie an einem sicheren Ort<br>
+                • Empfehlung: Screenshot machen oder aufschreiben
+            </div>
+
+            <div class="info-box">
+                <strong>📝 Was jetzt?</strong><br>
+                1. Notieren Sie sich die Restaurant-ID<br>
+                2. Klicken Sie auf "Weiter zur App"<br>
+                3. Sie werden automatisch eingeloggt<br>
+                4. Beim nächsten Mal: Login mit ID + PIN
+            </div>
+
+            <button class="btn btn-primary" onclick="continueToApp()">
+                🚀 Weiter zur App
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config (MUSS VOR firebase-multi-tenancy.js sein!) -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Multi-Tenancy Manager -->
+    <script src="js/firebase-multi-tenancy.js"></script>
+
+    <script>
+        let newTenantId = null;
+        
+        // Prüfe ob Firebase und TenantManager geladen sind
+        function checkDependencies() {
+            if (typeof firebase === 'undefined') {
+                showError('Firebase SDK konnte nicht geladen werden. Bitte überprüfen Sie Ihre Internetverbindung.');
+                return false;
+            }
+            
+            if (typeof TenantManager === 'undefined') {
+                showError('TenantManager konnte nicht geladen werden. Bitte überprüfen Sie ob die Datei js/firebase-multi-tenancy.js existiert.');
+                return false;
+            }
+            
+            // Prüfe ob Firebase Config eingetragen wurde
+            if (!firebase.apps.length) {
+                showError('Firebase ist nicht konfiguriert. Bitte erstellen Sie js/firebase-config.js (siehe js/firebase-config.example.js).');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // ==========================================
+        // SCREEN MANAGEMENT
+        // ==========================================
+
+        function showLogin() {
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('registration-screen').classList.add('hidden');
+            document.getElementById('success-screen').classList.add('hidden');
+        }
+
+        function showRegistration() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('registration-screen').classList.remove('hidden');
+            document.getElementById('success-screen').classList.add('hidden');
+        }
+
+        function showSuccess(tenantId) {
+            newTenantId = tenantId;
+            document.getElementById('new-tenant-id').textContent = tenantId;
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('registration-screen').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+        }
+
+        // ==========================================
+        // LOGIN
+        // ==========================================
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Prüfe Dependencies
+            if (!checkDependencies()) {
+                return;
+            }
+
+            const tenantId = document.getElementById('login-tenant-id').value.toUpperCase().trim();
+            const pin = document.getElementById('login-pin').value;
+
+            // Validierung
+            if (!tenantId.match(/^GASTRO-[A-Z0-9]{5}$/)) {
+                showError('Ungültiges Format der Restaurant-ID!');
+                return;
+            }
+
+            // Submit-Button disablen
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Wird überprüft...';
+
+            try {
+                const result = await TenantManager.validateTenant(tenantId, pin);
+
+                if (result.success) {
+                    // Erfolgreicher Login
+                    alert(`✅ Willkommen zurück, ${result.restaurantName}!`);
+                    window.location.href = 'index.html';
+                } else {
+                    showError(result.error);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            } catch (error) {
+                showError('Login fehlgeschlagen: ' + error.message);
+                console.error('Login-Fehler:', error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // ==========================================
+        // REGISTRIERUNG
+        // ==========================================
+
+        document.getElementById('registration-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Prüfe Dependencies
+            if (!checkDependencies()) {
+                return;
+            }
+
+            const restaurantName = document.getElementById('reg-restaurant-name').value;
+            const adminPin = document.getElementById('reg-admin-pin').value;
+            const adminPinConfirm = document.getElementById('reg-admin-pin-confirm').value;
+            const email = document.getElementById('reg-email').value;
+            const phone = document.getElementById('reg-phone').value;
+
+            // PIN-Validierung
+            if (adminPin !== adminPinConfirm) {
+                showError('PINs stimmen nicht überein!');
+                return;
+            }
+
+            if (!adminPin.match(/^[0-9]{4}$/)) {
+                showError('PIN muss genau 4 Ziffern haben!');
+                return;
+            }
+
+            // Submit-Button disablen
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Restaurant wird angelegt...';
+
+            try {
+                const result = await TenantManager.registerTenant({
+                    restaurantName,
+                    adminPin,
+                    contactEmail: email,
+                    contactPhone: phone
+                });
+
+                if (result.success) {
+                    // Zeige Success-Screen
+                    showSuccess(result.tenantId);
+                    
+                    // Formular zurücksetzen
+                    e.target.reset();
+                } else {
+                    showError('Registrierung fehlgeschlagen: ' + result.error);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            } catch (error) {
+                showError('Registrierung fehlgeschlagen: ' + error.message);
+                console.error('Registrierungs-Fehler:', error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // ==========================================
+        // SUCCESS ACTIONS
+        // ==========================================
+
+        function copyTenantId() {
+            const tenantId = document.getElementById('new-tenant-id').textContent;
+            
+            navigator.clipboard.writeText(tenantId).then(() => {
+                alert('✅ Restaurant-ID kopiert!\n\n' + tenantId + '\n\nBitte speichern Sie diese ID an einem sicheren Ort!');
+            }).catch(() => {
+                // Fallback für ältere Browser
+                const textArea = document.createElement('textarea');
+                textArea.value = tenantId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ Restaurant-ID kopiert!');
+            });
+        }
+
+        function continueToApp() {
+            if (newTenantId) {
+                // Tenant ist bereits gesetzt durch registerTenant()
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==========================================
+        // HELPER
+        // ==========================================
+
+        function showError(message) {
+            // Temporäre Error-Box anzeigen
+            const existingError = document.querySelector('.error-box.temp');
+            if (existingError) existingError.remove();
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-box temp';
+            errorDiv.innerHTML = `<strong>❌ Fehler:</strong><br>${message}`;
+
+            const activeScreen = document.querySelector('.card:not(.hidden)');
+            activeScreen.insertBefore(errorDiv, activeScreen.firstChild);
+
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        // ==========================================
+        // AUTO-LOGIN CHECK
+        // ==========================================
+
+        // Prüfe ob bereits eingeloggt
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const tenantId = TenantManager.getTenant();
+                
+                if (tenantId) {
+                    // Bereits eingeloggt - direkt zur App weiterleiten (kein confirm auf iOS PWA!)
+                    console.log('✅ Tenant-Session gefunden:', tenantId, '- Weiterleitung zur App...');
+                    window.location.replace('index.html');
+                    return;
+                }
+                
+                console.log('ℹ️ Keine aktive Session - Login-Screen anzeigen');
+            } catch (error) {
+                console.error('❌ Fehler beim Auto-Login Check:', error);
+            }
+        });
+    </script>
+</body>
+</html>

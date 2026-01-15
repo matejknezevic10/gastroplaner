@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GastroPlaner - Installation & Backup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #c9a961;
+        }
+        
+        .section h2 {
+            color: #8b6f47;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #d1f2eb;
+            border-left: 5px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .danger {
+            background: #f8d7da;
+            border-left: 5px solid #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        code {
+            background: #2d3748;
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            margin-left: 20px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ GastroPlaner Pro</h1>
+        <div class="subtitle">Installations- & Backup-Anleitung</div>
+        
+        <div class="success">
+            <strong>✅ Problem behoben!</strong><br>
+            Ihre Daten gehen nicht mehr beim Neuladen verloren!<br>
+            Alle Änderungen werden automatisch gespeichert.
+        </div>
+        
+        <!-- Installation -->
+        <div class="section">
+            <h2>📦 Installation</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>ZIP-Datei entpacken</strong><br>
+                Entpacken Sie <code>gastro-planer-verbessert.zip</code> in einen Ordner
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Dateien auf Server hochladen</strong><br>
+                Per FTP, Netlify, oder anderen Hosting-Service
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>App öffnen</strong><br>
+                Öffnen Sie <code>index.html</code> im Browser oder über Ihre Domain
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Fertig!</strong> ✅<br>
+                Standard Admin-PIN: <code>1234</code>
+            </div>
+        </div>
+        
+        <!-- Neue Features -->
+        <div class="section">
+            <h2>✨ Neue Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">💾</div>
+                    <strong>Auto-Save</strong>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Jede Änderung wird sofort gespeichert
+                    </p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📥</div>
+                    <strong>Backup</strong>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Daten als Datei herunterladen
+                    </p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📤</div>
+                    <strong>Restore</strong>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Daten aus Backup wiederherstellen
+                    </p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <strong>Info</strong>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Speicher-Statistiken anzeigen
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Backup erstellen -->
+        <div class="section">
+            <h2>📥 Backup erstellen</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                Admin-Login mit PIN <code>1234</code>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                Gehe zu <span class="emoji">⚙️</span> <strong>Einstellungen</strong> (unten rechts)
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                Scrolle zu <strong>"💾 Datenverwaltung"</strong>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                Klicke auf <strong>"📥 Backup herunterladen"</strong>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                Datei wird automatisch heruntergeladen:<br>
+                <code>gastro-planer-backup-2026-01-05.json</code>
+            </div>
+            
+            <div class="warning">
+                <strong>💡 Tipp:</strong> Erstellen Sie wöchentlich ein Backup und bewahren Sie es an mehreren Orten auf!
+            </div>
+        </div>
+        
+        <!-- Backup wiederherstellen -->
+        <div class="section">
+            <h2>📤 Backup wiederherstellen</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                Gehe zu <span class="emoji">⚙️</span> <strong>Einstellungen</strong>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                Klicke auf <strong>"📤 Backup importieren"</strong>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                Wähle die Backup-Datei (<code>.json</code>)
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                Bestätige die Warnung
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                Warte auf automatischen Neustart
+            </div>
+            
+            <div class="danger">
+                <strong>⚠️ ACHTUNG:</strong> Dies überschreibt alle aktuellen Daten! Erstellen Sie vorher ein Backup der aktuellen Daten.
+            </div>
+        </div>
+        
+        <!-- Wichtige Hinweise -->
+        <div class="section">
+            <h2>⚠️ Wichtige Hinweise</h2>
+            
+            <ul>
+                <li><strong>Lokale Speicherung:</strong> Daten werden nur in diesem Browser gespeichert</li>
+                <li><strong>Kein Auto-Backup:</strong> Es gibt kein automatisches Cloud-Backup</li>
+                <li><strong>Regelmäßig sichern:</strong> Erstellen Sie wöchentlich ein Backup</li>
+                <li><strong>Mehrere Kopien:</strong> Bewahren Sie Backups an mehreren Orten auf</li>
+                <li><strong>Inkognito-Modus:</strong> Daten werden beim Schließen gelöscht</li>
+                <li><strong>Browser-Cache:</strong> Vorsicht beim Löschen des Browser-Cache</li>
+            </ul>
+        </div>
+        
+        <!-- Empfohlene Routine -->
+        <div class="section">
+            <h2>📅 Empfohlene Routine</h2>
+            
+            <h3 style="color: #8b6f47; margin-top: 20px;">Täglich</h3>
+            <ul>
+                <li>✅ Einfach normal arbeiten</li>
+                <li>✅ Daten werden automatisch gespeichert</li>
+            </ul>
+            
+            <h3 style="color: #8b6f47; margin-top: 20px;">Wöchentlich (z.B. Freitag Abend)</h3>
+            <ul>
+                <li>📥 Backup herunterladen</li>
+                <li>💾 Auf USB-Stick oder Cloud speichern</li>
+            </ul>
+            
+            <h3 style="color: #8b6f47; margin-top: 20px;">Monatlich</h3>
+            <ul>
+                <li>📊 Speicher-Info prüfen</li>
+                <li>🗑️ Alte Zeiterfassungen löschen</li>
+                <li>✅ Backup-Routine überprüfen</li>
+            </ul>
+        </div>
+        
+        <!-- Test-Checkliste -->
+        <div class="section">
+            <h2>✅ Test-Checkliste</h2>
+            
+            <p>Testen Sie nach der Installation:</p>
+            
+            <ul>
+                <li>□ App öffnet sich</li>
+                <li>□ Admin-Login funktioniert</li>
+                <li>□ Neuen Mitarbeiter hinzufügen</li>
+                <li>□ Seite neu laden → Mitarbeiter noch da?</li>
+                <li>□ Backup herunterladen</li>
+                <li>□ Backup importieren</li>
+                <li>□ Speicher-Info anzeigen</li>
+                <li>□ Alle Buttons funktionieren</li>
+            </ul>
+        </div>
+        
+        <!-- Support -->
+        <div class="section">
+            <h2>📞 Support & Dokumentation</h2>
+            
+            <p>Weitere Hilfe finden Sie in:</p>
+            <ul>
+                <li><code>DATENPERSISTENZ.md</code> - Technische Details</li>
+                <li><code>SCHNELLSTART-BACKUP.md</code> - Benutzeranleitung</li>
+                <li><code>ZUSAMMENFASSUNG.md</code> - Übersicht aller Änderungen</li>
+                <li><code>README.md</code> - Allgemeine Dokumentation</li>
+            </ul>
+        </div>
+        
+        <div class="success" style="margin-top: 40px; text-align: center;">
+            <h3 style="color: #10b981; margin-bottom: 10px;">🎉 Viel Erfolg!</h3>
+            <p>Die App ist jetzt vollständig funktional mit automatischer Datenspeicherung!</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+            Version 1.0 | Januar 2026 | Status: ✅ Produktionsbereit
+        </div>
+    </div>
+</body>
+</html>

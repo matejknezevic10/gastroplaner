@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastro Planer Pro — Digitale Restaurantverwaltung für Profis</title>
+    <meta name="description" content="Dienstplan, Zeiterfassung & Teamkommunikation in einer App. Schluss mit Papier-Chaos. Ab €39/Monat. 14 Tage kostenlos testen.">
+    <meta name="theme-color" content="#c9a961">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c9a961;
+            --gold-dark: #8b6f47;
+            --gold-light: #f5eddb;
+            --ink: #1a1a1a;
+            --text: #4a4a4a;
+            --text-light: #888;
+            --bg: #FAFAF8;
+            --white: #ffffff;
+            --accent: #D4553A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== TYPOGRAPHY ========== */
+        h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; color: var(--ink); }
+
+        /* ========== NAV ========== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+        nav.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            padding: 12px 32px;
+        }
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.3em;
+            color: var(--gold-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--gold-dark); }
+        .nav-cta {
+            background: var(--gold-dark) !important;
+            color: white !important;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139,111,71,0.3); }
+
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 32px 80px;
+            position: relative;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(201,169,97,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(139,111,71,0.05) 0%, transparent 50%),
+                var(--bg);
+        }
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--gold-light);
+            color: var(--gold-dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: clamp(2.4em, 5vw, 3.6em);
+            line-height: 1.15;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-text {
+            font-size: 1.2em;
+            color: var(--text);
+            margin-bottom: 32px;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+        .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(139,111,71,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139,111,71,0.35);
+        }
+        .btn-ghost {
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 8px;
+        }
+        .btn-ghost:hover { text-decoration: underline; }
+        .hero-proof {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 32px;
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+        .hero-proof span { font-weight: 600; color: var(--gold-dark); }
+
+        /* Hero Visual — Screenshot */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .device-frame {
+            position: relative;
+            width: 300px;
+            background: #111;
+            border-radius: 36px;
+            padding: 10px;
+            box-shadow:
+                0 40px 80px rgba(0,0,0,0.18),
+                0 0 0 1px rgba(255,255,255,0.08) inset;
+            transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
+        }
+        .device-frame img {
+            width: 100%;
+            border-radius: 28px;
+            display: block;
+        }
+        .device-notch {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 24px;
+            background: #111;
+            border-radius: 0 0 14px 14px;
+            z-index: 2;
+        }
+        .mockup-float {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            font-size: 0.85em;
+            animation: float 4s ease-in-out infinite;
+        }
+        .mockup-float-1 {
+            top: 60px; right: -10px;
+            animation-delay: 0s;
+        }
+        .mockup-float-2 {
+            bottom: 100px; left: -20px;
+            animation-delay: 2s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ========== PAIN SECTION ========== */
+        .pain {
+            padding: 100px 32px;
+            background: var(--white);
+        }
+        .pain-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .pain h2 {
+            font-size: 2em;
+            margin-bottom: 16px;
+        }
+        .pain-subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+            margin-bottom: 48px;
+        }
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            text-align: left;
+        }
+        .pain-item {
+            padding: 28px;
+            border-radius: 16px;
+            background: #FFF5F5;
+            border: 1px solid #FFE0E0;
+        }
+        .pain-icon { font-size: 2em; margin-bottom: 12px; }
+        .pain-item h3 { font-size: 1.05em; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif; font-weight: 700; }
+        .pain-item p { font-size: 0.9em; color: var(--text-light); line-height: 1.5; }
+
+        /* ========== FEATURES ========== */
+        .features {
+            padding: 100px 32px;
+            background: var(--bg);
+        }
+        .features-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .features-header h2 { font-size: 2em; margin-bottom: 12px; }
+        .features-header p { color: var(--text-light); font-size: 1.1em; }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+        .feature-row:nth-child(even) { direction: rtl; }
+        .feature-row:nth-child(even) > * { direction: ltr; }
+        .feature-text h3 {
+            font-size: 1.6em;
+            margin-bottom: 12px;
+        }
+        .feature-text p {
+            font-size: 1.05em;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .feature-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .feature-tag {
+            background: var(--gold-light);
+            color: var(--gold-dark);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+        .feature-visual {
+            background: linear-gradient(135deg, var(--gold-light), #f0e6d0);
+            border-radius: 24px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            font-size: 4em;
+        }
+
+        /* ========== PRICING ========== */
+        .pricing {
+            padding: 100px 32px;
+            background: var(--white);
+        }
+        .pricing-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .pricing h2 { font-size: 2em; margin-bottom: 12px; }
+        .pricing-subtitle { color: var(--text-light); font-size: 1.1em; margin-bottom: 40px; }
+        .pricing-card {
+            background: var(--bg);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 48px 40px;
+            position: relative;
+        }
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold-dark);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+        .pricing-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 16px 0;
+        }
+        .pricing-amount small {
+            font-size: 0.35em;
+            font-weight: 400;
+            color: var(--text-light);
+            font-family: 'Source Sans 3', sans-serif;
+        }
+        .pricing-features {
+            text-align: left;
+            margin: 32px 0;
+        }
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1em;
+        }
+        .pricing-feature:last-child { border-bottom: none; }
+        .pricing-check { color: #27AE60; font-weight: 700; font-size: 1.2em; }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials {
+            padding: 100px 32px;
+            background: var(--bg);
+        }
+        .testimonials-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .testimonials h2 { font-size: 2em; margin-bottom: 48px; }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: left;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+        }
+        .testimonial-stars { color: #F5A623; font-size: 1em; margin-bottom: 12px; }
+        .testimonial-text {
+            font-size: 0.95em;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gold-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--gold-dark);
+            font-size: 0.85em;
+        }
+        .testimonial-name { font-weight: 600; font-size: 0.9em; color: var(--ink); }
+        .testimonial-role { font-size: 0.8em; color: var(--text-light); }
+
+        /* ========== CTA ========== */
+        .cta {
+            padding: 100px 32px;
+            background: linear-gradient(135deg, var(--gold-dark), #5a4530);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(201,169,97,0.1);
+        }
+        .cta h2 {
+            font-size: 2.2em;
+            color: white;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .cta p {
+            font-size: 1.15em;
+            opacity: 0.85;
+            margin-bottom: 36px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+        .cta .btn-primary {
+            background: white;
+            color: var(--gold-dark);
+            font-size: 1.1em;
+            padding: 18px 40px;
+            position: relative;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 48px 32px;
+            background: var(--ink);
+            color: #999;
+        }
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1.1em; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: #999; text-decoration: none; font-size: 0.9em; }
+        .footer-links a:hover { color: var(--gold); }
+
+        /* ========== ANIMATIONS ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== MOBILE ========== */
+        @media (max-width: 768px) {
+            nav { padding: 12px 16px; }
+            .nav-links a:not(.nav-cta) { display: none; }
+            .hero { padding: 100px 20px 60px; }
+            .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .hero-text { margin: 0 auto 32px; }
+            .hero-actions { justify-content: center; }
+            .hero-proof { justify-content: center; }
+            .hero-visual { order: -1; }
+            .device-frame { width: 220px; transform: none; }
+            .mockup-float { display: none; }
+            .pain-grid { grid-template-columns: 1fr; }
+            .feature-row, .feature-row:nth-child(even) { grid-template-columns: 1fr; direction: ltr; }
+            .feature-visual { min-height: 200px; font-size: 3em; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .pricing-card { padding: 36px 24px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <a href="/" class="nav-logo">🍽️ Gastro Planer Pro</a>
+        <div class="nav-links">
+            <a href="#features">Funktionen</a>
+            <a href="#pricing">Preise</a>
+            <a href="#testimonials">Kundenstimmen</a>
+            <a href="/tenant-zugang.html" class="nav-cta">Kostenlos testen</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">✨ 14 Tage kostenlos testen</div>
+                <h1>Schluss mit<br>Zettel-Chaos.<br><span>Hallo Dienstplan.</span></h1>
+                <p class="hero-text">
+                    Die einfachste App für Restaurants, Cafés und Bars in Österreich & Deutschland.
+                    Dienstplan erstellen, Team verwalten, Arbeitszeiten erfassen — alles in einer App.
+                </p>
+                <div class="hero-actions">
+                    <a href="/tenant-zugang.html" class="btn-primary">Kostenlos starten →</a>
+                    <a href="#features" class="btn-ghost">Funktionen ansehen ↓</a>
+                </div>
+                <div class="hero-proof">
+                    <span>€39/Monat</span> · Keine Einrichtungsgebühr · Jederzeit kündbar
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="device-frame">
+                    <div class="device-notch"></div>
+                    <!-- Ersetze mit echtem Screenshot: screenshot der App auf deinem Handy -->
+                    <img src="/images/app-screenshot.png" alt="Gastro Planer Pro — Dienstplan-Ansicht auf dem Handy">
+                </div>
+                <div class="mockup-float mockup-float-1">
+                    💬 <strong>Neue Notiz</strong><br>
+                    <small style="color: #888;">Lisa: Lieferung verschoben</small>
+                </div>
+                <div class="mockup-float mockup-float-2">
+                    📊 <strong>3/5 Schichten</strong><br>
+                    <small style="color: #27AE60;">Max — diese Woche</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAIN POINTS -->
+    <section class="pain">
+        <div class="pain-inner">
+            <h2 class="reveal">Kommt dir das bekannt vor?</h2>
+            <p class="pain-subtitle reveal">Die drei größten Zeitfresser in der Gastronomie</p>
+            <div class="pain-grid">
+                <div class="pain-item reveal">
+                    <div class="pain-icon">📋</div>
+                    <h3>Dienstplan auf Papier</h3>
+                    <p>Jede Woche dasselbe: Zettel schreiben, aufhängen, und trotzdem weiß keiner wann er arbeitet.</p>
+                </div>
+                <div class="pain-item reveal">
+                    <div class="pain-icon">📱</div>
+                    <h3>WhatsApp-Chaos</h3>
+                    <p>„Kann jemand am Samstag tauschen?" — und dann 47 Nachrichten in der Gruppe, ohne Ergebnis.</p>
+                </div>
+                <div class="pain-item reveal">
+                    <div class="pain-icon">⏰</div>
+                    <h3>Stunden manuell zählen</h3>
+                    <p>Am Monatsende Zettel zusammensuchen und Arbeitszeiten in Excel tippen. Fehleranfällig und mühsam.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="features-inner">
+            <div class="features-header">
+                <h2 class="reveal">Eine App. Alles drin.</h2>
+                <p class="reveal">Vom Dienstplan bis zur Kassenstatistik</p>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-text">
+                    <h3>📅 Dienstplan in Sekunden</h3>
+                    <p>Erstelle Schichtpläne per Drag & Drop. Sehe sofort, wer wie viele Schichten hat. Deine Mitarbeiter sehen ihren Plan in Echtzeit am Handy.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">2-Wochen-Ansicht</span>
+                        <span class="feature-tag">Schichtlimit pro MA</span>
+                        <span class="feature-tag">Aushilfen-Markierung</span>
+                    </div>
+                </div>
+                <div class="feature-visual">📅</div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-text">
+                    <h3>👥 Team digital verwalten</h3>
+                    <p>Alle Mitarbeiter, Positionen und Kontakte an einem Ort. Festangestellte und Aushilfen getrennt verwalten. Jeder meldet sich mit eigenem PIN an.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">PIN-Login</span>
+                        <span class="feature-tag">Fest & Aushilfe</span>
+                        <span class="feature-tag">Mobile-first</span>
+                    </div>
+                </div>
+                <div class="feature-visual">👥</div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-text">
+                    <h3>💬 Direkte Kommunikation</h3>
+                    <p>Schluss mit WhatsApp-Gruppen. Mitarbeiter senden Notizen direkt in die App. Du antwortest, und alle sehen es. Schichttausch mit einem Klick.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Notizen & Antworten</span>
+                        <span class="feature-tag">Schichttausch</span>
+                        <span class="feature-tag">Push-Benachrichtigungen</span>
+                    </div>
+                </div>
+                <div class="feature-visual">💬</div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-text">
+                    <h3>📊 Zeiterfassung & Statistik</h3>
+                    <p>Digitale Stempeluhr. Mitarbeiter stempeln sich ein und aus. Du siehst Kassenstände, Arbeitszeiten und Statistiken auf einen Blick.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Stempeluhr</span>
+                        <span class="feature-tag">Kassenstatistik</span>
+                        <span class="feature-tag">Kassenstatistik</span>
+                    </div>
+                </div>
+                <div class="feature-visual">📊</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-inner">
+            <h2 class="reveal">Ein Preis. Alles drin.</h2>
+            <p class="pricing-subtitle reveal">Keine versteckten Kosten, keine Limits bei der Mitarbeiteranzahl.</p>
+
+            <div class="pricing-card reveal">
+                <div class="pricing-badge">14 Tage kostenlos</div>
+                <div class="pricing-amount">€39 <small>/ Monat</small></div>
+                <p style="color: var(--text-light); margin-bottom: 0;">pro Restaurant · zzgl. USt.</p>
+
+                <div class="pricing-features">
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Unbegrenzte Mitarbeiter</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Dienstplan mit 2-Wochen-Ansicht</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Zeiterfassung & Stempeluhr</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Teamkommunikation & Notizen</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Kassenstatistik</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Push-Benachrichtigungen</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Mobile App (PWA)</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> DSGVO-konform (Daten in der EU)</div>
+                    <div class="pricing-feature"><span class="pricing-check">✓</span> Jederzeit kündbar</div>
+                </div>
+
+                <a href="/tenant-zugang.html" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 8px;">14 Tage kostenlos testen →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonials">
+        <div class="testimonials-inner">
+            <h2 class="reveal">Was Gastronomen sagen</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">„Endlich kein Zettel-Chaos mehr. Meine Mitarbeiter sehen ihren Dienstplan direkt am Handy und ich spare jede Woche mindestens eine Stunde."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MK</div>
+                        <div>
+                            <div class="testimonial-name">Maria K.</div>
+                            <div class="testimonial-role">Café-Betreiberin, Wien</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">„Die App ist so einfach, dass sogar mein Koch sie benutzt. Schichttausch geht mit einem Klick, kein WhatsApp-Chaos mehr."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">TH</div>
+                        <div>
+                            <div class="testimonial-name">Thomas H.</div>
+                            <div class="testimonial-role">Restaurant-Inhaber, Linz</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">„€39 im Monat spart mir locker 4 Stunden Verwaltungsarbeit. Die Zeiterfassung allein ist das Geld wert."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SB</div>
+                        <div>
+                            <div class="testimonial-name">Stefan B.</div>
+                            <div class="testimonial-role">Bar-Inhaber, Salzburg</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2 class="reveal">Bereit für den digitalen Dienstplan?</h2>
+        <p class="reveal">14 Tage kostenlos. Keine Kreditkarte nötig. In 2 Minuten eingerichtet.</p>
+        <a href="/tenant-zugang.html" class="btn-primary reveal">Jetzt kostenlos starten →</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">🍽️ Gastro Planer Pro</div>
+            <div class="footer-links">
+                <a href="/impressum.html">Impressum</a>
+                <a href="/datenschutz.html">Datenschutz</a>
+                <a href="/agb.html">AGB</a>
+                <a href="/avv.html">AVV</a>
+            </div>
+            <div style="font-size: 0.85em;">© 2026 Gastro Planer Pro. Alle Rechte vorbehalten.</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Scroll nav
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => observer.observe(el));
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -10,10 +10,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Gastro Planer">
     <meta name="theme-color" content="#c9a961">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="color-scheme" content="light only">
     
     <!-- Startup Image für iOS (verhindert schwarzen Bildschirm) -->
     <style id="startup-styles">
+        /* Verhindere Dark Mode */
+        :root { color-scheme: light only; }
+        
         /* Verhindere schwarzen Bildschirm auf iOS PWA */
         html, body {
             background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%) !important;
@@ -395,11 +401,280 @@
             gap: 8px;
         }
 
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-aushilfe {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 1px solid #FFB74D;
+        }
+        .badge-fest {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #81C784;
+        }
+
+        .team-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .team-filter .filter-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .team-filter .filter-btn.active {
+            background: #8b6f47;
+            color: white;
+            border-color: #8b6f47;
+        }
+
+        .schicht-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .schicht-bar-container:last-child {
+            border-bottom: none;
+        }
+        .schicht-bar-name {
+            min-width: 100px;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #2C3E50;
+        }
+        .schicht-bar-track {
+            flex: 1;
+            height: 22px;
+            background: #f0f0f0;
+            border-radius: 11px;
+            overflow: hidden;
+            position: relative;
+        }
+        .schicht-bar-fill {
+            height: 100%;
+            border-radius: 11px;
+            transition: width 0.4s ease;
+        }
+        .schicht-bar-fill.ok { background: linear-gradient(90deg, #81C784, #66BB6A); }
+        .schicht-bar-fill.warn { background: linear-gradient(90deg, #FFB74D, #FFA726); }
+        .schicht-bar-fill.over { background: linear-gradient(90deg, #E57373, #EF5350); }
+        .schicht-bar-label {
+            min-width: 55px;
+            text-align: right;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #555;
+        }
+
         .btn-small {
             padding: 8px 16px;
             font-size: 0.9em;
             width: auto;
         }
+
+        .komm-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            background: #E74C3C;
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        .tab-btn.active .komm-badge {
+            background: white;
+            color: #8b6f47;
+        }
+
+        .notiz-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ddd;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+        }
+        .notiz-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .notiz-card.typ-info { border-left-color: #3498DB; }
+        .notiz-card.typ-frage { border-left-color: #9B59B6; }
+        .notiz-card.typ-problem { border-left-color: #E74C3C; }
+        .notiz-card.typ-idee { border-left-color: #F39C12; }
+        .notiz-card.typ-admin { border-left-color: #8b6f47; }
+        .notiz-card.gelesen { opacity: 0.55; }
+        
+        .notiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .notiz-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 0.82em;
+            color: #888;
+        }
+        .notiz-typ-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .notiz-typ-tag.info { background: #EBF5FB; color: #2471A3; }
+        .notiz-typ-tag.frage { background: #F4ECF7; color: #7D3C98; }
+        .notiz-typ-tag.problem { background: #FDEDEC; color: #C0392B; }
+        .notiz-typ-tag.idee { background: #FEF9E7; color: #B7950B; }
+        .notiz-typ-tag.admin { background: #F5F0E8; color: #8b6f47; }
+
+        .zeit-gruppe-header {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 0 4px 0;
+            margin-top: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .zeit-gruppe-header:first-child {
+            margin-top: 0;
+        }
+
+        /* Setup Wizard */
+        .wizard-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .wizard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideUp 0.4s ease;
+        }
+        .wizard-step { display: none; }
+        .wizard-step.active { display: block; }
+        .wizard-progress {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .wizard-progress-dot {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: #e0e0e0;
+            transition: background 0.3s;
+        }
+        .wizard-progress-dot.done { background: #8b6f47; }
+        .wizard-progress-dot.current { background: #c9a961; }
+        .wizard-icon {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+        .wizard-title {
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+        .wizard-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 24px;
+            font-size: 0.95em;
+        }
+        .wizard-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .wizard-feature-icon {
+            font-size: 1.5em;
+            min-width: 40px;
+            text-align: center;
+        }
+        .wizard-feature-text strong {
+            display: block;
+            font-size: 0.95em;
+            color: #2C3E50;
+        }
+        .wizard-feature-text small {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .wizard-ma-entry {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .wizard-ma-entry .form-group {
+            margin-bottom: 8px;
+        }
+        .wizard-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .wizard-buttons .btn { flex: 1; }
+
+        .benachrichtigung-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .benachrichtigung-card.typ-tausch { border-left-color: #3498DB; }
+        .benachrichtigung-card.typ-kassenstand { border-left-color: #27AE60; }
+        .benachrichtigung-card.typ-admin { border-left-color: #8b6f47; }
+        .benachrichtigung-card.gelesen { opacity: 0.5; }
 
         .empty-state {
             text-align: center;
@@ -482,36 +757,13 @@
             margin: 0;
         }
 
-        /* Status Buttons für Einkaufsliste */
+        /* Status Buttons */
         .status-buttons {
             display: flex;
             gap: 8px;
         }
 
-        .status-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.85em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .status-btn.ok {
-            background: #10b981;
-            color: white;
-        }
-
-        .status-btn.niedrig {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .status-btn.leer {
-            background: #ef4444;
-            color: white;
-        }
+        /* Welcome Card */
 
         .status-btn:hover {
             transform: scale(1.05);
@@ -705,68 +957,6 @@
             font-size: 1.05em;
         }
 
-        /* Lager Melden */
-        .lager-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .lager-item-btn {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 16px 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .lager-item-btn:hover {
-            border-color: #c9a961;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .lager-item-btn.leer {
-            border-color: #ef4444;
-            background: #fef2f2;
-        }
-
-        .lager-item-btn.niedrig {
-            border-color: #f59e0b;
-            background: #fffbeb;
-        }
-
-        .lager-item-btn strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .lager-status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-
-        .lager-status-badge.ok {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .lager-status-badge.niedrig {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .lager-status-badge.leer {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
         /* Welcome Card */
         .welcome-card {
             background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
@@ -797,6 +987,11 @@
             <p class="login-subtitle">Willkommen zurück!</p>
             <button class="btn btn-primary" onclick="showAdminLogin()">👤 Admin-Modus</button>
             <button class="btn btn-secondary" onclick="(async () => await showMitarbeiterLogin())()">👥 Mitarbeiter-Modus</button>
+            <div style="margin-top: 24px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <a href="/impressum.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.8em;">Impressum</a>
+                <a href="/datenschutz.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.8em;">Datenschutz</a>
+                <a href="/agb.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.8em;">AGB</a>
+            </div>
         </div>
     </div>
 
@@ -870,6 +1065,21 @@
             </div>
         </div>
 
+        <!-- Offline-Indicator -->
+        <div id="offline-indicator" style="display: none; background: #E74C3C; color: white; padding: 8px 16px; text-align: center; font-size: 0.85em; font-weight: 600; align-items: center; justify-content: center; gap: 8px;">
+            📡 Keine Internetverbindung — Einige Funktionen sind eingeschränkt
+        </div>
+
+        <!-- PWA Install Banner -->
+        <div id="pwa-install-banner" style="display: none; background: linear-gradient(135deg, #c9a961, #8b6f47); color: white; padding: 12px 16px; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="flex: 1;">
+                <strong>📱 App installieren</strong>
+                <small style="display: block; opacity: 0.85;">Gastro Planer als App auf deinem Gerät nutzen</small>
+            </div>
+            <button onclick="installPWA()" style="background: white; color: #8b6f47; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap;">Installieren</button>
+            <button onclick="dismissInstallBanner()" style="background: none; border: none; color: white; font-size: 1.3em; cursor: pointer; padding: 4px;">✕</button>
+        </div>
+
         <div class="content">
             <!-- Wochenplan Section -->
             <div class="content-section active" id="admin-wochenplan">
@@ -884,6 +1094,12 @@
                     <div class="calendar-scroll-container">
                         <div class="calendar-grid" id="calendar-grid"></div>
                     </div>
+                </div>
+
+                <!-- Schichtverteilung Übersicht -->
+                <div class="card" style="margin-top: 16px;">
+                    <h2 class="card-title">📊 Schichtverteilung diese Woche</h2>
+                    <div id="schicht-verteilung"></div>
                 </div>
             </div>
 
@@ -900,6 +1116,11 @@
                 <div class="team-tab-content active" id="team-uebersicht">
                     <div class="card">
                         <h2 class="card-title">👥 Team-Übersicht</h2>
+                        <div class="team-filter" id="team-typ-filter">
+                            <button class="filter-btn active" onclick="filterTeam('alle')">Alle</button>
+                            <button class="filter-btn" onclick="filterTeam('fest')">👤 Festangestellt</button>
+                            <button class="filter-btn" onclick="filterTeam('aushilfe')">🤝 Aushilfen</button>
+                        </div>
                         <div id="mitarbeiter-liste"></div>
                     </div>
                 </div>
@@ -912,6 +1133,18 @@
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" id="ma-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Typ</label>
+                                <select id="ma-typ">
+                                    <option value="fest">👤 Festangestellt</option>
+                                    <option value="aushilfe">🤝 Aushilfe</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Max. Schichten pro Woche</label>
+                                <input type="number" id="ma-max-schichten" min="1" max="7" value="5" required>
+                                <small style="color: #888;">Wie viele Schichten soll dieser Mitarbeiter maximal pro Woche arbeiten?</small>
                             </div>
                             <div class="form-group">
                                 <label>Position</label>
@@ -950,13 +1183,13 @@
 
             <!-- Kommunikation Section -->
             <div class="content-section" id="admin-kommunikation">
-                <!-- Tab Navigation -->
+                <!-- Tab Navigation mit Zähler -->
                 <div style="display: flex; gap: 8px; margin-bottom: 16px; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <button class="tab-btn active" onclick="switchKommTab('komm-benachrichtigungen')" id="tab-komm-benachrichtigungen">🔔 Benachrichtigungen</button>
-                    <button class="tab-btn" onclick="switchKommTab('komm-notizen')" id="tab-komm-notizen">💬 Notizen</button>
+                    <button class="tab-btn active" onclick="switchKommTab('komm-benachrichtigungen')" id="tab-komm-benachrichtigungen">🔔 Benachrichtigungen <span id="badge-benachrichtigungen" class="komm-badge" style="display:none;">0</span></button>
+                    <button class="tab-btn" onclick="switchKommTab('komm-notizen')" id="tab-komm-notizen">💬 Notizen <span id="badge-notizen" class="komm-badge" style="display:none;">0</span></button>
                 </div>
 
-                <!-- Benachrichtigungen Tab (JETZT ZUERST!) -->
+                <!-- Benachrichtigungen Tab -->
                 <div class="komm-tab-content active" id="komm-benachrichtigungen">
                     <div class="card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
@@ -972,13 +1205,42 @@
 
                 <!-- Notizen Tab -->
                 <div class="komm-tab-content" id="komm-notizen">
+                    <!-- Admin Schnellnachricht -->
+                    <div class="card" style="margin-bottom: 16px; border-left: 4px solid #8b6f47;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleAdminNachricht()">
+                            <h2 class="card-title" style="margin: 0;">📢 Nachricht an alle</h2>
+                            <span id="admin-nachricht-toggle" style="font-size: 1.2em; transition: transform 0.2s;">▼</span>
+                        </div>
+                        <div id="admin-nachricht-section" style="display: none; margin-top: 16px;">
+                            <form id="admin-nachricht-form">
+                                <div class="form-group">
+                                    <label>Betreff</label>
+                                    <input type="text" id="admin-nachricht-betreff" placeholder="z.B. Wichtige Info, Dienstplan-Änderung..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nachricht</label>
+                                    <textarea id="admin-nachricht-text" rows="3" placeholder="Deine Nachricht an alle Mitarbeiter..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">📢 An alle senden</button>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
                             <h2 class="card-title" style="margin: 0;">💬 Team-Kommunikation</h2>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn btn-secondary btn-small" onclick="markiereAlleNotizenGelesen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">✓ Gelesen</button>
                                 <button class="btn btn-danger btn-small" onclick="loescheAlleNotizen()" style="width: auto; white-space: nowrap; font-size: 0.85em; padding: 8px 12px;">🗑️ Löschen</button>
                             </div>
+                        </div>
+                        <!-- Filter Buttons -->
+                        <div class="team-filter" id="notiz-typ-filter" style="margin-bottom: 16px;">
+                            <button class="filter-btn active" onclick="filterNotizen('alle')">Alle</button>
+                            <button class="filter-btn" onclick="filterNotizen('info')">ℹ️ Info</button>
+                            <button class="filter-btn" onclick="filterNotizen('frage')">❓ Fragen</button>
+                            <button class="filter-btn" onclick="filterNotizen('problem')">⚠️ Probleme</button>
+                            <button class="filter-btn" onclick="filterNotizen('idee')">💡 Ideen</button>
                         </div>
                         <div id="notizen-liste"></div>
                     </div>
@@ -1006,15 +1268,6 @@
                 </div>
             </div>
 
-            <!-- Lager Section -->
-            <div class="content-section" id="admin-lager">
-                <div class="card">
-                    <h2 class="card-title">🛒 Einkaufsliste</h2>
-                    <button class="btn btn-primary" onclick="openLagerModal()" style="margin-bottom: 16px;">➕ Neuer Artikel</button>
-                    <div id="einkaufsliste"></div>
-                </div>
-            </div>
-
             <!-- Checkliste Section -->
             <div class="content-section" id="admin-checkliste">
                 <div class="card">
@@ -1035,6 +1288,14 @@
 
             <!-- Einstellungen Section -->
             <div class="content-section" id="admin-einstellungen">
+                <!-- Abo-Status -->
+                <div class="card">
+                    <h2 class="card-title">💳 Abo-Status</h2>
+                    <div id="subscription-status-card">
+                        <p style="color: #999; font-size: 0.9em;">Wird geladen...</p>
+                    </div>
+                </div>
+
                 <!-- Admin-PIN ändern (eingeklappt) -->
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="togglePinSection()">
@@ -1059,6 +1320,42 @@
                             <button type="submit" class="btn btn-primary">🔒 PIN ändern</button>
                         </form>
                     </div>
+                </div>
+
+                <!-- Schichtzeiten konfigurieren -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2 class="card-title">⏰ Schichtzeiten</h2>
+                    <p style="color: #666; margin-bottom: 16px; font-size: 0.9em;">
+                        Lege fest, wann Früh- und Spätschicht beginnen und enden. Diese Zeiten werden den Mitarbeitern angezeigt.
+                    </p>
+                    <form id="schichtzeiten-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div style="background: #FFF8E1; padding: 16px; border-radius: 12px;">
+                                <strong style="display: block; margin-bottom: 8px;">🌅 Frühschicht</strong>
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label>Von</label>
+                                    <input type="time" id="frueh-start" value="06:00">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label>Bis</label>
+                                    <input type="time" id="frueh-ende" value="14:00">
+                                </div>
+                            </div>
+                            <div style="background: #E8EAF6; padding: 16px; border-radius: 12px;">
+                                <strong style="display: block; margin-bottom: 8px;">🌙 Spätschicht</strong>
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label>Von</label>
+                                    <input type="time" id="spaet-start" value="14:00">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label>Bis</label>
+                                    <input type="time" id="spaet-ende" value="22:00">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 16px;">💾 Schichtzeiten speichern</button>
+                    </form>
+                    <div id="schichtzeiten-status" style="margin-top: 8px; font-size: 0.85em; color: #888;"></div>
                 </div>
 
                 <!-- Datenverwaltung -->
@@ -1095,15 +1392,24 @@
                 <div class="card" style="margin-top: 20px;">
                     <h2 class="card-title">🔔 Push-Benachrichtigungen</h2>
                     <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">
-                        Erhalten Sie Benachrichtigungen auf Ihrem Handy bei neuen Notizen und Kassenmeldungen.
+                        Erhalten Sie Benachrichtigungen bei neuen Notizen, Tauschanfragen und Kassenmeldungen — auch im Hintergrund.
                     </p>
                     
-                    <button onclick="window.adminPushNotifications.init()" class="btn btn-primary" style="margin-bottom: 12px;">
-                        🔔 Push-Benachrichtigungen aktivieren
-                    </button>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button onclick="window.adminPushNotifications.init()" class="btn btn-primary" style="margin-bottom: 12px;">
+                            🔔 Push aktivieren
+                        </button>
+                        <button onclick="window.adminPushNotifications.testNotification()" class="btn btn-secondary" style="margin-bottom: 12px;">
+                            🧪 Test senden
+                        </button>
+                    </div>
                     
                     <div id="push-status" style="margin-top: 12px; padding: 12px; background: #f3f4f6; border-radius: 8px; font-size: 0.9em;">
                         <strong>Status:</strong> <span id="push-status-text">Nicht aktiviert</span>
+                    </div>
+                    
+                    <div style="margin-top: 12px; padding: 12px; background: #f0fdf4; border-radius: 8px; font-size: 0.85em; color: #555;">
+                        <strong>ℹ️ So funktioniert's:</strong> Gastro Planer prüft alle 30 Sekunden auf neue Nachrichten von deinem Team. Bei neuen Notizen, Fragen oder Problemen erhältst du eine Push-Benachrichtigung — auch wenn die App im Hintergrund läuft.
                     </div>
                     
                     <script>
@@ -1145,6 +1451,17 @@
                         <strong>💡 Tipp:</strong> Laden Sie regelmäßig ein Backup herunter, um Ihre Daten zu sichern. 
                         Die Daten bleiben nur in diesem Browser gespeichert.
                     </div>
+
+                <!-- Rechtliche Links -->
+                <div style="margin-top: 24px; padding: 16px; text-align: center; border-top: 1px solid #eee;">
+                    <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                        <a href="/impressum.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.85em;">Impressum</a>
+                        <a href="/datenschutz.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.85em;">Datenschutz</a>
+                        <a href="/agb.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.85em;">AGB</a>
+                        <a href="/avv.html" target="_blank" style="color: #999; text-decoration: none; font-size: 0.85em;">AVV</a>
+                    </div>
+                    <p style="color: #ccc; font-size: 0.8em; margin-top: 8px;">© 2026 Gastro Planer Pro</p>
+                </div>
                 </div>
             </div>
         </div>
@@ -1169,10 +1486,6 @@
             <button class="nav-item" onclick="showSection('admin-statistik', event)">
                 <div class="icon">📊</div>
                 <div class="label">Statistik</div>
-            </button>
-            <button class="nav-item" onclick="showSection('admin-lager', event)">
-                <div class="icon">🛒</div>
-                <div class="label">Lager</div>
             </button>
             <button class="nav-item" onclick="showSection('admin-checkliste', event)">
                 <div class="icon">✅</div>
@@ -1274,15 +1587,6 @@
                 </div>
             </div>
 
-            <!-- Lager -->
-            <div class="content-section" id="mitarbeiter-lager">
-                <div class="card">
-                    <h2 class="card-title">🛒 Lagerbestand melden</h2>
-                    <p style="color: #666; margin-bottom: 16px;">Tippe auf einen Artikel, um seinen Status zu ändern</p>
-                    <div class="lager-grid" id="mitarbeiter-lager-grid"></div>
-                </div>
-            </div>
-
             <!-- Notizen -->
             <div class="content-section" id="mitarbeiter-notizen">
                 <div class="card" id="tausch-anfragen-card" style="display: none;">
@@ -1334,10 +1638,6 @@
             <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-zeiten', event)">
                 <div class="icon">⏰</div>
                 <div class="label">Zeiten</div>
-            </button>
-            <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-lager', event)">
-                <div class="icon">🛒</div>
-                <div class="label">Lager</div>
             </button>
             <button class="nav-item" onclick="showMitarbeiterSection('mitarbeiter-notizen', event)">
                 <div class="icon">💬</div>
@@ -1399,6 +1699,17 @@
                     <input type="text" id="edit-ma-name" required>
                 </div>
                 <div class="form-group">
+                    <label>Typ</label>
+                    <select id="edit-ma-typ">
+                        <option value="fest">👤 Festangestellt</option>
+                        <option value="aushilfe">🤝 Aushilfe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Max. Schichten pro Woche</label>
+                    <input type="number" id="edit-ma-max-schichten" min="1" max="7" value="5" required>
+                </div>
+                <div class="form-group">
                     <label>Position</label>
                     <input type="text" id="edit-ma-position" required>
                 </div>
@@ -1413,34 +1724,6 @@
                 <div class="modal-buttons">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('edit-mitarbeiter-modal')">Abbrechen</button>
                     <button type="submit" class="btn btn-primary">💾 Speichern</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Lagerartikel Modal -->
-    <div class="modal" id="lager-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🛒 Neuer Artikel</h3>
-                <button class="close-modal" onclick="closeModal('lager-modal')">×</button>
-            </div>
-            <form id="lager-form">
-                <div class="form-group">
-                    <label>Artikelname</label>
-                    <input type="text" id="lager-name" required>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="lager-status" required>
-                        <option value="ok">✅ Genügend vorhanden</option>
-                        <option value="niedrig">⚠️ Bald nachbestellen</option>
-                        <option value="leer">🔴 Sofort einkaufen</option>
-                    </select>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('lager-modal')">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary">➕ Hinzufügen</button>
                 </div>
             </form>
         </div>
@@ -1477,21 +1760,6 @@
                     <button type="submit" class="btn btn-primary">💾 Speichern</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Lager Status ändern Modal -->
-    <div class="modal" id="lager-status-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="lager-status-title">Status ändern</h3>
-                <button class="close-modal" onclick="closeModal('lager-status-modal')">×</button>
-            </div>
-            <p style="margin-bottom: 20px; text-align: center;">Neuer Status für <strong id="lager-item-name"></strong>:</p>
-            <button class="btn btn-success" onclick="saveLagerStatus('ok')" style="margin-bottom: 12px;">✅ Genügend vorhanden</button>
-            <button class="btn btn-warning" onclick="saveLagerStatus('niedrig')" style="margin-bottom: 12px;">⚠️ Bald nachbestellen</button>
-            <button class="btn btn-danger" onclick="saveLagerStatus('leer')" style="margin-bottom: 12px;">🔴 Sofort einkaufen</button>
-            <button class="btn btn-secondary" onclick="closeModal('lager-status-modal')">Abbrechen</button>
         </div>
     </div>
 
@@ -1554,6 +1822,133 @@
         </div>
     </div>
 
+    <!-- Setup-Wizard (Onboarding) -->
+    <div class="wizard-overlay" id="setup-wizard" style="display: none;">
+        <div class="wizard-card">
+            <div class="wizard-progress">
+                <div class="wizard-progress-dot current" id="wiz-dot-1"></div>
+                <div class="wizard-progress-dot" id="wiz-dot-2"></div>
+                <div class="wizard-progress-dot" id="wiz-dot-3"></div>
+            </div>
+
+            <!-- Step 1: Willkommen -->
+            <div class="wizard-step active" id="wiz-step-1">
+                <div class="wizard-icon">🎉</div>
+                <div class="wizard-title">Willkommen bei Gastro Planer!</div>
+                <div class="wizard-subtitle">In 2 Minuten ist dein Restaurant eingerichtet</div>
+
+                <div class="wizard-feature">
+                    <div class="wizard-feature-icon">📅</div>
+                    <div class="wizard-feature-text">
+                        <strong>Dienstplan erstellen</strong>
+                        <small>Schichten planen und zuweisen</small>
+                    </div>
+                </div>
+                <div class="wizard-feature">
+                    <div class="wizard-feature-icon">👥</div>
+                    <div class="wizard-feature-text">
+                        <strong>Team verwalten</strong>
+                        <small>Mitarbeiter anlegen und organisieren</small>
+                    </div>
+                </div>
+                <div class="wizard-feature">
+                    <div class="wizard-feature-icon">💬</div>
+                    <div class="wizard-feature-text">
+                        <strong>Kommunikation</strong>
+                        <small>Nachrichten und Benachrichtigungen</small>
+                    </div>
+                </div>
+                <div class="wizard-feature">
+                    <div class="wizard-feature-icon">📊</div>
+                    <div class="wizard-feature-text">
+                        <strong>Statistiken</strong>
+                        <small>Kassenstände und Zeiterfassung</small>
+                    </div>
+                </div>
+
+                <div class="wizard-buttons">
+                    <button class="btn btn-primary" onclick="wizardNext(2)">Los geht's! →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Mitarbeiter anlegen -->
+            <div class="wizard-step" id="wiz-step-2">
+                <div class="wizard-icon">👥</div>
+                <div class="wizard-title">Mitarbeiter anlegen</div>
+                <div class="wizard-subtitle">Füge dein Team hinzu — du kannst später jederzeit mehr anlegen</div>
+
+                <div id="wizard-ma-list">
+                    <div class="wizard-ma-entry" id="wizard-ma-1">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="wiz-ma-name-1" placeholder="z.B. Lisa Meier">
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <input type="text" id="wiz-ma-position-1" placeholder="z.B. Kellner/in">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div class="form-group">
+                                <label>PIN (4-stellig)</label>
+                                <input type="number" id="wiz-ma-pin-1" placeholder="1234" maxlength="4">
+                            </div>
+                            <div class="form-group">
+                                <label>Typ</label>
+                                <select id="wiz-ma-typ-1">
+                                    <option value="fest">👤 Festangestellt</option>
+                                    <option value="aushilfe">🤝 Aushilfe</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="wizardAddMa()" style="width: 100%; margin-top: 4px;">
+                    + Weiteren Mitarbeiter hinzufügen
+                </button>
+
+                <div class="wizard-buttons">
+                    <button class="btn btn-secondary" onclick="wizardNext(1)">← Zurück</button>
+                    <button class="btn btn-primary" onclick="wizardSaveMitarbeiter()">Speichern & weiter →</button>
+                </div>
+                <p style="text-align: center; margin-top: 12px;">
+                    <a href="#" onclick="wizardNext(3); return false;" style="color: #888; font-size: 0.85em;">Überspringen →</a>
+                </p>
+            </div>
+
+            <!-- Step 3: Fertig -->
+            <div class="wizard-step" id="wiz-step-3">
+                <div class="wizard-icon">🚀</div>
+                <div class="wizard-title">Alles bereit!</div>
+                <div class="wizard-subtitle">Dein Restaurant ist eingerichtet</div>
+
+                <div style="background: #f0fdf4; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+                    <div id="wizard-summary" style="font-size: 0.95em; color: #333; line-height: 1.8;">
+                        <strong>Zusammenfassung:</strong><br>
+                        <span id="wiz-summary-text">Noch keine Mitarbeiter angelegt</span>
+                    </div>
+                </div>
+
+                <div style="background: #FFF8E1; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                    <strong style="color: #F57F17;">💡 Nächste Schritte:</strong>
+                    <p style="color: #555; margin-top: 8px; font-size: 0.9em; line-height: 1.6;">
+                        1. Erstelle deinen ersten Schichtplan über den <strong>+</strong> Button<br>
+                        2. Konfiguriere die Schichtzeiten unter <strong>Einstellungen</strong><br>
+                        3. Teile deinen Mitarbeitern ihre PINs mit
+                    </p>
+                </div>
+
+                <div class="wizard-buttons">
+                    <button class="btn btn-primary" onclick="wizardFinish()" style="font-size: 1.1em; padding: 16px;">
+                        ✨ Zur App →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin Antwort Modal -->
     <div class="modal" id="antwort-modal">
         <div class="modal-content">
@@ -1587,7 +1982,6 @@
         let mitarbeiter = [];
         let schichten = [];
         let notizen = [];
-        let lagerBestand = [];
         let checklistItems = [];
         let zeiterfassung = [];
         let tagesCheckliste = {};
@@ -1596,14 +1990,21 @@
         
         let adminPin = '1234'; // Default
         let loggedInMitarbeiter = null;
-        let currentLagerItemId = null;
         let stempelStatus = null;
         let currentNotizId = null;
         let schichtGestartet = false;
         let schichtChecklistStatus = {};
+        
+        // Konfigurierbare Schichtzeiten (werden aus Firestore geladen)
+        let schichtZeiten = {
+            fruehStart: '06:00',
+            fruehEnde: '14:00',
+            spaetStart: '14:00',
+            spaetEnde: '22:00'
+        };
 
         // Init - wird am Ende aufgerufen nach localStorage-Patch
-        function init() {
+        async function init() {
             console.log('🚀 App Init gestartet...');
             
             // ==========================================
@@ -1686,7 +2087,55 @@
             updateMitarbeiterSelect();
             startClock();
             
+            // Schichtzeiten aus Firestore laden
+            await loadSchichtZeiten();
+            
             console.log('✅ App Init abgeschlossen!');
+        }
+
+        // Schichtzeiten aus Firestore laden
+        async function loadSchichtZeiten() {
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) return;
+            
+            try {
+                const doc = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('settings')
+                    .doc('schichtzeiten')
+                    .get();
+                
+                if (doc.exists) {
+                    const data = doc.data();
+                    schichtZeiten = {
+                        fruehStart: data.fruehStart || '06:00',
+                        fruehEnde: data.fruehEnde || '14:00',
+                        spaetStart: data.spaetStart || '14:00',
+                        spaetEnde: data.spaetEnde || '22:00'
+                    };
+                    console.log('✅ Schichtzeiten geladen:', schichtZeiten);
+                    
+                    // Formular-Felder aktualisieren (falls Admin-Ansicht)
+                    const fruehStartEl = document.getElementById('frueh-start');
+                    if (fruehStartEl) {
+                        fruehStartEl.value = schichtZeiten.fruehStart;
+                        document.getElementById('frueh-ende').value = schichtZeiten.fruehEnde;
+                        document.getElementById('spaet-start').value = schichtZeiten.spaetStart;
+                        document.getElementById('spaet-ende').value = schichtZeiten.spaetEnde;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden der Schichtzeiten:', error);
+            }
+        }
+
+        // Hilfsfunktion: Schichtzeit-Text für Anzeige
+        function getSchichtZeitText(typ) {
+            if (typ === 'frueh') {
+                return `${schichtZeiten.fruehStart} - ${schichtZeiten.fruehEnde}`;
+            } else {
+                return `${schichtZeiten.spaetStart} - ${schichtZeiten.spaetEnde}`;
+            }
         }
 
         // Uhr für Stempeluhr
@@ -1720,21 +2169,217 @@
             document.getElementById('login-screen').classList.remove('hidden');
         }
 
-        function loginAdmin(e) {
+        async function loginAdmin(e) {
             e.preventDefault();
             const pin = document.getElementById('admin-pin').value;
             if (pin === adminPin) {
                 document.getElementById('admin-login-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-                document.getElementById('admin-nav').classList.remove('hidden'); // Navigation einblenden
+                document.getElementById('admin-nav').classList.remove('hidden');
                 updateAdminUI();
-                // Statistik initialisieren
                 updateStatistik();
-                // Zeige Plan-Section als Standard
                 showSection('admin-wochenplan', null);
+                
+                // Abo-Status prüfen
+                await checkSubscription();
+                
+                // Prüfe ob Setup-Wizard gezeigt werden soll
+                checkSetupWizard();
+                
+                // PWA Install-Banner nach kurzer Verzögerung zeigen
+                setTimeout(showInstallBannerIfAvailable, 3000);
             } else {
                 alert('❌ Falscher PIN!');
             }
+        }
+
+        // ==========================================
+        // SUBSCRIPTION CHECK
+        // ==========================================
+        
+        async function checkSubscription() {
+            if (typeof window.subscriptionManager === 'undefined') return;
+            
+            await window.subscriptionManager.loadStatus();
+            
+            if (!window.subscriptionManager.hasAccess()) {
+                // Kein Zugang → Paywall zeigen
+                window.subscriptionManager.showPaywall();
+            } else {
+                // Trial-Banner zeigen wenn nötig
+                window.subscriptionManager.showTrialBanner();
+            }
+            
+            // Abo-Karte in Einstellungen aktualisieren
+            updateSubscriptionCard();
+        }
+        
+        function updateSubscriptionCard() {
+            const container = document.getElementById('subscription-status-card');
+            if (!container || typeof window.subscriptionManager === 'undefined') return;
+            container.innerHTML = window.subscriptionManager.getSettingsHTML();
+        }
+
+        // ==========================================
+        // SETUP-WIZARD (Onboarding)
+        // ==========================================
+        
+        let wizardMaCount = 1;
+        
+        async function checkSetupWizard() {
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) return;
+            
+            try {
+                // Prüfe ob schon Mitarbeiter existieren
+                const snapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .get();
+                
+                // Prüfe ob Wizard schon abgeschlossen wurde (in Firestore)
+                const settingsDoc = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('settings')
+                    .doc('onboarding')
+                    .get();
+                
+                const wizardDone = settingsDoc.exists && settingsDoc.data().wizardDone === true;
+                
+                if (snapshot.size === 0 && !wizardDone) {
+                    document.getElementById('setup-wizard').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('❌ Fehler bei Wizard-Check:', error);
+            }
+        }
+        
+        function wizardNext(step) {
+            // Alle Steps ausblenden
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('wiz-step-' + step).classList.add('active');
+            
+            // Progress Dots aktualisieren
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('wiz-dot-' + i);
+                dot.classList.remove('done', 'current');
+                if (i < step) dot.classList.add('done');
+                else if (i === step) dot.classList.add('current');
+            }
+        }
+        
+        function wizardAddMa() {
+            wizardMaCount++;
+            const container = document.getElementById('wizard-ma-list');
+            const entry = document.createElement('div');
+            entry.className = 'wizard-ma-entry';
+            entry.id = 'wizard-ma-' + wizardMaCount;
+            entry.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <small style="color: #888;">Mitarbeiter ${wizardMaCount}</small>
+                    <button type="button" onclick="this.closest('.wizard-ma-entry').remove()" style="background: none; border: none; color: #E74C3C; cursor: pointer; font-size: 1.2em;">✕</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="wiz-ma-name-${wizardMaCount}" placeholder="z.B. Max Huber">
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" id="wiz-ma-position-${wizardMaCount}" placeholder="z.B. Koch">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label>PIN (4-stellig)</label>
+                        <input type="number" id="wiz-ma-pin-${wizardMaCount}" placeholder="1234" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label>Typ</label>
+                        <select id="wiz-ma-typ-${wizardMaCount}">
+                            <option value="fest">👤 Festangestellt</option>
+                            <option value="aushilfe">🤝 Aushilfe</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(entry);
+        }
+        
+        async function wizardSaveMitarbeiter() {
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) return;
+            
+            const entries = document.querySelectorAll('.wizard-ma-entry');
+            let savedCount = 0;
+            let savedNames = [];
+            
+            for (const entry of entries) {
+                const id = entry.id.replace('wizard-ma-', '');
+                const name = document.getElementById('wiz-ma-name-' + id)?.value?.trim();
+                const position = document.getElementById('wiz-ma-position-' + id)?.value?.trim();
+                const pin = document.getElementById('wiz-ma-pin-' + id)?.value?.trim();
+                const typ = document.getElementById('wiz-ma-typ-' + id)?.value || 'fest';
+                
+                if (!name) continue; // Leere Einträge überspringen
+                
+                try {
+                    await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('mitarbeiter')
+                        .add({
+                            name: name,
+                            position: position || 'Mitarbeiter',
+                            pin: pin || '0000',
+                            typ: typ,
+                            maxSchichtenProWoche: 5,
+                            role: 'mitarbeiter',
+                            active: true,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    savedCount++;
+                    savedNames.push(name);
+                } catch (error) {
+                    console.error('❌ Fehler beim Speichern:', error);
+                }
+            }
+            
+            // Summary aktualisieren
+            if (savedCount > 0) {
+                document.getElementById('wiz-summary-text').innerHTML = 
+                    `✅ <strong>${savedCount} Mitarbeiter</strong> angelegt:<br>` +
+                    savedNames.map(n => `&nbsp;&nbsp;• ${n}`).join('<br>');
+            }
+            
+            // UI aktualisieren
+            await updateMitarbeiterListe();
+            await updateMitarbeiterSelect();
+            await updateQuickAddSelect();
+            
+            wizardNext(3);
+        }
+        
+        async function wizardFinish() {
+            const tenantId = TenantStorage.getTenantId();
+            if (tenantId) {
+                try {
+                    await db.collection('tenants')
+                        .doc(tenantId)
+                        .collection('settings')
+                        .doc('onboarding')
+                        .set({
+                            wizardDone: true,
+                            completedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                } catch (error) {
+                    console.error('❌ Fehler beim Speichern des Wizard-Status:', error);
+                }
+            }
+            document.getElementById('setup-wizard').style.display = 'none';
+            
+            // Admin UI komplett neu laden
+            updateAdminUI();
+            showToast('✨ Einrichtung abgeschlossen!');
         }
 
         async function loginMitarbeiter(e) {
@@ -1852,9 +2497,8 @@
                     'admin-team': 1,
                     'admin-kommunikation': 2,
                     'admin-statistik': 3,
-                    'admin-lager': 4,
-                    'admin-checkliste': 5,
-                    'admin-settings': 6
+                    'admin-checkliste': 4,
+                    'admin-settings': 5
                 };
                 const index = sectionMap[sectionId];
                 if (index !== undefined && navButtons[index]) {
@@ -2452,8 +3096,7 @@
                     'mitarbeiter-plan': 0,
                     'mitarbeiter-schicht': 1,
                     'mitarbeiter-zeiten': 2,
-                    'mitarbeiter-lager': 3,
-                    'mitarbeiter-notizen': 4
+                    'mitarbeiter-notizen': 3
                 };
                 const index = sectionMap[sectionId];
                 if (index !== undefined && navButtons[index]) {
@@ -2469,8 +3112,6 @@
                 updateSchichtButton();
             } else if (sectionId === 'mitarbeiter-zeiten') {
                 updateMeineZeiten();
-            } else if (sectionId === 'mitarbeiter-lager') {
-                updateMitarbeiterLagerGrid();
             } else if (sectionId === 'mitarbeiter-notizen') {
                 setTimeout(() => updateMeineNotizen(), 100); // async
                 updateTauschAnfragen();
@@ -2484,8 +3125,84 @@
             await updateQuickAddSelect();
         }
 
-        function openLagerModal() {
-            document.getElementById('lager-modal').classList.add('active');
+        async function updateSchichtVerteilung() {
+            const container = document.getElementById('schicht-verteilung');
+            if (!container) return;
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) return;
+            
+            try {
+                // Lade Mitarbeiter
+                const maSnapshot = await db.collection('tenants').doc(tenantId).collection('mitarbeiter').get();
+                const mitarbeiterList = [];
+                maSnapshot.forEach(doc => mitarbeiterList.push({ id: doc.id, ...doc.data() }));
+                
+                if (mitarbeiterList.length === 0) {
+                    container.innerHTML = '<p style="color: #999; text-align: center;">Keine Mitarbeiter vorhanden</p>';
+                    return;
+                }
+                
+                // Aktuelle Woche berechnen (Mo-So)
+                const today = new Date();
+                const wochenTag = today.getDay();
+                const montag = new Date(today);
+                montag.setDate(today.getDate() - (wochenTag === 0 ? 6 : wochenTag - 1));
+                const sonntag = new Date(montag);
+                sonntag.setDate(montag.getDate() + 6);
+                const montagStr = montag.toISOString().split('T')[0];
+                const sonntagStr = sonntag.toISOString().split('T')[0];
+                
+                // Lade Schichten
+                const schichtenSnapshot = await db.collection('tenants').doc(tenantId).collection('schichten').get();
+                const alleSchichten = [];
+                schichtenSnapshot.forEach(doc => alleSchichten.push({ id: doc.id, ...doc.data() }));
+                
+                // Zähle Schichten pro Mitarbeiter für diese Woche
+                const html = mitarbeiterList.map(m => {
+                    const maxS = m.maxSchichtenProWoche || 5;
+                    const wochenSchichten = alleSchichten.filter(s => 
+                        s.mitarbeiterId === m.id && s.datum >= montagStr && s.datum <= sonntagStr
+                    ).length;
+                    
+                    const prozent = Math.min((wochenSchichten / maxS) * 100, 100);
+                    let barClass = 'ok';
+                    if (wochenSchichten >= maxS) barClass = 'over';
+                    else if (wochenSchichten >= maxS - 1) barClass = 'warn';
+                    
+                    const typTag = m.typ === 'aushilfe' ? ' <span style="color: #E65100; font-size: 0.8em;">🤝</span>' : '';
+                    
+                    return `
+                        <div class="schicht-bar-container">
+                            <div class="schicht-bar-name">${m.name}${typTag}</div>
+                            <div class="schicht-bar-track">
+                                <div class="schicht-bar-fill ${barClass}" style="width: ${prozent}%"></div>
+                            </div>
+                            <div class="schicht-bar-label">${wochenSchichten} / ${maxS}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('❌ Fehler bei Schichtverteilung:', error);
+                container.innerHTML = '<p style="color: #dc2626;">Fehler beim Laden</p>';
+            }
+        }
+
+        function filterTeam(typ) {
+            // Update active button
+            document.querySelectorAll('#team-typ-filter .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter list items
+            document.querySelectorAll('#mitarbeiter-liste .list-item').forEach(item => {
+                if (typ === 'alle' || item.dataset.typ === typ) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
         async function openEditMitarbeiterModal(id) {
@@ -2514,6 +3231,8 @@
                 
                 document.getElementById('edit-ma-id').value = ma.id;
                 document.getElementById('edit-ma-name').value = ma.name;
+                document.getElementById('edit-ma-typ').value = ma.typ || 'fest';
+                document.getElementById('edit-ma-max-schichten').value = ma.maxSchichtenProWoche || 5;
                 document.getElementById('edit-ma-position').value = ma.position;
                 document.getElementById('edit-ma-telefon').value = ma.telefon;
                 document.getElementById('edit-ma-pin').value = ma.pin;
@@ -2528,40 +3247,6 @@
             document.getElementById('zeit-modal').classList.add('active');
             document.getElementById('zeit-datum').value = new Date().toISOString().split('T')[0];
             updateZeitSelect();
-        }
-
-        async function openLagerStatusModal(itemId) {
-            console.log('🛒 openLagerStatusModal aufgerufen mit ID:', itemId);
-            currentLagerItemId = itemId;
-            
-            const tenantId = TenantStorage.getTenantId();
-            console.log('🛒 Tenant-ID:', tenantId);
-            if (!tenantId) return;
-            
-            try {
-                const docSnap = await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .doc(itemId)
-                    .get();
-                
-                console.log('🛒 Firestore Abfrage abgeschlossen, existiert:', docSnap.exists);
-                
-                if (docSnap.exists) {
-                    const item = {
-                        id: docSnap.id,
-                        ...docSnap.data()
-                    };
-                    console.log('🛒 Lager-Item:', item);
-                    document.getElementById('lager-item-name').textContent = item.name;
-                    document.getElementById('lager-status-modal').classList.add('active');
-                    console.log('🛒 Modal geöffnet!');
-                } else {
-                    console.error('❌ Item nicht gefunden in Firestore:', itemId);
-                }
-            } catch (error) {
-                console.error('❌ Fehler beim Laden des Lager-Items:', error);
-            }
         }
 
         async function openAntwortModal(notizId) {
@@ -2590,79 +3275,6 @@
                 console.log('✅ Modal geöffnet!');
             } else {
                 console.error('❌ Notiz nicht gefunden:', notizId);
-            }
-        }
-
-        async function saveLagerStatus(newStatus) {
-            if (!currentLagerItemId) return;
-            
-            const tenantId = TenantStorage.getTenantId();
-            if (!tenantId) {
-                alert('❌ Keine Tenant-ID gefunden!');
-                return;
-            }
-            
-            try {
-                // Lade Item-Info aus Firestore
-                const docSnap = await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .doc(currentLagerItemId)
-                    .get();
-                
-                if (!docSnap.exists) {
-                    alert('❌ Artikel nicht gefunden!');
-                    return;
-                }
-                
-                const item = {
-                    id: docSnap.id,
-                    ...docSnap.data()
-                };
-                
-                // Update Status
-                await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .doc(currentLagerItemId)
-                    .update({
-                        status: newStatus,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                
-                await updateMitarbeiterLagerGrid();
-                await updateEinkaufsliste();
-                closeModal('lager-status-modal');
-                
-                // Benachrichtigung erstellen
-                const notiz = {
-                    id: Date.now(),
-                    typ: 'benachrichtigung',
-                    betreff: 'Lagerbestand gemeldet',
-                    text: `${item.name}: Status auf "${getStatusText(newStatus)}" geändert`,
-                    mitarbeiterId: loggedInMitarbeiter.id,
-                    mitarbeiterName: loggedInMitarbeiter.name,
-                    datum: new Date().toISOString(),
-                    antwort: null,
-                    antwortDatum: null
-                };
-                notizen.push(notiz);
-                localStorage.setItem('gastro-notizen', JSON.stringify(notizen));
-                
-                alert('✅ Status aktualisiert!');
-                
-            } catch (error) {
-                console.error('❌ Fehler beim Speichern des Status:', error);
-                alert('❌ Fehler: ' + error.message);
-            }
-        }
-
-        function getStatusText(status) {
-            switch(status) {
-                case 'ok': return 'Genügend vorhanden';
-                case 'niedrig': return 'Bald nachbestellen';
-                case 'leer': return 'Sofort einkaufen';
-                default: return status;
             }
         }
 
@@ -2703,7 +3315,6 @@
             await updateCalendar(); // Warte auf Firestore-Laden
             await updateMitarbeiterListe(); // Warte auf Firestore-Laden
             await updateNotizenListe(); // Warte auf Firestore-Laden
-            await updateEinkaufsliste(); // Warte auf Firestore-Laden
             updateMasterChecklist();
             await updateZeiterfassungListe(); // Warte auf Firestore-Laden
         }
@@ -2801,11 +3412,15 @@
                             const initials = m ? getInitials(m.name) : '??';
                             const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
                             const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            const isAushilfe = m && m.typ === 'aushilfe';
+                            const aushilfeStyle = isAushilfe ? 'border-left: 3px solid #FF9800;' : '';
+                            const aushilfeTag = isAushilfe ? '<small style="color: #E65100; font-size: 0.75em;">🤝 Aushilfe</small>' : '';
                             return `
-                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen">
+                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen" style="${aushilfeStyle}">
                                     <span class="schicht-initials">${initials}</span>
                                     <strong>${m ? m.name : 'Unbekannt'}</strong>
                                     <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${aushilfeTag}
                                 </div>
                             `;
                         }).join('')}
@@ -2840,11 +3455,15 @@
                             const initials = m ? getInitials(m.name) : '??';
                             const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
                             const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
+                            const isAushilfe = m && m.typ === 'aushilfe';
+                            const aushilfeStyle = isAushilfe ? 'border-left: 3px solid #FF9800;' : '';
+                            const aushilfeTag = isAushilfe ? '<small style="color: #E65100; font-size: 0.75em;">🤝 Aushilfe</small>' : '';
                             return `
-                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen">
+                                <div class="schicht-item ${s.typ}" onclick="deleteSchicht('${s.id}')" title="Klicken zum Löschen" style="${aushilfeStyle}">
                                     <span class="schicht-initials">${initials}</span>
                                     <strong>${m ? m.name : 'Unbekannt'}</strong>
                                     <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${aushilfeTag}
                                 </div>
                             `;
                         }).join('')}
@@ -2862,6 +3481,9 @@
                     todayElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
             }, 300);
+            
+            // Schichtverteilung aktualisieren
+            await updateSchichtVerteilung();
         }
 
         async function updateMitarbeiterListe() {
@@ -2894,18 +3516,23 @@
                     return;
                 }
                 
-                liste.innerHTML = mitarbeiterListe.map(m => `
-                    <div class="list-item">
+                liste.innerHTML = mitarbeiterListe.map(m => {
+                    const typ = m.typ || 'fest';
+                    const badgeClass = typ === 'aushilfe' ? 'badge-aushilfe' : 'badge-fest';
+                    const badgeText = typ === 'aushilfe' ? '🤝 Aushilfe' : '👤 Fest';
+                    const maxS = m.maxSchichtenProWoche || 5;
+                    return `
+                    <div class="list-item" data-typ="${typ}">
                         <div class="list-item-info">
-                            <strong>${m.name}</strong>
-                            <small>${m.position} • 📞 ${m.telefon} • PIN: ${m.pin}</small>
+                            <strong>${m.name} <span class="badge ${badgeClass}">${badgeText}</span></strong>
+                            <small>${m.position} • 📞 ${m.telefon} • PIN: ${m.pin} • Max: ${maxS} Schichten/Woche</small>
                         </div>
                         <div class="list-item-actions">
                             <button class="btn btn-primary btn-small" onclick="openEditMitarbeiterModal('${m.id}')">✏️</button>
                             <button class="btn btn-danger btn-small" onclick="deleteMitarbeiter('${m.id}')">🗑️</button>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             } catch (error) {
                 console.error('❌ Fehler beim Laden der Mitarbeiter:', error);
                 liste.innerHTML = '<div class="empty-state"><div class="icon">❌</div><p>Fehler beim Laden</p></div>';
@@ -2916,17 +3543,21 @@
             const liste = document.getElementById('notizen-liste');
             if (!liste) return;
             
-            // Lade Notizen aus Firestore
             const alleNotizen = await FirestoreHelpers.loadNotizen();
-            console.log('📝 Alle geladenen Notizen:', alleNotizen);
-            console.log('📝 Erste Notiz Detail:', alleNotizen[0]);
             
-            // Nur echte Notizen (keine Benachrichtigungen)
-            const echteNotizen = alleNotizen.filter(n => {
-                console.log('🔍 Prüfe Notiz:', n.id, 'typ:', n.typ, 'ist Benachrichtigung?', n.typ === 'benachrichtigung');
-                return n.typ !== 'benachrichtigung';
-            });
-            console.log('📝 Nach Filter (typ !== benachrichtigung):', echteNotizen);
+            const echteNotizen = alleNotizen.filter(n => n.typ !== 'benachrichtigung');
+            
+            // Update Badge-Zähler
+            const ungeleseneNotizen = echteNotizen.filter(n => !n.gelesen).length;
+            const badgeEl = document.getElementById('badge-notizen');
+            if (badgeEl) {
+                if (ungeleseneNotizen > 0) {
+                    badgeEl.textContent = ungeleseneNotizen;
+                    badgeEl.style.display = 'inline-flex';
+                } else {
+                    badgeEl.style.display = 'none';
+                }
+            }
             
             if (echteNotizen.length === 0) {
                 liste.innerHTML = '<div class="empty-state"><div class="icon">💬</div><p>Keine Notizen</p></div>';
@@ -2935,50 +3566,77 @@
             
             const sorted = [...echteNotizen].sort((a, b) => new Date(b.datum) - new Date(a.datum));
             
-            // Icons für Notiztypen
-            const typIcons = {
-                'info': 'ℹ️',
-                'frage': '❓',
-                'problem': '⚠️',
-                'idee': '💡'
-            };
+            const typIcons = { 'info': 'ℹ️', 'frage': '❓', 'problem': '⚠️', 'idee': '💡', 'admin': '📢' };
+            const typLabels = { 'info': 'Info', 'frage': 'Frage', 'problem': 'Problem', 'idee': 'Idee', 'admin': 'Admin' };
             
-            liste.innerHTML = sorted.slice(0, 20).map(n => {
-                const icon = typIcons[n.typ] || '💬';
-                const hatAntwort = n.antwort && n.antwort.length > 0;
+            // Zeitliche Gruppierung
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            
+            let currentGroup = '';
+            let html = '';
+            
+            sorted.slice(0, 30).forEach(n => {
+                const nDate = new Date(n.datum).toISOString().split('T')[0];
+                let group = 'Älter';
+                if (nDate === todayStr) group = 'Heute';
+                else if (nDate === yesterdayStr) group = 'Gestern';
+                else if (new Date(n.datum) > new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)) group = 'Diese Woche';
                 
-                return `
-                    <div class="list-item" style="flex-direction: column; align-items: stretch;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                            <div class="list-item-info" style="flex: 1;">
-                                <strong>${icon} ${n.betreff}</strong>
-                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</small>
-                                ${n.text ? `<p style="margin-top: 8px; color: #333; font-size: 0.95em;">${n.text}</p>` : ''}
+                if (group !== currentGroup) {
+                    html += `<div class="zeit-gruppe-header">${group}</div>`;
+                    currentGroup = group;
+                }
+                
+                const icon = typIcons[n.typ] || '💬';
+                const typLabel = typLabels[n.typ] || n.typ;
+                const typClass = n.typ || 'info';
+                const hatAntwort = n.antwort && n.antwort.length > 0;
+                const isGelesen = n.gelesen || false;
+                const zeitStr = new Date(n.datum).toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+                const datumStr = new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
+                
+                html += `
+                    <div class="notiz-card typ-${typClass} ${isGelesen ? 'gelesen' : ''}" data-notiz-typ="${typClass}">
+                        <div class="notiz-header">
+                            <div style="flex: 1;">
+                                <strong style="font-size: 1em;">${icon} ${n.betreff}</strong>
+                                <div class="notiz-meta">
+                                    <span class="notiz-typ-tag ${typClass}">${typLabel}</span>
+                                    <span>👤 ${n.mitarbeiterName}</span>
+                                    <span>📅 ${datumStr} ${zeitStr}</span>
+                                    ${hatAntwort ? '<span style="color: #10b981;">✅ Beantwortet</span>' : '<span style="color: #E67E22;">⏳ Offen</span>'}
+                                </div>
                             </div>
-                            ${!hatAntwort ? `<button class="btn btn-primary btn-small" onclick="openAntwortModal('${n.id}')" style="margin-left: 12px;">↩️ Antworten</button>` : ''}
+                            ${!hatAntwort ? `<button class="btn btn-primary btn-small" onclick="openAntwortModal('${n.id}')" style="white-space: nowrap;">↩️ Antworten</button>` : ''}
                         </div>
+                        ${n.text ? `<p style="margin-top: 10px; color: #444; font-size: 0.95em; line-height: 1.5;">${n.text}</p>` : ''}
                         ${hatAntwort ? `
-                            <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 8px; border-left: 4px solid #10b981;">
-                                <strong style="color: #059669; font-size: 0.9em;">✅ Admin-Antwort:</strong>
-                                <p style="color: #333; margin-top: 4px; font-size: 0.95em;">${n.antwort}</p>
-                                <small style="color: #666; margin-top: 4px; display: block;">${new Date(n.antwortDatum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
+                            <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 3px solid #10b981;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="color: #059669; font-size: 0.85em;">✅ Admin-Antwort</strong>
+                                    <small style="color: #888;">${n.antwortDatum ? new Date(n.antwortDatum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'}) : ''}</small>
+                                </div>
+                                <p style="color: #333; margin-top: 6px; font-size: 0.93em;">${n.antwort}</p>
                             </div>
                         ` : ''}
                     </div>
                 `;
-            }).join('');
+            });
+            
+            liste.innerHTML = html;
         }
 
         async function updateBenachrichtigungen() {
             const liste = document.getElementById('benachrichtigungen-liste');
             if (!liste) return;
             
-            // Lade Notizen aus Firestore
             const alleNotizen = await FirestoreHelpers.loadNotizen();
             
-            // Nur Benachrichtigungen
             const benachrichtigungen = alleNotizen.filter(n => n.typ === 'benachrichtigung');
-            console.log('🔔 Benachrichtigungen geladen:', benachrichtigungen.length, benachrichtigungen);
             
             const kassenMeldungen = kassenstände.map(k => ({
                 ...k,
@@ -2988,37 +3646,80 @@
             
             const alle = [...benachrichtigungen, ...kassenMeldungen].sort((a, b) => new Date(b.datum) - new Date(a.datum));
             
+            // Update Badge-Zähler
+            const ungelesene = alle.filter(n => !n.gelesen).length;
+            const badgeEl = document.getElementById('badge-benachrichtigungen');
+            if (badgeEl) {
+                if (ungelesene > 0) {
+                    badgeEl.textContent = ungelesene;
+                    badgeEl.style.display = 'inline-flex';
+                } else {
+                    badgeEl.style.display = 'none';
+                }
+            }
+            
             if (alle.length === 0) {
                 liste.innerHTML = '<div class="empty-state"><div class="icon">🔔</div><p>Keine Benachrichtigungen</p></div>';
                 return;
             }
             
-            liste.innerHTML = alle.slice(0, 30).map(n => {
+            // Zeitliche Gruppierung
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            
+            let currentGroup = '';
+            let html = '';
+            
+            alle.slice(0, 30).forEach(n => {
+                const nDate = new Date(n.datum).toISOString().split('T')[0];
+                let group = 'Älter';
+                if (nDate === todayStr) group = 'Heute';
+                else if (nDate === yesterdayStr) group = 'Gestern';
+                else if (new Date(n.datum) > new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)) group = 'Diese Woche';
+                
+                if (group !== currentGroup) {
+                    html += `<div class="zeit-gruppe-header">${group}</div>`;
+                    currentGroup = group;
+                }
+                
                 const isGelesen = n.gelesen || false;
-                const opacity = isGelesen ? 'opacity: 0.5;' : '';
+                const zeitStr = new Date(n.datum).toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+                const datumStr = new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
                 
                 if (n.typ === 'kassenstand') {
-                    return `
-                        <div class="list-item" style="${opacity}">
-                            <div class="list-item-info">
-                                <strong>💰 ${n.betreff}</strong>
-                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
-                                <p style="margin-top: 8px; color: #333; font-size: 1.1em; font-weight: 600;">Betrag: €${parseFloat(n.betrag).toFixed(2)}</p>
+                    html += `
+                        <div class="benachrichtigung-card typ-kassenstand ${isGelesen ? 'gelesen' : ''}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>💰 Kassenstand gemeldet</strong>
+                                    <div class="notiz-meta">
+                                        <span>👤 ${n.mitarbeiterName}</span>
+                                        <span>📅 ${datumStr} ${zeitStr}</span>
+                                    </div>
+                                </div>
+                                <div style="font-size: 1.2em; font-weight: 700; color: #27AE60;">€${parseFloat(n.betrag).toFixed(2)}</div>
                             </div>
                         </div>
                     `;
                 } else {
-                    return `
-                        <div class="list-item" style="${opacity}">
-                            <div class="list-item-info">
-                                <strong>🔄 ${n.betreff}</strong>
-                                <small>${n.mitarbeiterName} • ${new Date(n.datum).toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</small>
-                                ${n.text ? `<p style="margin-top: 8px; color: #333; font-size: 0.95em; white-space: pre-line;">${n.text}</p>` : ''}
+                    const icon = n.betreff && n.betreff.includes('Tausch') ? '🔄' : '🔔';
+                    html += `
+                        <div class="benachrichtigung-card typ-tausch ${isGelesen ? 'gelesen' : ''}">
+                            <strong>${icon} ${n.betreff}</strong>
+                            <div class="notiz-meta">
+                                <span>👤 ${n.mitarbeiterName}</span>
+                                <span>📅 ${datumStr} ${zeitStr}</span>
                             </div>
+                            ${n.text ? `<p style="margin-top: 8px; color: #444; font-size: 0.93em; white-space: pre-line;">${n.text}</p>` : ''}
                         </div>
                     `;
                 }
-            }).join('');
+            });
+            
+            liste.innerHTML = html;
         }
 
         // ==========================================
@@ -3083,7 +3784,44 @@
             updateBenachrichtigungen();
             showToast('🗑️ Alle Benachrichtigungen gelöscht');
         }
-        
+
+        function filterNotizen(typ) {
+            document.querySelectorAll('#notiz-typ-filter .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('#notizen-liste .notiz-card').forEach(card => {
+                if (typ === 'alle' || card.dataset.notizTyp === typ) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Auch Zeitgruppen-Header ein/ausblenden
+            document.querySelectorAll('#notizen-liste .zeit-gruppe-header').forEach(header => {
+                const nextCards = [];
+                let sibling = header.nextElementSibling;
+                while (sibling && !sibling.classList.contains('zeit-gruppe-header')) {
+                    if (sibling.classList.contains('notiz-card')) nextCards.push(sibling);
+                    sibling = sibling.nextElementSibling;
+                }
+                const hasVisible = nextCards.some(c => c.style.display !== 'none');
+                header.style.display = hasVisible ? '' : 'none';
+            });
+        }
+
+        function toggleAdminNachricht() {
+            const section = document.getElementById('admin-nachricht-section');
+            const toggle = document.getElementById('admin-nachricht-toggle');
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                toggle.style.transform = 'rotate(180deg)';
+            } else {
+                section.style.display = 'none';
+                toggle.style.transform = '';
+            }
+        }
+
         // Toast Notification Helper
         function showToast(message) {
             const toast = document.createElement('div');
@@ -3107,95 +3845,6 @@
                 toast.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
-        }
-
-        async function updateEinkaufsliste() {
-            const liste = document.getElementById('einkaufsliste');
-            
-            // Lade Lager aus Firestore
-            let lagerItems = [];
-            const tenantId = TenantStorage.getTenantId();
-            if (tenantId) {
-                try {
-                    const snapshot = await db.collection('tenants')
-                        .doc(tenantId)
-                        .collection('lager')
-                        .get();
-                    
-                    snapshot.forEach(doc => {
-                        lagerItems.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
-                    });
-                } catch (error) {
-                    console.error('❌ Fehler beim Laden des Lagers:', error);
-                }
-            }
-            
-            const sortiert = {
-                leer: lagerItems.filter(l => l.status === 'leer'),
-                niedrig: lagerItems.filter(l => l.status === 'niedrig'),
-                ok: lagerItems.filter(l => l.status === 'ok')
-            };
-            
-            let html = '';
-            
-            if (sortiert.leer.length > 0) {
-                html += '<h3 style="color: #ef4444; margin-bottom: 12px;">🔴 Sofort einkaufen!</h3>';
-                sortiert.leer.forEach(item => {
-                    html += `
-                        <div class="list-item" style="border-left: 4px solid #ef4444;">
-                            <div class="list-item-info">
-                                <strong>${item.name}</strong>
-                            </div>
-                            <div class="status-buttons">
-                                <button class="status-btn ok" onclick="changeStatus('${item.id}', 'ok')">✅</button>
-                                <button class="status-btn niedrig" onclick="changeStatus('${item.id}', 'niedrig')">⚠️</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            
-            if (sortiert.niedrig.length > 0) {
-                html += '<h3 style="color: #f59e0b; margin: 20px 0 12px;">⚠️ Bald nachbestellen</h3>';
-                sortiert.niedrig.forEach(item => {
-                    html += `
-                        <div class="list-item" style="border-left: 4px solid #f59e0b;">
-                            <div class="list-item-info">
-                                <strong>${item.name}</strong>
-                            </div>
-                            <div class="status-buttons">
-                                <button class="status-btn ok" onclick="changeStatus('${item.id}', 'ok')">✅</button>
-                                <button class="status-btn leer" onclick="changeStatus('${item.id}', 'leer')">🔴</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            
-            if (sortiert.ok.length > 0) {
-                html += '<h3 style="color: #10b981; margin: 20px 0 12px;">✅ Genügend vorhanden</h3>';
-                sortiert.ok.forEach(item => {
-                    html += `
-                        <div class="list-item">
-                            <div class="list-item-info">
-                                <strong>${item.name}</strong>
-                            </div>
-                            <div class="status-buttons">
-                                <button class="status-btn niedrig" onclick="changeStatus('${item.id}', 'niedrig')">⚠️</button>
-                                <button class="status-btn leer" onclick="changeStatus('${item.id}', 'leer')">🔴</button>
-                                <button class="btn btn-danger btn-small" onclick="deleteLagerItem('${item.id}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            
-            liste.innerHTML = html || '<div class="empty-state"><p>Keine Artikel</p></div>';
         }
 
         async function updateZeiterfassungListe() {
@@ -3341,11 +3990,39 @@
                     });
                 });
                 
+                // Lade aktuelle Schichten für Wochenübersicht
+                const today = new Date();
+                const quickDatum = document.getElementById('quick-datum')?.value;
+                const refDate = quickDatum ? new Date(quickDatum) : today;
+                const wochenTag = refDate.getDay();
+                const montag = new Date(refDate);
+                montag.setDate(refDate.getDate() - (wochenTag === 0 ? 6 : wochenTag - 1));
+                const sonntag = new Date(montag);
+                sonntag.setDate(montag.getDate() + 6);
+                const montagStr = montag.toISOString().split('T')[0];
+                const sonntagStr = sonntag.toISOString().split('T')[0];
+                
+                const schichtenSnapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('schichten')
+                    .get();
+                
+                const alleSchichten = [];
+                schichtenSnapshot.forEach(doc => alleSchichten.push({ id: doc.id, ...doc.data() }));
+                
                 if (mitarbeiterListe.length === 0) {
                     select.innerHTML = '<option value="">Keine Mitarbeiter</option>';
                 } else {
                     select.innerHTML = '<option value="">Bitte wählen...</option>' + 
-                        mitarbeiterListe.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                        mitarbeiterListe.map(m => {
+                            const maxS = m.maxSchichtenProWoche || 5;
+                            const wochenCount = alleSchichten.filter(s => 
+                                s.mitarbeiterId === m.id && s.datum >= montagStr && s.datum <= sonntagStr
+                            ).length;
+                            const typLabel = (m.typ === 'aushilfe') ? ' 🤝' : '';
+                            const limitInfo = wochenCount >= maxS ? ' ⚠️' : '';
+                            return `<option value="${m.id}">${m.name}${typLabel} (${wochenCount}/${maxS})${limitInfo}</option>`;
+                        }).join('');
                 }
             } catch (error) {
                 console.error('❌ Fehler beim Laden für Quick-Add:', error);
@@ -3425,7 +4102,10 @@
                     console.log('❌ Keine Mitarbeiter in Firestore gefunden!');
                 } else {
                     select.innerHTML = '<option value="">Bitte wählen...</option>' + 
-                        mitarbeiterListe.map(m => `<option value="${m.id}">${m.name} - ${m.position}</option>`).join('');
+                        mitarbeiterListe.map(m => {
+                            const typLabel = (m.typ === 'aushilfe') ? ' (Aushilfe)' : '';
+                            return `<option value="${m.id}">${m.name} - ${m.position}${typLabel}</option>`;
+                        }).join('');
                     console.log('✅ Dropdown gefüllt mit', mitarbeiterListe.length, 'Mitarbeitern');
                 }
             } catch (error) {
@@ -3537,11 +4217,13 @@
                             const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
                             const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
                             const istMeineSchicht = s.mitarbeiterId === loggedInMitarbeiter.id;
+                            const zeitInfo = istMeineSchicht ? `<small style="display: block; margin-top: 2px; color: #8b6f47; font-weight: 600;">🕐 ${getSchichtZeitText(s.typ)}</small>` : '';
                             return `
                                 <div class="schicht-item ${s.typ}" style="${istMeineSchicht ? 'border: 2px solid #c9a961; background: #fff3cd;' : ''}">
                                     <span class="schicht-initials">${initials}</span>
                                     <strong>${m ? m.name : 'Unbekannt'}</strong>
                                     <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${zeitInfo}
                                     ${istMeineSchicht ? `<button onclick="openTauschModal('${s.id}')" class="btn btn-primary btn-small" style="margin-top: 8px; width: 100%; font-size: 0.85em;">🔄 Tauschen</button>` : ''}
                                 </div>
                             `;
@@ -3578,11 +4260,13 @@
                             const typIcon = s.typ === 'frueh' ? '🌅' : '🌙';
                             const typText = s.typ === 'frueh' ? 'Früh' : 'Spät';
                             const istMeineSchicht = s.mitarbeiterId === loggedInMitarbeiter.id;
+                            const zeitInfo = istMeineSchicht ? `<small style="display: block; margin-top: 2px; color: #8b6f47; font-weight: 600;">🕐 ${getSchichtZeitText(s.typ)}</small>` : '';
                             return `
                                 <div class="schicht-item ${s.typ}" style="${istMeineSchicht ? 'border: 2px solid #c9a961; background: #fff3cd;' : ''}">
                                     <span class="schicht-initials">${initials}</span>
                                     <strong>${m ? m.name : 'Unbekannt'}</strong>
                                     <small style="display: block; margin-top: 4px;">${typIcon} ${typText}</small>
+                                    ${zeitInfo}
                                     ${istMeineSchicht ? `<button onclick="openTauschModal('${s.id}')" class="btn btn-primary btn-small" style="margin-top: 8px; width: 100%; font-size: 0.85em;">🔄 Tauschen</button>` : ''}
                                 </div>
                             `;
@@ -3641,7 +4325,7 @@
             
             liste.innerHTML = sorted.slice(0, 5).map(s => {
                 const typText = s.typ === 'frueh' ? '🌅 Frühschicht' : '🌙 Spätschicht';
-                const zeitText = s.typ === 'frueh' ? '6:00 - 14:00' : '14:00 - 22:00';
+                const zeitText = getSchichtZeitText(s.typ);
                 const isToday = s.datum === today;
                 return `
                     <div class="list-item" style="${isToday ? 'border-left: 4px solid #c9a961;' : ''}">
@@ -3716,58 +4400,6 @@
             }).join('');
         }
 
-        async function updateMitarbeiterLagerGrid() {
-            const grid = document.getElementById('mitarbeiter-lager-grid');
-            if (!grid) return;
-            
-            // Lade Lager aus Firestore
-            let lagerItems = [];
-            const tenantId = TenantStorage.getTenantId();
-            if (tenantId) {
-                try {
-                    const snapshot = await db.collection('tenants')
-                        .doc(tenantId)
-                        .collection('lager')
-                        .get();
-                    
-                    snapshot.forEach(doc => {
-                        lagerItems.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
-                    });
-                } catch (error) {
-                    console.error('❌ Fehler beim Laden des Lagers für Mitarbeiter:', error);
-                }
-            }
-            
-            grid.innerHTML = lagerItems.map(item => {
-                let statusText = '';
-                let statusClass = '';
-                switch(item.status) {
-                    case 'ok':
-                        statusText = '✅ OK';
-                        statusClass = 'ok';
-                        break;
-                    case 'niedrig':
-                        statusText = '⚠️ Niedrig';
-                        statusClass = 'niedrig';
-                        break;
-                    case 'leer':
-                        statusText = '🔴 Leer';
-                        statusClass = 'leer';
-                        break;
-                }
-                
-                return `
-                    <div class="lager-item-btn ${item.status}" onclick="openLagerStatusModal('${item.id}')">
-                        <strong>${item.name}</strong>
-                        <div class="lager-status-badge ${statusClass}">${statusText}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
         function updateMitarbeiterChecklist() {
             const liste = document.getElementById('mitarbeiter-checklist');
             const heute = new Date().toISOString().split('T')[0];
@@ -3825,6 +4457,8 @@
                 // Erstelle Mitarbeiter in Firestore
                 const mitarbeiterData = {
                     name: document.getElementById('ma-name').value,
+                    typ: document.getElementById('ma-typ').value,
+                    maxSchichtenProWoche: parseInt(document.getElementById('ma-max-schichten').value) || 5,
                     position: document.getElementById('ma-position').value,
                     telefon: document.getElementById('ma-telefon').value,
                     pin: document.getElementById('ma-pin').value,
@@ -3882,6 +4516,8 @@
             try {
                 const updateData = {
                     name: document.getElementById('edit-ma-name').value,
+                    typ: document.getElementById('edit-ma-typ').value,
+                    maxSchichtenProWoche: parseInt(document.getElementById('edit-ma-max-schichten').value) || 5,
                     position: document.getElementById('edit-ma-position').value,
                     telefon: document.getElementById('edit-ma-telefon').value,
                     pin: document.getElementById('edit-ma-pin').value,
@@ -3929,9 +4565,62 @@
             submitBtn.textContent = 'Wird erstellt...';
             
             try {
+                const mitarbeiterId = document.getElementById('quick-mitarbeiter').value;
+                const datum = document.getElementById('quick-datum').value;
+                
+                // Prüfe Schichtlimit für diese Woche
+                const schichtDatum = new Date(datum);
+                const wochenTag = schichtDatum.getDay();
+                const montag = new Date(schichtDatum);
+                montag.setDate(schichtDatum.getDate() - (wochenTag === 0 ? 6 : wochenTag - 1));
+                const sonntag = new Date(montag);
+                sonntag.setDate(montag.getDate() + 6);
+                
+                const montagStr = montag.toISOString().split('T')[0];
+                const sonntagStr = sonntag.toISOString().split('T')[0];
+                
+                // Lade aktuelle Schichten dieser Woche für den Mitarbeiter
+                const schichtenSnapshot = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('schichten')
+                    .where('mitarbeiterId', '==', mitarbeiterId)
+                    .get();
+                
+                const wochenSchichten = [];
+                schichtenSnapshot.forEach(doc => {
+                    const s = doc.data();
+                    if (s.datum >= montagStr && s.datum <= sonntagStr) {
+                        wochenSchichten.push(s);
+                    }
+                });
+                
+                // Lade Mitarbeiter-Daten für maxSchichten
+                const maDoc = await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('mitarbeiter')
+                    .doc(mitarbeiterId)
+                    .get();
+                
+                const maData = maDoc.data();
+                const maxSchichten = maData?.maxSchichtenProWoche || 5;
+                const aktuelleAnzahl = wochenSchichten.length;
+                
+                // Warnung wenn Maximum erreicht/überschritten
+                if (aktuelleAnzahl >= maxSchichten) {
+                    const kwNr = getWeekNumber(schichtDatum);
+                    const weiter = confirm(
+                        `⚠️ Achtung: ${maData.name} hat bereits ${aktuelleAnzahl} von max. ${maxSchichten} Schichten in KW ${kwNr}.\n\nTrotzdem zuweisen?`
+                    );
+                    if (!weiter) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '➕ Hinzufügen';
+                        return;
+                    }
+                }
+                
                 const schichtData = {
-                    datum: document.getElementById('quick-datum').value,
-                    mitarbeiterId: document.getElementById('quick-mitarbeiter').value,
+                    datum: datum,
+                    mitarbeiterId: mitarbeiterId,
                     typ: document.getElementById('quick-typ').value,
                     status: 'geplant',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -3969,52 +4658,6 @@
             localStorage.setItem('gastro-checklist', JSON.stringify(checklistItems));
             updateMasterChecklist();
             e.target.reset();
-        });
-
-        document.getElementById('lager-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const tenantId = TenantStorage.getTenantId();
-            if (!tenantId) {
-                alert('❌ Keine Tenant-ID gefunden!');
-                return;
-            }
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Wird erstellt...';
-            
-            try {
-                const itemData = {
-                    name: document.getElementById('lager-name').value,
-                    status: document.getElementById('lager-status').value,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
-                
-                console.log('📝 Erstelle Lager-Item:', itemData);
-                
-                const docRef = await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .add(itemData);
-                
-                console.log('✅ Lager-Item erstellt mit ID:', docRef.id);
-                
-                // UI aktualisieren
-                await updateEinkaufsliste();
-                await updateMitarbeiterLagerGrid();
-                
-                closeModal('lager-modal');
-                e.target.reset();
-                alert('✅ Artikel hinzugefügt!');
-                
-            } catch (error) {
-                console.error('❌ Fehler beim Erstellen:', error);
-                alert('❌ Fehler: ' + error.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '➕ Hinzufügen';
-            }
         });
 
         document.getElementById('zeit-form').addEventListener('submit', (e) => {
@@ -4060,6 +4703,88 @@
             localStorage.setItem('gastro-admin-pin', adminPin);
             e.target.reset();
             alert('✅ Admin-PIN erfolgreich geändert!');
+        });
+
+        document.getElementById('schichtzeiten-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tenantId = TenantStorage.getTenantId();
+            if (!tenantId) {
+                alert('❌ Keine Tenant-ID gefunden!');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gespeichert...';
+            
+            try {
+                const zeiten = {
+                    fruehStart: document.getElementById('frueh-start').value,
+                    fruehEnde: document.getElementById('frueh-ende').value,
+                    spaetStart: document.getElementById('spaet-start').value,
+                    spaetEnde: document.getElementById('spaet-ende').value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('tenants')
+                    .doc(tenantId)
+                    .collection('settings')
+                    .doc('schichtzeiten')
+                    .set(zeiten);
+                
+                // Globale Variable aktualisieren
+                schichtZeiten = zeiten;
+                
+                document.getElementById('schichtzeiten-status').textContent = '✅ Schichtzeiten gespeichert!';
+                document.getElementById('schichtzeiten-status').style.color = '#27AE60';
+                setTimeout(() => {
+                    document.getElementById('schichtzeiten-status').textContent = '';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Speichern der Schichtzeiten:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '💾 Schichtzeiten speichern';
+            }
+        });
+
+        document.getElementById('admin-nachricht-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gesendet...';
+            
+            try {
+                const nachrichtData = {
+                    typ: 'admin',
+                    betreff: '📢 ' + document.getElementById('admin-nachricht-betreff').value,
+                    text: document.getElementById('admin-nachricht-text').value,
+                    mitarbeiterId: 'admin',
+                    mitarbeiterName: 'Admin',
+                    datum: new Date().toISOString(),
+                    antwort: null,
+                    antwortDatum: null,
+                    gelesen: false
+                };
+                
+                await FirestoreHelpers.createNotiz(nachrichtData);
+                
+                e.target.reset();
+                toggleAdminNachricht();
+                await updateNotizenListe();
+                showToast('📢 Nachricht an alle gesendet!');
+                
+            } catch (error) {
+                console.error('❌ Fehler beim Senden:', error);
+                alert('❌ Fehler: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📢 An alle senden';
+            }
         });
 
         document.getElementById('mitarbeiter-notiz-form').addEventListener('submit', async (e) => {
@@ -4374,71 +5099,6 @@
             updateMasterChecklist();
         }
 
-        async function deleteLagerItem(id) {
-            if (!confirm('Artikel wirklich löschen?')) {
-                return;
-            }
-            
-            const tenantId = TenantStorage.getTenantId();
-            if (!tenantId) {
-                alert('❌ Keine Tenant-ID gefunden!');
-                return;
-            }
-            
-            try {
-                console.log('🗑️ Lösche Lager-Item:', id);
-                
-                await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .doc(id)
-                    .delete();
-                
-                console.log('✅ Lager-Item gelöscht:', id);
-                
-                alert('✅ Artikel gelöscht!');
-                
-                // UI aktualisieren
-                await updateEinkaufsliste();
-                await updateMitarbeiterLagerGrid();
-                
-            } catch (error) {
-                console.error('❌ Fehler beim Löschen:', error);
-                alert('❌ Fehler: ' + error.message);
-            }
-        }
-
-        async function changeStatus(id, newStatus) {
-            const tenantId = TenantStorage.getTenantId();
-            if (!tenantId) {
-                alert('❌ Keine Tenant-ID gefunden!');
-                return;
-            }
-            
-            try {
-                console.log('🔄 Ändere Status:', id, '→', newStatus);
-                
-                await db.collection('tenants')
-                    .doc(tenantId)
-                    .collection('lager')
-                    .doc(id)
-                    .update({
-                        status: newStatus,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                
-                console.log('✅ Status geändert:', id);
-                
-                // UI aktualisieren
-                await updateEinkaufsliste();
-                await updateMitarbeiterLagerGrid();
-                
-            } catch (error) {
-                console.error('❌ Fehler beim Ändern des Status:', error);
-                alert('❌ Fehler: ' + error.message);
-            }
-        }
-
         function getWeekNumber(date) {
             const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
             const dayNum = d.getUTCDay() || 7;
@@ -4474,11 +5134,80 @@
     <!-- Admin Push Notifications -->
     <script src="js/admin-push-notifications.js"></script>
     
+    <!-- Subscription Manager (Stripe) -->
+    <script src="js/subscription-manager.js"></script>
+    
     <!-- Sync Status Indikator -->
     <script src="js/sync-indicator.js"></script>
     
     <!-- APP INIT - NACH allen Integrationen! -->
     <script>
+        // PWA Install Prompt
+        let deferredInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            // Zeige Install-Banner nach Login
+            console.log('📱 PWA Install-Prompt verfügbar');
+        });
+
+        // Service Worker registrieren
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const reg = await navigator.serviceWorker.register('/sw.js');
+                    console.log('✅ Service Worker registriert:', reg.scope);
+                    
+                    // Prüfe auf Updates
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'activated') {
+                                console.log('🔄 Neuer Service Worker aktiviert');
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ SW Registrierung fehlgeschlagen:', error);
+                }
+            });
+        }
+
+        // Online/Offline Status
+        function updateOnlineStatus() {
+            const isOnline = navigator.onLine;
+            const indicator = document.getElementById('offline-indicator');
+            if (indicator) {
+                indicator.style.display = isOnline ? 'none' : 'flex';
+            }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // PWA Install Functions
+        async function installPWA() {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            const result = await deferredInstallPrompt.userChoice;
+            console.log('📱 Install-Ergebnis:', result.outcome);
+            deferredInstallPrompt = null;
+            document.getElementById('pwa-install-banner').style.display = 'none';
+        }
+        
+        function dismissInstallBanner() {
+            document.getElementById('pwa-install-banner').style.display = 'none';
+            // Merke Dismissal für diese Session
+            sessionStorage.setItem('pwa-banner-dismissed', 'true');
+        }
+        
+        function showInstallBannerIfAvailable() {
+            if (deferredInstallPrompt && !sessionStorage.getItem('pwa-banner-dismissed')) {
+                // Nicht zeigen wenn bereits als PWA installiert
+                if (window.matchMedia('(display-mode: standalone)').matches) return;
+                document.getElementById('pwa-install-banner').style.display = 'flex';
+            }
+        }
+
         // Warte auf DOM und dann init() aufrufen
         function startApp() {
             try {
@@ -4488,9 +5217,22 @@
                 } else {
                     console.error('❌ init() Funktion nicht gefunden');
                 }
+                // Online-Status prüfen
+                updateOnlineStatus();
+                
+                // Stripe-Redirect prüfen
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('payment') === 'success') {
+                    setTimeout(() => {
+                        if (typeof showToast === 'function') showToast('✅ Zahlung erfolgreich! Dein Abo ist aktiv.');
+                    }, 2000);
+                    // URL bereinigen
+                    window.history.replaceState({}, '', window.location.pathname);
+                } else if (urlParams.get('payment') === 'cancelled') {
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
             } catch (error) {
                 console.error('❌ Fehler beim App-Start:', error);
-                // Zeige zumindest den Login-Screen bei Fehler
                 document.body.style.background = 'linear-gradient(135deg, #c9a961 0%, #8b6f47 100%)';
             }
         }

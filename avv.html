@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auftragsverarbeitungsvertrag (AVV) | Gastro Planer Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FAFAF8;
+            color: #2C3E50;
+            line-height: 1.7;
+        }
+        .top-bar {
+            background: linear-gradient(135deg, #8b6f47, #c9a961);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .top-bar a { color: white; text-decoration: none; font-weight: 600; font-size: 1.1em; }
+        .top-bar .back { opacity: 0.85; font-size: 0.9em; }
+        .top-bar .back:hover { opacity: 1; }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #8b6f47;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #999;
+            margin-bottom: 40px;
+            font-size: 0.95em;
+        }
+        h2 {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #8b6f47;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f0ebe0;
+        }
+        h3 {
+            font-size: 1em;
+            font-weight: 600;
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+        p { margin-bottom: 12px; color: #444; }
+        .placeholder {
+            background: #FFF3E0;
+            border: 1px dashed #FFB74D;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            color: #E65100;
+            font-size: 0.9em;
+        }
+        .placeholder strong { color: #BF360C; }
+        .info-box {
+            background: #EBF5FB;
+            border-left: 4px solid #2E86C1;
+            border-radius: 0 8px 8px 0;
+            padding: 16px;
+            margin: 24px 0;
+            font-size: 0.9em;
+            color: #1B4F72;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9em;
+        }
+        .data-table th, .data-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table th {
+            background: #f8f6f2;
+            font-weight: 600;
+            color: #8b6f47;
+        }
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #8b6f47;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 32px;
+        }
+        .print-btn:hover { background: #7a6140; }
+        .footer-links {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #8b6f47;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .footer-links a:hover { text-decoration: underline; }
+        .signature-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #ddd;
+        }
+        .signature-field {
+            padding-top: 60px;
+            border-top: 1px solid #333;
+            font-size: 0.85em;
+            color: #666;
+        }
+        @media print {
+            .top-bar, .print-btn, .footer-links, .placeholder { display: none !important; }
+            body { background: white; }
+            .container { padding: 24px; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="/">🍽️ Gastro Planer Pro</a>
+        <a href="/" class="back">← Zurück zur App</a>
+    </div>
+    <div class="container">
+        <h1>Auftragsverarbeitungsvertrag (AVV)</h1>
+        <p class="subtitle">gemäß Art. 28 Datenschutz-Grundverordnung (DSGVO)</p>
+
+        <button class="print-btn" onclick="window.print()">🖨️ AVV drucken / als PDF speichern</button>
+
+        <div class="placeholder">
+            <strong>⚠️ Hinweis:</strong> Dieses Dokument tritt mit Registrierung bei Gastro Planer Pro automatisch in Kraft. Restaurantbetreiber können es für ihre Unterlagen ausdrucken. Lass den AVV idealerweise von einem Anwalt prüfen!
+        </div>
+
+        <h2>§ 1 Gegenstand und Laufzeit</h2>
+        <p>(1) Dieser Auftragsverarbeitungsvertrag (AVV) regelt die Rechte und Pflichten der Parteien im Zusammenhang mit der Verarbeitung personenbezogener Daten durch den Auftragsverarbeiter im Auftrag des Verantwortlichen.</p>
+        <p>(2) <strong>Verantwortlicher (Auftraggeber):</strong> Der Kunde (Restaurantbetreiber), der die Software „Gastro Planer Pro" nutzt und über Zweck und Mittel der Datenverarbeitung entscheidet.</p>
+        <p>(3) <strong>Auftragsverarbeiter (Auftragnehmer):</strong> [DEIN VOLLSTÄNDIGER NAME], Einzelunternehmer, [ADRESSE], [PLZ] [ORT], Österreich (Betreiber von Gastro Planer Pro).</p>
+        <p>(4) Dieser AVV gilt für die gesamte Laufzeit des Nutzungsvertrags über Gastro Planer Pro und tritt mit der Registrierung des Kunden automatisch in Kraft.</p>
+
+        <h2>§ 2 Art und Zweck der Verarbeitung</h2>
+        <p>(1) Der Auftragsverarbeiter verarbeitet personenbezogene Daten im Auftrag des Verantwortlichen ausschließlich zum Zweck der Bereitstellung der Software „Gastro Planer Pro" mit folgenden Funktionen:</p>
+        <p>Erstellung und Verwaltung von Dienstplänen, Zeiterfassung und Arbeitszeitdokumentation, Teamkommunikation (Notizen, Nachrichten), Bestandsverwaltung und Einkaufslisten, sowie Kassenstatistik und Finanzberichte.</p>
+
+        <h2>§ 3 Art der personenbezogenen Daten</h2>
+        <table class="data-table">
+            <tr><th>Datenkategorie</th><th>Betroffene</th><th>Details</th></tr>
+            <tr><td>Stammdaten</td><td>Mitarbeiter</td><td>Name, Position, Telefonnummer</td></tr>
+            <tr><td>Authentifizierungsdaten</td><td>Mitarbeiter</td><td>PIN (4-stellig)</td></tr>
+            <tr><td>Arbeitszeitdaten</td><td>Mitarbeiter</td><td>Schichtzuweisungen, Stempelzeiten, An-/Abmeldungen</td></tr>
+            <tr><td>Kommunikationsdaten</td><td>Mitarbeiter</td><td>Notizen, Nachrichten, Tauschanfragen</td></tr>
+            <tr><td>Konfigurationsdaten</td><td>Betreiber</td><td>Restaurantname, Admin-PIN, E-Mail, Schichtzeiten</td></tr>
+        </table>
+
+        <h2>§ 4 Kategorien betroffener Personen</h2>
+        <p>Mitarbeiter des Restaurantbetriebs (vom Verantwortlichen in der Software angelegt) sowie der Restaurantbetreiber (Kunde) selbst.</p>
+
+        <h2>§ 5 Pflichten des Auftragsverarbeiters</h2>
+        <p>(1) Der Auftragsverarbeiter verarbeitet die personenbezogenen Daten ausschließlich auf dokumentierte Weisung des Verantwortlichen — es sei denn, er ist gesetzlich zur Verarbeitung verpflichtet.</p>
+        <p>(2) Der Auftragsverarbeiter gewährleistet, dass sich alle zur Verarbeitung befugten Personen zur Vertraulichkeit verpflichtet haben.</p>
+        <p>(3) Der Auftragsverarbeiter ergreift alle gemäß Art. 32 DSGVO erforderlichen technischen und organisatorischen Maßnahmen (siehe § 7).</p>
+        <p>(4) Der Auftragsverarbeiter unterstützt den Verantwortlichen bei der Erfüllung seiner Pflichten gemäß Art. 32–36 DSGVO, insbesondere bei Datenschutz-Folgenabschätzungen und bei der Meldung von Datenschutzverletzungen.</p>
+        <p>(5) Nach Beendigung des Vertrags werden alle personenbezogenen Daten nach Wahl des Verantwortlichen gelöscht oder zurückgegeben, sofern keine gesetzliche Aufbewahrungspflicht besteht. Die Löschung erfolgt innerhalb von 30 Tagen nach Vertragsende.</p>
+
+        <h2>§ 6 Unterauftragsverarbeiter</h2>
+        <p>(1) Der Verantwortliche erteilt dem Auftragsverarbeiter eine allgemeine Genehmigung zur Beauftragung von Unterauftragsverarbeitern. Der Auftragsverarbeiter informiert den Verantwortlichen über jede beabsichtigte Hinzuziehung oder Änderung von Unterauftragsverarbeitern.</p>
+        <p>(2) Zum Zeitpunkt des Vertragsschlusses sind folgende Unterauftragsverarbeiter eingesetzt:</p>
+
+        <table class="data-table">
+            <tr><th>Unterauftragsverarbeiter</th><th>Zweck</th><th>Standort</th></tr>
+            <tr><td>Google Ireland Ltd. (Firebase/Firestore)</td><td>Datenbankhosting, Datenspeicherung</td><td>EU (europe-west)</td></tr>
+            <tr><td>Vercel Inc.</td><td>Webhosting, Bereitstellung der Anwendung</td><td>USA (EU-US DPF)</td></tr>
+            <tr><td>Stripe Inc.</td><td>Zahlungsabwicklung</td><td>USA (EU-US DPF)</td></tr>
+        </table>
+
+        <p>(3) Bei Hinzuziehung neuer Unterauftragsverarbeiter wird der Verantwortliche mindestens 14 Tage vor der Beauftragung informiert und hat das Recht, Widerspruch einzulegen.</p>
+
+        <h2>§ 7 Technische und organisatorische Maßnahmen (TOMs)</h2>
+        <p>Der Auftragsverarbeiter hat folgende Maßnahmen gemäß Art. 32 DSGVO implementiert:</p>
+
+        <h3>Vertraulichkeit</h3>
+        <p>Zugriffskontrolle durch PIN-basierte Authentifizierung, Mandantentrennung (Multi-Tenancy) in der Datenbank — jeder Restaurantbetrieb kann nur auf seine eigenen Daten zugreifen, sowie rollenbasierte Zugriffssteuerung (Admin vs. Mitarbeiter).</p>
+
+        <h3>Integrität</h3>
+        <p>Verschlüsselte Datenübertragung mittels HTTPS/TLS, serverseitige Timestamps für Nachvollziehbarkeit, und Firestore Security Rules zur Absicherung der Datenbankzugriffe.</p>
+
+        <h3>Verfügbarkeit</h3>
+        <p>Hosting auf Google Cloud Infrastructure mit hoher Verfügbarkeit, automatische Backups durch Firebase, und manuelle Backup-Funktion für Kunden in der Software.</p>
+
+        <h3>Belastbarkeit</h3>
+        <p>Automatische Skalierung der Infrastruktur durch Google Cloud und Vercel, sowie regelmäßige Sicherheitsupdates der eingesetzten Dienste.</p>
+
+        <h2>§ 8 Kontrollrechte des Verantwortlichen</h2>
+        <p>(1) Der Verantwortliche hat das Recht, die Einhaltung der datenschutzrechtlichen Verpflichtungen des Auftragsverarbeiters zu überprüfen — durch Auskünfte, Inspektionen oder Audits.</p>
+        <p>(2) Der Auftragsverarbeiter stellt dem Verantwortlichen alle erforderlichen Informationen zum Nachweis der Einhaltung der in Art. 28 DSGVO niedergelegten Pflichten zur Verfügung.</p>
+        <p>(3) Inspektionen und Audits können nach vorheriger Ankündigung (mindestens 14 Tage) während der Geschäftszeiten durchgeführt werden.</p>
+
+        <h2>§ 9 Meldung von Datenschutzverletzungen</h2>
+        <p>(1) Der Auftragsverarbeiter meldet dem Verantwortlichen jede Verletzung des Schutzes personenbezogener Daten unverzüglich, spätestens jedoch innerhalb von 24 Stunden nach Kenntniserlangung.</p>
+        <p>(2) Die Meldung enthält mindestens: Art der Verletzung, betroffene Datenkategorien und betroffene Personen, wahrscheinliche Folgen, sowie ergriffene und vorgeschlagene Maßnahmen.</p>
+
+        <h2>§ 10 Haftung</h2>
+        <p>Die Haftung der Parteien richtet sich nach Art. 82 DSGVO. Im Übrigen gelten die Haftungsregelungen des Hauptvertrags (AGB).</p>
+
+        <h2>§ 11 Schlussbestimmungen</h2>
+        <p>(1) Dieser AVV ist Bestandteil des Nutzungsvertrags (AGB) für Gastro Planer Pro.</p>
+        <p>(2) Änderungen und Ergänzungen dieses AVV bedürfen der Schriftform.</p>
+        <p>(3) Es gilt österreichisches Recht.</p>
+        <p>(4) Dieser AVV tritt mit der Registrierung des Kunden bei Gastro Planer Pro automatisch in Kraft.</p>
+
+        <div class="info-box">
+            <strong>Hinweis für Restaurantbetreiber:</strong> Dieser AVV tritt automatisch bei Registrierung in Kraft. Drucken Sie ihn für Ihre Unterlagen aus oder speichern Sie ihn als PDF (über den Button oben). Bei Fragen wenden Sie sich an <strong>[DEINE E-MAIL-ADRESSE]</strong>.
+        </div>
+
+        <div class="signature-block">
+            <div>
+                <div class="signature-field">Ort, Datum — Auftraggeber (Restaurantbetreiber)</div>
+            </div>
+            <div>
+                <div class="signature-field">Ort, Datum — Auftragnehmer (Gastro Planer Pro)</div>
+            </div>
+        </div>
+
+        <p class="subtitle" style="margin-top: 40px;">Stand: März 2026</p>
+
+        <div class="footer-links">
+            <a href="/impressum.html">Impressum</a>
+            <a href="/datenschutz.html">Datenschutz</a>
+            <a href="/agb.html">AGB</a>
+            <a href="/avv.html">AVV</a>
+        </div>
+    </div>
+</body>
+</html>

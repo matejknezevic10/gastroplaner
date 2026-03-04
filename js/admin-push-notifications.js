@@ -1,52 +1,74 @@
 // ==========================================
 // PUSH-BENACHRICHTIGUNGEN für Admin
-// Benachrichtigt Admin bei neuen Notizen & Benachrichtigungen
+// Firestore-basiert mit Service Worker
 // ==========================================
 
 class AdminPushNotifications {
     constructor() {
         this.supported = 'Notification' in window && 'serviceWorker' in navigator;
         this.permission = null;
-        this.lastNotificationCount = 0;
         this.checkInterval = null;
+        this.lastCheckTime = new Date().toISOString();
     }
     
-    // Init: Frage nach Permission
+    // Init: Permission anfragen + Service Worker registrieren
     async init() {
         if (!this.supported) {
             console.log('📱 Push-Benachrichtigungen werden von diesem Browser nicht unterstützt');
             return false;
         }
         
-        // Prüfe aktuelle Permission
+        // Service Worker registrieren
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('✅ Service Worker registriert:', registration.scope);
+        } catch (error) {
+            console.error('❌ Service Worker Registrierung fehlgeschlagen:', error);
+        }
+        
+        // Permission anfragen
         this.permission = Notification.permission;
         
         if (this.permission === 'default') {
-            // Frage nach Permission
             this.permission = await Notification.requestPermission();
         }
         
         if (this.permission === 'granted') {
             console.log('✅ Push-Benachrichtigungen aktiviert');
             this.startMonitoring();
+            this.updateStatusUI();
             return true;
         } else {
             console.log('❌ Push-Benachrichtigungen abgelehnt');
+            this.updateStatusUI();
             return false;
         }
     }
     
-    // Starte Monitoring für neue Notizen/Benachrichtigungen
+    // Status-UI aktualisieren
+    updateStatusUI() {
+        const statusEl = document.getElementById('push-status-text');
+        if (!statusEl) return;
+        
+        if (this.permission === 'granted') {
+            statusEl.textContent = '✅ Aktiv';
+            statusEl.style.color = '#10b981';
+        } else if (this.permission === 'denied') {
+            statusEl.textContent = '❌ Blockiert (in Browser-Einstellungen ändern)';
+            statusEl.style.color = '#dc2626';
+        }
+    }
+    
+    // Starte Monitoring — prüfe Firestore auf neue Notizen
     startMonitoring() {
-        // Initial Count
-        this.lastNotificationCount = this.getCurrentCount();
+        this.lastCheckTime = new Date().toISOString();
         
         // Prüfe alle 30 Sekunden
         this.checkInterval = setInterval(() => {
             this.checkForNew();
         }, 30000);
         
-        console.log('👀 Monitoring für neue Benachrichtigungen gestartet');
+        console.log('👀 Firestore-Monitoring für neue Benachrichtigungen gestartet');
     }
     
     // Stoppe Monitoring
@@ -57,122 +79,122 @@ class AdminPushNotifications {
         }
     }
     
-    // Hole aktuelle Anzahl ungelesener Items
-    getCurrentCount() {
-        const notizen = JSON.parse(localStorage.getItem('gastro-notizen') || '[]');
-        const kassenstände = JSON.parse(localStorage.getItem('gastro-kassenstände') || '[]');
-        
-        const ungelesenNotizen = notizen.filter(n => !n.gelesen).length;
-        const ungelesenKassen = kassenstände.filter(k => !k.gelesen).length;
-        
-        return ungelesenNotizen + ungelesenKassen;
-    }
-    
-    // Prüfe auf neue Items
+    // Prüfe Firestore auf neue Notizen seit letztem Check
     async checkForNew() {
-        const currentCount = this.getCurrentCount();
+        if (typeof TenantStorage === 'undefined' || typeof db === 'undefined') return;
         
-        if (currentCount > this.lastNotificationCount) {
-            const anzahlNeu = currentCount - this.lastNotificationCount;
-            await this.sendNotification(anzahlNeu);
+        const tenantId = TenantStorage.getTenantId();
+        if (!tenantId) return;
+        
+        try {
+            const snapshot = await db.collection('tenants')
+                .doc(tenantId)
+                .collection('notizen')
+                .where('datum', '>', this.lastCheckTime)
+                .get();
+            
+            if (!snapshot.empty) {
+                const neueNotizen = [];
+                snapshot.forEach(doc => neueNotizen.push({ id: doc.id, ...doc.data() }));
+                
+                // Nur Benachrichtigungen die nicht vom Admin selbst sind
+                const relevante = neueNotizen.filter(n => n.mitarbeiterId !== 'admin');
+                
+                if (relevante.length > 0) {
+                    await this.sendNotification(relevante);
+                }
+            }
+            
+            this.lastCheckTime = new Date().toISOString();
+            
+        } catch (error) {
+            console.error('❌ Fehler beim Prüfen auf neue Notizen:', error);
         }
-        
-        this.lastNotificationCount = currentCount;
     }
     
     // Sende Push-Notification
-    async sendNotification(anzahl) {
+    async sendNotification(notizen) {
         if (this.permission !== 'granted') return;
         
-        // Hole letzte Notiz/Benachrichtigung
-        const notizen = JSON.parse(localStorage.getItem('gastro-notizen') || '[]');
-        const kassenstände = JSON.parse(localStorage.getItem('gastro-kassenstände') || '[]');
-        
-        const letzteNotiz = notizen[notizen.length - 1];
-        const letzterKassenstand = kassenstände[kassenstände.length - 1];
+        const letzte = notizen[notizen.length - 1];
         
         let title = '🔔 Neue Benachrichtigung';
-        let body = `Sie haben ${anzahl} neue Benachrichtigung(en)`;
-        let icon = '🔔';
+        let body = `${notizen.length} neue Nachricht(en)`;
         
-        // Bestimme spezifischen Inhalt
-        if (letzteNotiz && (!letzterKassenstand || new Date(letzteNotiz.datum) > new Date(letzterKassenstand.datum))) {
-            icon = '💬';
-            title = '💬 Neue Notiz';
-            body = `${letzteNotiz.mitarbeiterName}: ${letzteNotiz.betreff}`;
-        } else if (letzterKassenstand) {
-            icon = '💰';
-            title = '💰 Neuer Kassenstand';
-            body = `${letzterKassenstand.mitarbeiterName}: €${letzterKassenstand.betrag}`;
+        if (notizen.length === 1) {
+            const typIcons = { 'info': 'ℹ️', 'frage': '❓', 'problem': '⚠️', 'idee': '💡', 'benachrichtigung': '🔔' };
+            const icon = typIcons[letzte.typ] || '💬';
+            title = `${icon} ${letzte.betreff || 'Neue Nachricht'}`;
+            body = `${letzte.mitarbeiterName}: ${letzte.text ? letzte.text.substring(0, 100) : ''}`;
         }
         
         try {
-            const notification = new Notification(title, {
+            // Versuche Service Worker Notification (funktioniert im Hintergrund)
+            const registration = await navigator.serviceWorker.ready;
+            await registration.showNotification(title, {
                 body: body,
-                icon: icon,
-                badge: icon,
-                tag: 'gastro-admin', // Gruppiere Notifications
-                requireInteraction: false, // Auto-close nach ein paar Sekunden
-                silent: false // Mit Sound
+                icon: '/icons/icon-192.png',
+                badge: '/icons/icon-192.png',
+                tag: 'gastroplaner-admin',
+                vibrate: [200, 100, 200],
+                data: { url: '/' },
+                requireInteraction: false
             });
-            
-            // Bei Klick: Öffne Kommunikations-Tab
-            notification.onclick = () => {
-                window.focus();
-                if (typeof showSection === 'function') {
-                    showSection('admin-kommunikation');
-                }
-                notification.close();
-            };
-            
-            // Auto-close nach 10 Sekunden
-            setTimeout(() => notification.close(), 10000);
-            
         } catch (error) {
-            console.error('❌ Notification-Fehler:', error);
+            // Fallback: Direkte Notification
+            try {
+                const notification = new Notification(title, {
+                    body: body,
+                    tag: 'gastroplaner-admin',
+                    requireInteraction: false
+                });
+                
+                notification.onclick = () => {
+                    window.focus();
+                    if (typeof showSection === 'function') {
+                        showSection('admin-kommunikation');
+                    }
+                    notification.close();
+                };
+                
+                setTimeout(() => notification.close(), 10000);
+            } catch (e) {
+                console.error('❌ Notification-Fehler:', e);
+            }
         }
     }
     
-    // Manuelle Test-Notification
+    // Test-Notification
     async testNotification() {
         if (this.permission !== 'granted') {
-            alert('Bitte erlauben Sie Push-Benachrichtigungen in den Browser-Einstellungen!');
             await this.init();
             return;
         }
         
-        const notification = new Notification('🧪 Test-Benachrichtigung', {
-            body: 'Push-Benachrichtigungen funktionieren! ✅',
-            icon: '🧪',
-            badge: '🧪'
-        });
-        
-        setTimeout(() => notification.close(), 5000);
+        try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.showNotification('🧪 Test-Benachrichtigung', {
+                body: 'Push-Benachrichtigungen funktionieren! ✅',
+                icon: '/icons/icon-192.png',
+                tag: 'gastroplaner-test',
+                vibrate: [200]
+            });
+        } catch (error) {
+            new Notification('🧪 Test-Benachrichtigung', {
+                body: 'Push-Benachrichtigungen funktionieren! ✅'
+            });
+        }
     }
 }
 
 // Globale Instanz
 window.adminPushNotifications = new AdminPushNotifications();
 
-// Auto-Init wenn Admin eingeloggt ist
-window.addEventListener('load', () => {
-    // Warte 2 Sekunden damit User Zeit hat einzuloggen
-    setTimeout(async () => {
-        // Prüfe ob Admin-Modus aktiv
-        const isAdmin = localStorage.getItem('admin-logged-in') === 'true';
-        
-        if (isAdmin) {
-            console.log('👑 Admin-Modus erkannt - Initialisiere Push-Notifications');
-            await window.adminPushNotifications.init();
-        }
-    }, 2000);
-});
-
-// Stoppe Monitoring beim Logout
+// Stoppe Monitoring beim Schließen
 window.addEventListener('beforeunload', () => {
     if (window.adminPushNotifications) {
         window.adminPushNotifications.stopMonitoring();
     }
 });
 
-console.log('✅ Admin Push-Notifications Modul geladen');
+console.log('✅ Admin Push-Notifications Modul geladen (Firestore + Service Worker)');
